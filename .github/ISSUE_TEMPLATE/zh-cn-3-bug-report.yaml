@@ -14,7 +14,7 @@ body:
       description: 请认真检查以下清单中的每一项，并在相符的项前打勾。
       options:
         - label: 已经搜索过，没有发现类似 issue。
-        - label: 已经将TMS小帮手升级到最新版本。
+        - label: 已经将 TMS little helper 升级到最新版本。
   - type: input
     id: bug-url
     attributes:
@@ -31,12 +31,12 @@ body:
     id: information
     attributes:
       label: 环境信息
-      description: 请提供您的环境信息，打开终端在博客目录下执行命令获取内容。
+      description: 请提供您的环境信息，打开 `CMD` 终端执行 `systeminfo` 命令获取内容。
       value: |
         <details><summary>环境信息相关</summary><p>
 
         ```md
-        在这里面提供您的 `环境信息相关信息`。
+        在这里面粘贴您的 `环境信息相关信息`。
         具体列出 BUG 出现时的操作系统相关环境信息。
         如：
           + 系统版本
