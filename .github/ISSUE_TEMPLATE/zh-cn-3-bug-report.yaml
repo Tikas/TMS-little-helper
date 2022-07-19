@@ -1,0 +1,65 @@
+name: BUG反馈：小帮手出现 BUG 导致相关功能无法实现
+description: 此模板适用于您已经定位到了问题的具体所在，不需要协助定位问题。报告给开发者予以修复。
+title: "【BUG反馈】："
+labels: bug-report
+body:
+  - type: markdown
+    attributes:
+      value: |
+        请务必认真填写，足够的信息能帮助我们更快的解决问题。
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: 检查清单
+      description: 请认真检查以下清单中的每一项，并在相符的项前打勾。
+      options:
+        - label: 已经搜索过，没有发现类似 issue。
+        - label: 已经将TMS小帮手升级到最新版本。
+  - type: input
+    id: bug-url
+    attributes:
+      label: 复现视频
+      description: 如果可以，请输入可供复现视频的访问地址（如：Bilibili、Youtube）。
+  - type: textarea
+    id: description
+    attributes:
+      label: BUG 复现步骤
+      description: 请告诉我们 BUG 如何发生？
+    validations:
+      required: true
+  - type: textarea
+    id: information
+    attributes:
+      label: 环境信息
+      description: 请提供您的环境信息，打开终端在博客目录下执行命令获取内容。
+      value: |
+        <details><summary>环境信息相关</summary><p>
+
+        ```md
+        在这里面提供您的 `环境信息相关信息`。
+        具体列出 BUG 出现时的操作系统相关环境信息。
+        如：
+          + 系统版本
+          + 运行库版本
+          + 相关安全软件
+          + 等等
+        ```
+
+        </p></details>
+    validations:
+      required: true
+  - type: textarea
+    id: fix-bugs
+    attributes:
+      label: 解决 BUG 的可行方案
+      description: 请提供您的解决 BUG 的可行方案。
+      value: |
+        <details><summary>解决 BUG 的可行方案</summary><p>
+
+        ```md
+        在这里面提供您的 `解决 BUG 的可行方案`。
+        ```
+
+        </p></details>
+
+
