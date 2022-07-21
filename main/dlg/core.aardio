@@ -145,16 +145,6 @@ var setSkin = function(num){//传值 1 为正常，2 为警告，3 为危险
 	coreForm.redrawBackground();
 }
 
-var nameAndDay = function(escapeStr,timeStr){//返回两个字符值：名字，天数
-	var nameStr = "";
-	var timeNow = time.now();
-	var day     = "";
-		nameStr = perform.decode( escapeStr );
-	var tm      = time( timeStr,"%Y-%m-%d %H:%M:%S" );
-		day     = timeNow.diffday(tm);
-	return nameStr,day;
-}
-
 (function(){
 	select(..globalCord) {
 		case 4 {//webToken 获取失败
@@ -170,10 +160,6 @@ var nameAndDay = function(escapeStr,timeStr){//返回两个字符值：名字，
 			setSkin(2);
 		}
 		case 11 {//港号获取到游戏账号列表
-			/*
-			..account.rows[1].name,..account.rows[1].day = nameAndDay( ..account.rows[1].ServiceAccountDisplayName,..account.rows[1].CreateTime );
-			coreForm.accountOne.text = ..account.rows[1].name ++ '\n' ++ "来枫谷已有：" ++ ..account.rows[1].day ++ "天";
-			*/
 			coreForm.accountOne.text = ..account.one.displayName ++ '\n' ++ "来枫谷已有：" ++ ..account.one.day ++ "天";
 			coreForm.accountOne.hide = 0;
 			setSkin(1);

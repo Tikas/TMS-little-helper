@@ -105,15 +105,16 @@ namespace tikas{
 	    verify             = /*<@Verify@>*/;
 	    addAccount         = /*<@btnAddServiceAccount@>*/;
 	    lock               = /*<@class="Stop"@>*/;
-	    account            = /*\"\ssn\=\"(.*?)\"\sname\=\"(.*?)\"*/;
-	    sn                 = /*BF\&\&\&\&SN\=(.*?)\&\&\&\&*/;                         //获取游戏密码时，所需要的 sn 值
+	    account            = /*\"\>\<div\sid\=\"(.*?)\"\ssn\=\"(\d+)\"\sname\=\"(.*?)\"*/;
+	    sn                 = /*GetResultByLongPolling\&key\=(.*?)\"*/;                //获取游戏密码时，所需要的 sn 值
 	    dynamic            = /*CreateTime\s\+\"\&(.*?)\=(.*?)\"*/;                    //获取游戏密码时，后面所需要的动态值，值要解 url 编码
 	    secretCode         = /*\'(.*?)\'*/;                                           //获取游戏密码时，所需要的 secretCode 值
 	    data               = /*Data\=(.*?)\"*/;                                       //获取游戏密码时，所需要的 data 值
 	    serviceAccount     = /*ServiceAccount\=(.*?)\&*/;
-	    createTime         = /*CreateTime\=(.*?)\&*/;
+	    createTime         = /*ServiceAccountCreateTime\:\s\"(.*?)\"*/;
 	    ppppp              = /*ppppp\=(.*?)\&*/;
 	    strOutstring       = /*strOutstring\"\:\s\"(.*?)\"*/;
+	    advanceCheck       = /*<@AdvanceCheck@>*/;
 	}
 
 	loyisa = {

@@ -201,14 +201,14 @@ var login = function(){ if( check() ){
 				if( not perform.getOtpKey("HK") ){
 					mainForm.show(true);
 					adduserForm.static.text = "登  录";
-					win.msgbox(statusInformation,"错误:");
+					win.msgbox(..statusInformation,"错误:");
 					adduserForm.static.disabled = false;
 					return ;
 				}
 				if( not perform.login("HK",adduserForm.editID.text,adduserForm.editPwd.text) ){
 					mainForm.show(true);
 					adduserForm.static.text = "登  录";
-					win.msgbox(statusInformation,"错误:");
+					win.msgbox(..statusInformation,"错误:");
 					adduserForm.static.disabled = false;
 					return ;
 				}
@@ -228,14 +228,14 @@ var login = function(){ if( check() ){
 				if( not perform.getOtpKey("HK") ){
 					mainForm.show(true);
 					adduserForm.static.text = "登  录";
-					win.msgbox(statusInformation,"错误:");
+					win.msgbox(..statusInformation,"错误:");
 					adduserForm.static.disabled = false;
 					return ;
 				}
 				if( not perform.login("HK",adduserForm.editID.text,adduserForm.editPwd.text) ){
 					mainForm.show(true);
 					adduserForm.static.text = "登  录";
-					win.msgbox(statusInformation,"错误:");
+					win.msgbox(..statusInformation,"错误:");
 					adduserForm.static.disabled = false;
 					return ;
 				}
