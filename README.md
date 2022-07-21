@@ -14,7 +14,7 @@
         <img alt="GitHub release (latest by date including pre-releases)" src="https://img.shields.io/github/v/release/Tikas/TMS-little-helper?include_prereleases&sort=semver&style=flat-square"/>
     </a>
     <a href="https://github.com/Tikas/TMS-little-helper/releases">
-        <img alt="GitHub all releases" src="https://img.shields.io/github/downloads/pungin/Beanfun/total"/>
+        <img alt="GitHub all releases" src="https://img.shields.io/github/downloads/Tikas/TMS-little-helper/total"/>
     </a>
 </p>
 
@@ -32,7 +32,7 @@ README：~~English~~ | 中文
 
 TMS小帮手，一个致力于 TMS (TW MapleStory) 启动、登录、多账号管理等相关的小程序。
 
-![display](../image/display.webp)
+![display](https://raw.githubusercontent.com/Tikas/TMS-little-helper/main/image/display.webp)
 
 ### 开发背景
 
