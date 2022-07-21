@@ -323,12 +323,12 @@ getWebToken = function(str){
 
 getBFM = function(str){
 	import tikas;
-	var num = ..configId.current;
-	var jsonTab = {}; 
-	var bfmID = "";
+	var num     = ..configId.current;
+	var jsonTab = {};
+	var bfmID   = "";
 	try{
-		jsonTab = web.json.parse( ..http.get("https://bfweb.hk.beanfun.com/beanfun_block/generic_handlers/echo_token.ashx?webtoken=1") );
-		bfmID = jsonTab.MainAccountID;
+		jsonTab                       = web.json.parse( ..http.get("https://bfweb.hk.beanfun.com/beanfun_block/generic_handlers/echo_token.ashx?webtoken=1") );
+		bfmID                         = jsonTab.MainAccountID;
 		..configId.sequence[num][[2]] = str ++"：BFM***" ++ ..string.right( bfmID,3 );
 		..configId.sequence[num][[6]] = tikas.xxteaEncrypt( bfmID,..sysinfo ++ ..randomCode );
 		return true;
@@ -342,84 +342,81 @@ getBFM = function(str){
 getAccountList = function(str){//只能返回数值，3 为锁号，2 为没有进阶，1 为没有账号，0 为有账号
 	import tikas;
 	import inet.url;
+	import time.ole;
 	var payload = {};
-	var urlstr = "";
-	var strTmp = "";
-	var str = "";
-	var key = "";
+	var urlstr  = "";
+	var strTmp  = "";
+	var data    = "";
+	var key     = "";
 	var tm;
 	var tmNow = time.now();
 	if( str == "HK" ){//港号
 		strTmp = "https://bfweb.hk.beanfun.com/beanfun_block/auth.aspx?channel=game_zone&page_and_query=game_start.aspx%3Fservice_code_and_region%3D610074_T9&web_token=";
 		urlstr = ..http.get( strTmp ++ ..account.webtoken );
-		//首先看看有没有进阶
+		import win.clip;
+		..win.clip.write(urlstr);
+
 		if( ..string.match(urlstr,tikas.match.verify) == "Verify" ){
 			..log("请先完成进阶认证：1、身份验证，完成后再认证：2、电话验证",false);
 			return 2;
 		}
-		//再看看是否新号
+
 		if( ..string.match(urlstr,tikas.match.addAccount) == "btnAddServiceAccount" ){
 			..log("您当前还没有创建游戏账号，请先创建游戏账号",false);
 			return 1;
 		}
-		//检索游戏账号
-		..account.one = {};//初始化
-		//获取游戏账号的序列号和账号别名
+
+		..account.one = {};
 		..account.one.serviceAccountSN,..account.one.displayName = ..string.match(urlstr,tikas.match.account);
 
-		//再看看是否锁号
 		if( ..string.match(urlstr,tikas.match.lock) == 'class\=\"Stop\"' ){
-			..log(..account.one.displayName ++ "账号已被锁定，锁定原因查询中",false);
+			..log("游戏账号："..account.one.displayName ++ " 已被锁定，锁定原因查询中... ...",false);
 			return 3;
 		}
-		
-		//直接进入开始游戏
-		payload.service_code = "610074";
-		payload.service_region = "T9";
-		payload.sotp = hkSN;
-		urlstr = ..http.get( "https://bfweb.hk.beanfun.com/beanfun_block/game_zone/game_start_step2.aspx",payload );
-		//取得获取登录密码用的 sn 值，以及后面参数值
-		..account.sn = ..string.match(urlstr,tikas.match.sn);
-		..account.dynamic,strTmp = ..string.match(urlstr,tikas.match.dynamic);
-		..account.dynamicValue = inet.url.decodeUnicode(strTmp);//转个编码保存
 
-		str,key = this.deData( ..string.match(urlstr,tikas.match.data) );
-		strTmp = ..aesObject.DecryStrHex(str,key);
-		//取得获取登录密码用的 ppppp 值、账号、账号创建时间
-		..account.ppppp = ..string.match(strTmp,tikas.match.ppppp);
+		payload.service_code   = "610074";
+		payload.service_region = "T9";
+		payload.sotp           = hkSN;
+		urlstr                 = ..http.get( "https://bfweb.hk.beanfun.com/beanfun_block/game_zone/game_start_step2.aspx",payload );
+
+		..account.sn             = ..string.match(urlstr,tikas.match.sn);       //取得获取登录密码用的 sn 值，以及后面参数值
+		..account.dynamic,strTmp = ..string.match(urlstr,tikas.match.dynamic);
+		..account.dynamicValue   = inet.url.decodeUnicode(strTmp);              //转个编码保存
+
+		data,key = this.deData( ..string.match(urlstr,tikas.match.data) );
+		strTmp   = ..aesObject.DecryStrHex(data,key);
+
+		..account.ppppp                = ..string.match(strTmp,tikas.match.ppppp);
 		..account.one.serviceAccountID = ..string.match(strTmp,tikas.match.serviceAccount);
-		..account.one.createTime = ..string.match(strTmp,tikas.match.createTime);
-		//顺便计算一下天数
-		tm = time(..account.one.createTime,"%Y-%m-%d %H:%M:%S");
+		..account.one.createTime       = ..string.match(strTmp,tikas.match.createTime);
+
+		tm                = time(..account.one.createTime,"%Y-%m-%d %H:%M:%S");
 		..account.one.day = tm.diffday(tmNow);
 
-		strTmp = ..http.get( "https://login.hk.beanfun.com/generic_handlers/get_cookies.ashx" );
-		//取得获取登录密码用的 secretCode 值
+		strTmp               = ..http.get( "https://login.hk.beanfun.com/generic_handlers/get_cookies.ashx" );
 		..account.secretCode = ..string.match(strTmp,tikas.match.secretCode);
 
-		//获取登录游戏权限
-		payload = {};
-		payload.service_code = "610074";
-		payload.service_region = "T9";
-		payload.service_account_id = ..account.one.serviceAccountID;
-		payload.sotp = ..account.one.serviceAccountSN;
+		payload                              = {};
+		payload.service_code                 = "610074";
+		payload.service_region               = "T9";
+		payload.service_account_id           = ..account.one.serviceAccountID;
+		payload.sotp                         = ..account.one.serviceAccountSN;
 		payload.service_account_display_name = ..account.one.displayName;
-		payload.service_account_create_time = ..account.one.createTime;
+		payload.service_account_create_time  = ..account.one.createTime;
+		payload[..account.dynamic]           = ..account.dynamicValue;
 		try{
 			strTmp = ..http.post( "https://bfweb.hk.beanfun.com/beanfun_block/generic_handlers/record_service_start.ashx",payload )
-			if( ..string.match(strTmp,tikas.match.strOutstring) != "Success" ){
-				payload[..account.dynamic] = ..account.dynamicValue;
-				..http.post( "https://bfweb.hk.beanfun.com/beanfun_block/generic_handlers/record_service_start.ashx",payload )
+			if( ..string.match(strTmp,tikas.match.strOutstring) == "Success" ){
+				..log("所有准备工作已就绪",false);
+				return 0;
 			}
 		}
 		catch(e){
 			..log("请检查你的网络连接情况，之后再来尝试",false);
 		}
-		return 0; 
 	}else {//台号
 
 	}
-	return 0;
 }
 
 addAccount = function(str,name){
@@ -439,8 +436,6 @@ addAccount = function(str,name){
 		payload.sag         = "";
 		try{
 			jsonTab = web.json.parse( ..http.post("https://bfweb.hk.beanfun.com/generic_handlers/gamezone.ashx",payload) );
-			//import win.clip;
-			//..win.clip.write(strTmp);
 			/*
 			返回：
 			{

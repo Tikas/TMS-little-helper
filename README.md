@@ -59,7 +59,7 @@ TMS小帮手，一个致力于 TMS (TW MapleStory) 启动、登录、多账号�
 
 <details><summary>点我 打开/关闭 维护者列表</summary>
 
-- [tikas](https://github.com/tikas) - 项目作者，全能酱油王。
+- [Tikas](https://github.com/tikas) - 项目作者，全能酱油王。
 
 </details>
 
@@ -68,6 +68,12 @@ TMS小帮手，一个致力于 TMS (TW MapleStory) 启动、登录、多账号�
 特别感谢所有参与 TMS little helper 开发的贡献者。[贡献者列表](https://github.com/tikas/TMS-little-helper/graphs/contributors)
 
 <a href="https://github.com/Loyisa"><img src="https://github.com/Loyisa.png" width="40" height="40" alt="Loyisa" title="Loyisa"/></a>
+
+<details><summary>点我 打开/关闭 贡献者列表</summary>
+
+- [Loyisa](https://github.com/Loyisa) - 技术大神，高尚的人格魅力，强大的技术能力，还 TM 的帅气！。
+
+</details>
 
 ### 架构
 

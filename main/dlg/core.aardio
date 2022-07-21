@@ -7,18 +7,26 @@ import perform;
 			..globalCord = 4;  //webToken 获取失败！
 			return ;
 		}
-		var numTmp = perform.getAccountList("HK");
-		if( numTmp == 2 ){
-			..globalCord = 12;  //港号没有进行进阶认证
-			return ;
+		var numTmp = perform.getAccountList("HK");//3 为锁号，2 为没有进阶，1 为没有账号，0 为有账号
+		select(numTmp) {
+			case 3 {
+				..globalCord = 7;  //港号锁号了
+				//TODO：这里要执行查询是什么原因导致锁号
+				return ;
+			}
+			case 2 {
+				..globalCord = 12;  //港号没有进行进阶认证
+				return ;
+			}
+			case 1 {
+				..globalCord = 17;  //港号账号已完成进阶认证，但是还没创建游戏账号
+				return ;
+			}
+			case 0 {
+				..globalCord = 11;  //港号获取到游戏账号列表
+				return ;
+			}
 		}
-		if( numTmp == 1 ){
-			..globalCord = 17;  //港号账号已完成进阶认证，但是还没创建游戏账号
-			return ;
-		}
-
-		..globalCord = 11;  //港号获取到游戏账号列表
-		return ;
 	}else {//台号
 		if( perform.getWebToken("TW") == false ){
 			..globalCord = 4;  //webToken 获取失败！
@@ -64,18 +72,18 @@ buttonClose={cls="plus";left=436;top=0;right=466;bottom=30;iconColor=15790320;ic
 buttonMinimize={cls="plus";left=380;top=0;right=420;bottom=30;iconColor=15790320;iconStyle={font=LOGFONT(h=-19;name='FontAwesome');valign="bottom"};iconText='\uF068';notify=1;z=34};
 copyAccount={cls="plus";text="复制登录账号";left=35;top=445;right=215;bottom=475;bgcolor=11580047;color=15790320;font=LOGFONT(h=-14);z=26};
 copyPwd={cls="plus";text="获取并复制 OTP 登录密码";left=35;top=485;right=215;bottom=515;bgcolor=11580047;color=15790320;font=LOGFONT(h=-14);z=27};
-plus={cls="plus";left=18;top=725;right=48;bottom=755;iconColor=15790320;iconStyle={font=LOGFONT(h=-20;name='FontAwesome')};iconText='\uF132';z=5};
-plus10={cls="plus";left=378;top=723;right=408;bottom=753;iconColor=15790320;iconStyle={font=LOGFONT(h=-20;name='FontAwesome')};iconText='\uF11B';z=14};
-plus11={cls="plus";left=418;top=724;right=448;bottom=754;iconColor=6710886;iconStyle={font=LOGFONT(h=-20;name='FontAwesome')};iconText='\uF0F4';z=15};
-plus2={cls="plus";left=58;top=725;right=88;bottom=755;iconColor=6710886;iconStyle={font=LOGFONT(h=-20;name='FontAwesome')};iconText='\uF235';z=6};
+plus1={cls="plus";left=18;top=725;right=48;bottom=755;iconColor=15790320;iconStyle={font=LOGFONT(h=-20;name='FontAwesome')};iconText='\uF132';transparent=1;z=5};
+plus10={cls="plus";left=378;top=723;right=408;bottom=753;iconColor=15790320;iconStyle={font=LOGFONT(h=-20;name='FontAwesome')};iconText='\uF11B';transparent=1;z=14};
+plus11={cls="plus";left=418;top=724;right=448;bottom=754;iconColor=6710886;iconStyle={font=LOGFONT(h=-20;name='FontAwesome')};iconText='\uF0F4';transparent=1;z=15};
+plus2={cls="plus";left=58;top=725;right=88;bottom=755;iconColor=6710886;iconStyle={font=LOGFONT(h=-20;name='FontAwesome')};iconText='\uF235';transparent=1;z=6};
 plus21={cls="plus";left=232;top=380;right=234;bottom=480;bgcolor=15790320;z=22};
-plus3={cls="plus";left=98;top=725;right=128;bottom=755;iconColor=6710886;iconStyle={font=LOGFONT(h=-20;name='FontAwesome')};iconText='\uF127';z=7};
-plus4={cls="plus";left=138;top=725;right=168;bottom=755;iconColor=6710886;iconStyle={font=LOGFONT(h=-24;name='FontAwesome')};iconText='\uF023';z=8};
-plus5={cls="plus";left=178;top=725;right=208;bottom=755;iconColor=6710886;iconStyle={font=LOGFONT(h=-20;name='FontAwesome')};iconText='\uF071';z=9};
-plus6={cls="plus";left=218;top=725;right=248;bottom=755;iconColor=6710886;iconStyle={font=LOGFONT(h=-20;name='FontAwesome')};iconText='\uF021';z=10};
-plus7={cls="plus";left=258;top=725;right=288;bottom=755;iconColor=6710886;iconStyle={font=LOGFONT(h=-20;name='FontAwesome')};iconText='\uF268';z=11};
-plus8={cls="plus";left=298;top=725;right=328;bottom=755;iconColor=15790320;iconStyle={font=LOGFONT(h=-20;name='FontAwesome')};iconText='\uF2DD';z=12};
-plus9={cls="plus";left=338;top=725;right=368;bottom=755;iconColor=15790320;iconStyle={font=LOGFONT(h=-20;name='FontAwesome')};iconText='\uF21E';z=13};
+plus3={cls="plus";left=98;top=725;right=128;bottom=755;iconColor=6710886;iconStyle={font=LOGFONT(h=-20;name='FontAwesome')};iconText='\uF127';transparent=1;z=7};
+plus4={cls="plus";left=138;top=725;right=168;bottom=755;iconColor=6710886;iconStyle={font=LOGFONT(h=-24;name='FontAwesome')};iconText='\uF023';transparent=1;z=8};
+plus5={cls="plus";left=178;top=725;right=208;bottom=755;iconColor=6710886;iconStyle={font=LOGFONT(h=-20;name='FontAwesome')};iconText='\uF071';transparent=1;z=9};
+plus6={cls="plus";left=218;top=725;right=248;bottom=755;iconColor=6710886;iconStyle={font=LOGFONT(h=-20;name='FontAwesome')};iconText='\uF021';transparent=1;z=10};
+plus7={cls="plus";left=258;top=725;right=288;bottom=755;iconColor=6710886;iconStyle={font=LOGFONT(h=-20;name='FontAwesome')};iconText='\uF268';transparent=1;z=11};
+plus8={cls="plus";left=298;top=725;right=328;bottom=755;iconColor=15790320;iconStyle={font=LOGFONT(h=-20;name='FontAwesome')};iconText='\uF2DD';transparent=1;z=12};
+plus9={cls="plus";left=338;top=725;right=368;bottom=755;iconColor=15790320;iconStyle={font=LOGFONT(h=-20;name='FontAwesome')};iconText='\uF21E';transparent=1;z=13};
 richedit={cls="richedit";left=1;top=550;right=465;bottom=720;autohscroll=false;bgcolor=8615995;color=13421772;multiline=1;readonly=1;z=4};
 setting={cls="plus";left=18;top=35;right=88;bottom=105;autohscroll=false;autovscroll=false;iconColor=16776960;iconStyle={align="right";font=LOGFONT(h=-29;name='FontAwesome');valign="bottom"};iconText='\uF013';transparent=1;z=32};
 startGame={cls="plus";text="启动并进入游戏";left=251;top=445;right=431;bottom=515;bgcolor=11580047;color=15790320;font=LOGFONT(h=-16);iconStyle={font=LOGFONT(h=-22;name='FontAwesome');padding={top=10};valign="top"};iconText='\uF11B';textPadding={bottom=10};valign="bottom";z=28};
@@ -89,7 +97,7 @@ static5={cls="static";text="游戏账号";left=20;top=130;right=120;bottom=160;c
 static6={cls="static";text="Game Account";left=120;top=143;right=220;bottom=163;color=8947848;transparent=1;z=19};
 static7={cls="static";text="进入游戏";left=20;top=290;right=120;bottom=320;color=11184810;font=LOGFONT(h=-21);transparent=1;z=20};
 static8={cls="static";text="Enter Game";left=120;top=303;right=220;bottom=323;color=8947848;transparent=1;z=21};
-tip={cls="plus";text="早上好!";left=315;top=60;right=460;bottom=95;align="left";color=15790320;font=LOGFONT(h=-21);iconStyle={align="left";font=LOGFONT(h=-29;name='FontAwesome')};iconText='\uF0E5';textPadding={left=35};z=16}
+tip={cls="plus";text="早上好!";left=315;top=60;right=460;bottom=95;align="left";color=15790320;font=LOGFONT(h=-21);iconStyle={align="left";font=LOGFONT(h=-29;name='FontAwesome')};iconText='\uF0E5';textPadding={left=35};transparent=1;z=16}
 )
 /*}}*/
 
@@ -152,6 +160,12 @@ var nameAndDay = function(escapeStr,timeStr){//返回两个字符值：名字，
 		case 4 {//webToken 获取失败
 			coreForm.add(
 				plusWebtoken={cls="plus";text='WebToken 获取失败！\n\r如非网络问题，请联系 Tikas 修复！\n\r请重新启动小帮手，再次登录尝试！';left=20;top=170;right=446;bottom=270;align="left";bgcolor=6324655;color=15793151;font=LOGFONT(h=-16);iconStyle={align="left";font=LOGFONT(h=-30;name='FontAwesome');padding={left=30}};iconText='\uF119';textPadding={left=90};z=33};
+			)
+			setSkin(2);
+		}
+		case 7 {//港号锁号了
+			coreForm.add(
+				plusWebtoken={cls="plus";text='游戏账号：' ++ ..account.one.displayName ++ ' 已被锁定！\n\r锁定原因查询中...';left=20;top=170;right=446;bottom=270;align="left";bgcolor=6324655;color=15793151;font=LOGFONT(h=-16);iconStyle={align="left";font=LOGFONT(h=-30;name='FontAwesome');padding={left=30}};iconText='\uF023';textPadding={left=90};z=33};
 			)
 			setSkin(2);
 		}
@@ -267,7 +281,10 @@ var otpPwd = DES.ECB.DecryStrHex(str,key);
 
 
 coreForm.onClose = function(hwnd,message,wParam,lParam){
-    if( ..userClosed ){ mainForm.close() };
+    if( ..userClosed ){
+        ..http.close();
+		mainForm.close();
+	}
 }
 
 coreForm.onMouseDown  = function(wParam,lParam){ coreForm.hitCaption() };

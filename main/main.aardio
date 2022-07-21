@@ -46,6 +46,9 @@ globalCord 为全局通用控制识别码，为减少变量，很多判断写到
 4 = webToken 获取失败！
 5 = 首次使用进入 welcomeForm 时，5 为未点击设置密码按钮
 6 = 首次使用进入 welcomeForm 时，6 为已经点击设置密码按钮
+7 = 港号锁号了
+8 = 台号锁了一个号
+9 = 台号锁了两个号
 --------
 10 = 当前还没有账号记录信息，强制要求显示增加账号，并隐藏返回按钮
 11 = 「港号」获取到游戏账号列表 --- 不记录信息登录 - 此值由于 cookie 没解决，暂时无效
@@ -407,6 +410,8 @@ if( globalCord == 2 ){
 	win.ui.simpleWindow(loginForm);
 	if( loginForm.doModal() != dirPath ){ return ; }
 }//第二次阻塞判断结束
+
+import dotNet;
 
 /*DSG{{*/
 mainForm = win.form(cls="XTIKAS_FORM";text="TMS little helper";right=465;bottom=754;border="none";composited=1;max=false;mode="popup";sysmenu=false;title=false)

@@ -104,12 +104,12 @@ namespace tikas{
 	    pnlMsg             = /*<@pnlMsg@>*/;
 	    verify             = /*<@Verify@>*/;
 	    addAccount         = /*<@btnAddServiceAccount@>*/;
-	    lock               = /*<@class="Stop"@>*/;//本来可以直接找 Stop 的，但是，考虑到可能有人取名叫 Stop，只能这样了
+	    lock               = /*<@class="Stop"@>*/;
 	    account            = /*\"\ssn\=\"(.*?)\"\sname\=\"(.*?)\"*/;
-	    sn                 = /*BF\&\&\&\&SN\=(.*?)\&\&\&\&*/;//获取游戏密码时，所需要的 sn 值
-	    dynamic            = /*CreateTime\s\+\"\&(.*?)\=(.*?)\"*/;//获取游戏密码时，后面所需要的动态值，值要解 url 编码
-	    secretCode         = /*\'(.*?)\'*/;//获取游戏密码时，所需要的 secretCode 值
-	    data               = /*Data\=(.*?)\"*/;//获取游戏密码时，所需要的 data 值
+	    sn                 = /*BF\&\&\&\&SN\=(.*?)\&\&\&\&*/;                         //获取游戏密码时，所需要的 sn 值
+	    dynamic            = /*CreateTime\s\+\"\&(.*?)\=(.*?)\"*/;                    //获取游戏密码时，后面所需要的动态值，值要解 url 编码
+	    secretCode         = /*\'(.*?)\'*/;                                           //获取游戏密码时，所需要的 secretCode 值
+	    data               = /*Data\=(.*?)\"*/;                                       //获取游戏密码时，所需要的 data 值
 	    serviceAccount     = /*ServiceAccount\=(.*?)\&*/;
 	    createTime         = /*CreateTime\=(.*?)\&*/;
 	    ppppp              = /*ppppp\=(.*?)\&*/;

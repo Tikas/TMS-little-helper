@@ -202,12 +202,14 @@ var login = function(){ if( check() ){
 					mainForm.show(true);
 					adduserForm.static.text = "登  录";
 					win.msgbox(statusInformation,"错误:");
+					adduserForm.static.disabled = false;
 					return ;
 				}
 				if( not perform.login("HK",adduserForm.editID.text,adduserForm.editPwd.text) ){
 					mainForm.show(true);
 					adduserForm.static.text = "登  录";
 					win.msgbox(statusInformation,"错误:");
+					adduserForm.static.disabled = false;
 					return ;
 				}
 				if( saveBoolean ){
@@ -227,12 +229,14 @@ var login = function(){ if( check() ){
 					mainForm.show(true);
 					adduserForm.static.text = "登  录";
 					win.msgbox(statusInformation,"错误:");
+					adduserForm.static.disabled = false;
 					return ;
 				}
 				if( not perform.login("HK",adduserForm.editID.text,adduserForm.editPwd.text) ){
 					mainForm.show(true);
 					adduserForm.static.text = "登  录";
 					win.msgbox(statusInformation,"错误:");
+					adduserForm.static.disabled = false;
 					return ;
 				}
 				if( saveBoolean ){
@@ -254,7 +258,6 @@ var login = function(){ if( check() ){
 		case 30 {
 		}
 	}
-	adduserForm.static.disabled = false;
 }}//为减少缩进，login 事件是有两个大括号
 
 

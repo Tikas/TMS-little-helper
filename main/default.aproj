@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<project ver="10" name="little helper for tikas" libEmbed="true" icon="res\xtikas.ico" ui="win" output="TMSHelper.exe" CompanyName="tikas" FileDescription="This is a little helper for TMS that makes you experience maplestory more friendly." LegalCopyright="Copyright (C) 𝒙𝑻𝒊𝒌𝒂𝒔 2022" ProductName="TMS little helper" InternalName="TMS little helper" FileVersion="1.0.0.60" ProductVersion="1.0.0.60" publishDir="/dist/" dstrip="false" local="false" ignored="false">
+<project ver="10" name="little helper for tikas" libEmbed="true" icon="res\logo.ico" ui="win" output="TMSHelper.exe" CompanyName="tikas" FileDescription="This is a little helper for TMS that makes you experience maplestory more friendly." LegalCopyright="Copyright (C) 𝒙𝑻𝒊𝒌𝒂𝒔 2022" ProductName="TMS little helper" InternalName="TMS little helper" FileVersion="1.0.0.60" ProductVersion="1.0.0.60" publishDir="/dist/" dstrip="false" local="false" ignored="false">
 	<file name="main.aardio" path="main.aardio" comment="main.aardio"/>
 	<folder name="资源文件" path="res" embed="true" local="false" ignored="false">
 		<folder name="background" path="res\background" embed="true" comment="目录" local="false" ignored="false">
@@ -23,7 +23,6 @@
 			<file name="start1.png" path="res\start\start1.png" comment="res\start\start1.png"/>
 			<file name="start2.png" path="res\start\start2.png" comment="res\start\start2.png"/>
 		</folder>
-		<file name="xtikas.ico" path="res\xtikas.ico" comment="res\xtikas.ico"/>
 		<folder name="img" path="res\img" comment="res\img" local="false" embed="false" ignored="false">
 			<file name="1.jpg" path="res\img\1.jpg" comment="res\img\1.jpg"/>
 			<file name="10.jpg" path="res\img\10.jpg" comment="res\img\10.jpg"/>
@@ -91,6 +90,7 @@
 		<folder name="dll" path="res\dll" embed="true" comment="目录" local="false" ignored="false">
 			<file name="DES.dll" path="res\dll\DES.dll" comment="res\dll\DES.dll"/>
 		</folder>
+		<file name="logo.ico" path="res\logo.ico" comment="res\logo.ico"/>
 	</folder>
 	<folder name="窗体文件" path="dlg" comment="目录" embed="true" local="false" ignored="false">
 		<file name="list.aardio" path="dlg\list.aardio" comment="dlg\list.aardio"/>
