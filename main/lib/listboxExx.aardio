@@ -1,0 +1,166 @@
+﻿//listboxExx
+import win.imageList;
+import gdi;
+import fonts.fontAwesome;
+import com.picture;
+class listboxExx{
+    ctor( winform,Iheight=71,backColor=0xFFFFFF,activedColor=0xFFF5E2,hoverColor=0xEEB7FF ){
+
+        //先设置行高(自绘用)
+        winform.onMeasureItem = function(measureItem){ measureItem.itemHeight = Iheight };
+
+        //在行间开始自绘
+        winform.onDrawItem = function(drawItem){..gdi.selectBrush(
+            function(hdc,pen,brush){
+                //获取并分解需要显示的数据（字符串转表）
+                var str = winform.getItemText(drawItem.itemID + 1);
+                if(!str){return;};
+                var strTab = eval(str);
+                var rc     = drawItem.rcItem;
+                ..gdi.fillRect(hdc,backColor,rc);
+
+                if(drawItem.itemState & 1/*_ODS_SELECTED*/){
+                    ..gdi.fillRect(hdc,activedColor,rc);
+                    //删除
+                    if( delete ){
+                        font = ::LOGFONT(weight=60;color=0x8D95D2;name='FontAwesome';h=-16);
+                        ..gdi.textOut(hdc,font,'\uF057 删除',/*rc.width()/2+345*/rc.right-60, rc.top+25);
+                    }else {
+                        font = ::LOGFONT(weight=60;color=0x9C9C9C;name='FontAwesome';h=-16);
+                        ..gdi.textOut(hdc,font,'\uF057 删除',/*rc.width()/2+345*/rc.right-60, rc.top+25);
+                    }
+                    //修改
+                    if( revise ){
+                        font = ::LOGFONT(weight=60;color=0xADD195;name='FontAwesome';h=-16);
+                        ..gdi.textOut(hdc,font,'\uF0F6 修改',/*rc.width()/2+345*/rc.right-120, rc.top+25);
+                    }else {
+                        font = ::LOGFONT(weight=60;color=0x9C9C9C;name='FontAwesome';h=-16);
+                        ..gdi.textOut(hdc,font,'\uF0F6 修改',/*rc.width()/2+345*/rc.right-120, rc.top+25);
+                    }
+                }else {
+                    if( listboxsel == (drawItem.itemID+1) ){ ..gdi.fillRect(hdc,hoverColor,rc); }
+                }
+
+                //九宫格贴图
+                var bitmap       = ..com.picture.loadBitmap(strTab.iImage);
+                var bmpRC        = ..table.clone(rc);
+                    bmpRC.left   = bmpRC.left+15;
+                    bmpRC.top    = bmpRC.top+5;
+                    bmpRC.right  = bmpRC.left+60;
+                    bmpRC.bottom = bmpRC.bottom-6;
+                ..gdi.drawBitmap( hdc,bitmap,bmpRC,0,0,0,0 );
+                //::DeleteObject(bitmap)
+                //主文字
+                font = ::LOGFONT(weight=250;color=0xFFFFFF;h=-18);
+                ..gdi.textOut(hdc,font,strTab.text,bmpRC.right+10, rc.top+10);
+                //次文字描述
+                font = ::LOGFONT(weight=250;color=0xB0B0B0;h=-12);
+                ..gdi.textOut(hdc,font,strTab.size,bmpRC.right+10, rc.top+40);
+            },drawItem.hDC,0xF5FDFF/*背景色*/,0xEEEEEE/*画笔色*/
+        );}//为减少缩进，gdi.selectBrush 写在前面一行
+
+        winform.wndproc = function(hwnd,message,wParam,lParam){ select( message ){
+            case 0x200/*_WM_MOUSEMOVE*/{
+                var x,    y = ..win.getMessagePos();
+                var item = winform.hitTest(x,y,true);
+                if( item == null ){ return ; };
+
+                if( listboxsel == item ){   /* 若鼠标在同一行item内游动 */
+                    x,y = ..win.toClient(winform.hwnd,x,y);
+                    for( i=1;2;1 ){ select(i) {
+                        case 1 {
+                            var delrc        = winform.getItemRect(item);
+                                delrc.left   = delrc.right-59;
+                                delrc.top    = delrc.top+25;
+                                delrc.bottom = delrc.bottom-20 ;
+                            //判断鼠标游动的区间是不是在[删除]按钮范围
+                            if( ::PtInRect(delrc,x,y) ){
+                                if( delete == false ){    //鼠标从[删除]按钮外部移动到内部区域
+                                    delete = true;
+                                    //设置更新区,并更新
+                                    winform.invalidate( winform.getItemRect(item) );
+                                    winform.update();
+                                    break;
+                                }
+                                continue ; //一直在内部区域游动,则不更新
+                            }else {
+                                if( delete == true ){ //鼠标从内到外
+                                    delete = false;
+                                    //设置更新区,并更新
+                                    winform.invalidate( winform.getItemRect(item) );
+                                    winform.update();
+                                    break;
+                                }
+                                continue ; //一直在外部区域游动,则不更新
+                            }
+                        }
+                        case 2 {
+                            var reviserc        = winform.getItemRect(item);
+                                reviserc.left   = reviserc.right-120;
+                                reviserc.right  = reviserc.right-61;
+                                reviserc.top    = reviserc.top+25;
+                                reviserc.bottom = reviserc.bottom-20 ;
+                            //判断鼠标游动的区间是不是在[修改]按钮范围
+                            if( ::PtInRect(reviserc,x,y) ){
+                                if( revise == false ){    //鼠标从[修改]按钮外部移动到内部区域
+                                    revise = true;
+                                    //设置更新区,并更新
+                                    winform.invalidate( winform.getItemRect(item) );
+                                    winform.update();
+                                    break;
+                                }
+                                continue ; //一直在内部区域游动,则不更新
+                            }else {
+                                if( revise == true ){ //鼠标从内到外
+                                    revise = false;
+                                    //设置更新区,并更新
+                                    winform.invalidate( winform.getItemRect(item) );
+                                    winform.update();
+                                    break;
+                                };
+                                continue ; //一直在外部区域游动,则不更新
+                            }
+                        }
+                    };}//为减少缩进，select 写在前面一行，for 结束
+                    return ;
+                }else {
+                    //设置hover效果
+                    listboxsel = item;
+                    if( beforesel == null ){ //第一次执行,初始化
+                        beforesel = listboxsel;
+                    }else {
+                        //先关闭上次绘制区域
+                        if( beforesel ){ winform.invalidate( winform.getItemRect(beforesel),0 ) };
+                        beforesel = listboxsel;
+                    }
+                    //绘制当前区域
+                    winform.invalidate( winform.getItemRect(item) );
+                    winform.update();
+                }
+            }
+            case 0x202/*_WM_LBUTTONUP*/ {
+                //删除功能
+                if( delete ){ //若鼠标在删除按钮区域内单击了
+                    if(this.delFunc){ this.delFunc(winform.selIndex); };
+                    return ;
+                }
+                //修改功能
+                if( revise ){ //若鼠标在删除按钮区域内单击了
+                    if( this.reviseFunc ){ this.reviseFunc(winform.selIndex); };
+                    return ;
+                }
+            }
+            case 0x20A/*_WM_MOUSEWHEEL*/{ //滚轮消息
+                var wheelDelta = ..raw.convert( {int wParam=wParam},{word vk;word delta} ).delta;
+                if( wheelDelta > 0 ){
+                    ::SendMessageInt( winform.hwnd, 0x115/*_WM_VSCROLL*/, 0, 0 );
+                }else {
+                    ::SendMessageInt( winform.hwnd, 0x115/*_WM_VSCROLL*/, 1, 0 );
+                };
+                return 0;
+            }
+        };}//为减少缩进，select 写在前面一行，winform.wndproc 结束
+
+        return this;
+    }//ctor结束
+}

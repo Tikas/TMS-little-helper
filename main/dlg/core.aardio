@@ -1,0 +1,277 @@
+import tikas;
+import perform;
+
+(function(){ if( ..globalCord == 15 ){//不记录信息登录，两种场景：1、首次使用，2、已有账号，都是相同逻辑，共用代码
+	if( ..configId.tempArea == "HK" ){//港号
+		if( perform.getWebToken("HK") == false ){
+			..globalCord = 4;  //webToken 获取失败！
+			return ;
+		}
+		var numTmp = perform.getAccountList("HK");
+		if( numTmp == 2 ){
+			..globalCord = 12;  //港号没有进行进阶认证
+			return ;
+		}
+		if( numTmp == 1 ){
+			..globalCord = 17;  //港号账号已完成进阶认证，但是还没创建游戏账号
+			return ;
+		}
+
+		..globalCord = 11;  //港号获取到游戏账号列表
+		return ;
+	}else {//台号
+		if( perform.getWebToken("TW") == false ){
+			..globalCord = 4;  //webToken 获取失败！
+			return ;
+		}
+		if( perform.getAccountList("TW") == 2 ){
+			..globalCord = 14;  //台号没有进行进阶认证
+			return ;
+		}
+		if( perform.getAccountList("TW") == 1 ){
+			..globalCord = 18;  //台号账号已完成进阶认证，但是还没创建游戏账号
+			return ;
+		}
+
+		..globalCord = 13;  //台号获取到游戏账号列表
+		return ;
+	}
+return ;}//不记录信息登录完成，以下是：记录信息的登录
+
+
+
+
+})();
+
+
+
+mainForm.show(true);
+
+import win.ui;
+import fonts.fontAwesome;
+import process;
+import time.ole;
+/*DSG{{*/
+coreForm = win.form(cls="TIKASCORE_FORM";text="TMS little helper";right=465;bottom=754;bgcolor=6575626;border="none";max=false)
+coreForm.add(
+accountOne={cls="plus";text="Tikas";left=20;top=170;right=223;bottom=270;align="left";bgcolor=8088342;font=LOGFONT(h=-16);hide=1;iconColor=13421772;iconStyle={align="left";font=LOGFONT(h=-22;name='FontAwesome');padding={left=10;top=10};valign="top"};iconText='\uF2BC                      \uF0C8';textPadding={left=10;top=45};valign="top";z=33};
+accountTwo={cls="plus";text="小T同学";left=243;top=170;right=446;bottom=270;align="left";bgcolor=8088342;font=LOGFONT(h=-16);hide=1;iconColor=13421772;iconStyle={align="left";font=LOGFONT(h=-22;name='FontAwesome');padding={left=10;top=10};valign="top"};iconText='\uF2BC                      \uF0C8';textPadding={left=10;top=45};valign="top";z=36};
+addAccount={cls="plus";text="新建游戏账号";left=20;top=170;right=223;bottom=270;bgcolor=8088342;font=LOGFONT(h=-16);hide=1;iconColor=13421772;iconStyle={font=LOGFONT(h=-30;name='FontAwesome');padding={top=20};valign="top"};iconText='\uF234';textPadding={bottom=20};valign="bottom";z=35};
+bk={cls="bk";left=0;top=720;right=466;bottom=755;bgcolor=4931586;z=3};
+bk2={cls="bk";left=20;top=330;right=446;bottom=530;bgcolor=8088342;z=2};
+bk5={cls="bk";left=18;top=35;right=78;bottom=95;background="\res\img\46.jpg";z=1};
+buttonClose={cls="plus";left=436;top=0;right=466;bottom=30;iconColor=15790320;iconStyle={font=LOGFONT(h=-19;name='FontAwesome')};iconText='\uF2D3';z=31};
+buttonMinimize={cls="plus";left=380;top=0;right=420;bottom=30;iconColor=15790320;iconStyle={font=LOGFONT(h=-19;name='FontAwesome');valign="bottom"};iconText='\uF068';notify=1;z=34};
+copyAccount={cls="plus";text="复制登录账号";left=35;top=445;right=215;bottom=475;bgcolor=11580047;color=15790320;font=LOGFONT(h=-14);z=26};
+copyPwd={cls="plus";text="获取并复制 OTP 登录密码";left=35;top=485;right=215;bottom=515;bgcolor=11580047;color=15790320;font=LOGFONT(h=-14);z=27};
+plus={cls="plus";left=18;top=725;right=48;bottom=755;iconColor=15790320;iconStyle={font=LOGFONT(h=-20;name='FontAwesome')};iconText='\uF132';z=5};
+plus10={cls="plus";left=378;top=723;right=408;bottom=753;iconColor=15790320;iconStyle={font=LOGFONT(h=-20;name='FontAwesome')};iconText='\uF11B';z=14};
+plus11={cls="plus";left=418;top=724;right=448;bottom=754;iconColor=6710886;iconStyle={font=LOGFONT(h=-20;name='FontAwesome')};iconText='\uF0F4';z=15};
+plus2={cls="plus";left=58;top=725;right=88;bottom=755;iconColor=6710886;iconStyle={font=LOGFONT(h=-20;name='FontAwesome')};iconText='\uF235';z=6};
+plus21={cls="plus";left=232;top=380;right=234;bottom=480;bgcolor=15790320;z=22};
+plus3={cls="plus";left=98;top=725;right=128;bottom=755;iconColor=6710886;iconStyle={font=LOGFONT(h=-20;name='FontAwesome')};iconText='\uF127';z=7};
+plus4={cls="plus";left=138;top=725;right=168;bottom=755;iconColor=6710886;iconStyle={font=LOGFONT(h=-24;name='FontAwesome')};iconText='\uF023';z=8};
+plus5={cls="plus";left=178;top=725;right=208;bottom=755;iconColor=6710886;iconStyle={font=LOGFONT(h=-20;name='FontAwesome')};iconText='\uF071';z=9};
+plus6={cls="plus";left=218;top=725;right=248;bottom=755;iconColor=6710886;iconStyle={font=LOGFONT(h=-20;name='FontAwesome')};iconText='\uF021';z=10};
+plus7={cls="plus";left=258;top=725;right=288;bottom=755;iconColor=6710886;iconStyle={font=LOGFONT(h=-20;name='FontAwesome')};iconText='\uF268';z=11};
+plus8={cls="plus";left=298;top=725;right=328;bottom=755;iconColor=15790320;iconStyle={font=LOGFONT(h=-20;name='FontAwesome')};iconText='\uF2DD';z=12};
+plus9={cls="plus";left=338;top=725;right=368;bottom=755;iconColor=15790320;iconStyle={font=LOGFONT(h=-20;name='FontAwesome')};iconText='\uF21E';z=13};
+richedit={cls="richedit";left=1;top=550;right=465;bottom=720;autohscroll=false;bgcolor=8615995;color=13421772;multiline=1;readonly=1;z=4};
+setting={cls="plus";left=18;top=35;right=88;bottom=105;autohscroll=false;autovscroll=false;iconColor=16776960;iconStyle={align="right";font=LOGFONT(h=-29;name='FontAwesome');valign="bottom"};iconText='\uF013';transparent=1;z=32};
+startGame={cls="plus";text="启动并进入游戏";left=251;top=445;right=431;bottom=515;bgcolor=11580047;color=15790320;font=LOGFONT(h=-16);iconStyle={font=LOGFONT(h=-22;name='FontAwesome');padding={top=10};valign="top"};iconText='\uF11B';textPadding={bottom=10};valign="bottom";z=28};
+static={cls="static";text="分步操作";left=34;top=350;right=132;bottom=375;color=15790320;font=LOGFONT(h=-16);transparent=1;z=23};
+static11={cls="static";text="一步到位";left=333;top=350;right=431;bottom=375;align="right";color=15790320;font=LOGFONT(h=-16);transparent=1;z=29};
+static14={cls="static";text="只有指定游戏路径后才能启动游戏，并且直接登录进入游戏";left=256;top=380;right=406;bottom=430;align="right";color=11184810;transparent=1;z=30};
+static2={cls="static";text="月到天心处，风来水面时。";left=93;top=43;right=315;bottom=68;color=15790320;font=LOGFONT(h=-16);transparent=1;z=17};
+static3={cls="static";text="点数：5201314 点";left=93;top=70;right=273;bottom=90;color=11184810;transparent=1;z=24};
+static4={cls="static";text="适合游戏已启动，或者，把一次性 OTP 动态密码发送给别人登录游戏";left=60;top=380;right=210;bottom=430;color=11184810;transparent=1;z=25};
+static5={cls="static";text="游戏账号";left=20;top=130;right=120;bottom=160;color=11184810;font=LOGFONT(h=-21);transparent=1;z=18};
+static6={cls="static";text="Game Account";left=120;top=143;right=220;bottom=163;color=8947848;transparent=1;z=19};
+static7={cls="static";text="进入游戏";left=20;top=290;right=120;bottom=320;color=11184810;font=LOGFONT(h=-21);transparent=1;z=20};
+static8={cls="static";text="Enter Game";left=120;top=303;right=220;bottom=323;color=8947848;transparent=1;z=21};
+tip={cls="plus";text="早上好!";left=315;top=60;right=460;bottom=95;align="left";color=15790320;font=LOGFONT(h=-21);iconStyle={align="left";font=LOGFONT(h=-29;name='FontAwesome')};iconText='\uF0E5';textPadding={left=35};z=16}
+)
+/*}}*/
+
+..userClosed = true;//默认为真
+
+var setSkin = function(num){//传值 1 为正常，2 为警告，3 为危险
+	select(num) {
+		case 1 {
+			coreForm.bgcolor          = 6575626;
+			coreForm.bk2.bgcolor      = 8088342;
+			coreForm.richedit.bgcolor = 8615995;
+			coreForm.bk.bgcolor       = 4931586;
+			coreForm.copyAccount.skin( tikas.skin.buttonSkinNormal );
+			coreForm.copyPwd.skin( tikas.skin.buttonSkinNormal );
+			coreForm.startGame.skin( tikas.skin.buttonSkinNormal );
+			coreForm.accountOne.skin( tikas.skin.listSkinNormal );
+			coreForm.accountTwo.skin( tikas.skin.listSkinNormal );
+			coreForm.addAccount.skin( tikas.skin.addAccountSkinNormal );
+		}
+		case 2 {
+			coreForm.bgcolor          = 3760539;
+			coreForm.bk2.bgcolor      = 6324655;
+			coreForm.richedit.bgcolor = 6324655;
+			coreForm.bk.bgcolor       = 1848147;
+			coreForm.copyAccount.skin( tikas.skin.buttonSkinWarn );
+			coreForm.copyPwd.skin( tikas.skin.buttonSkinWarn );
+			coreForm.startGame.skin( tikas.skin.buttonSkinWarn );
+			coreForm.accountOne.skin( tikas.skin.listSkinWarn );
+			coreForm.accountTwo.skin( tikas.skin.listSkinWarn );
+			coreForm.addAccount.skin( tikas.skin.addAccountSkinWarn );
+		}
+		else {
+			coreForm.bgcolor          = 3226514;
+			coreForm.bk2.bgcolor      = 5923496;
+			coreForm.richedit.bgcolor = 5923496;
+			coreForm.bk.bgcolor       = 1449295;
+			coreForm.copyAccount.skin( tikas.skin.buttonSkinDanger );
+			coreForm.copyPwd.skin( tikas.skin.buttonSkinDanger );
+			coreForm.startGame.skin( tikas.skin.buttonSkinDanger );
+			coreForm.accountOne.skin( tikas.skin.listSkinDanger );
+			coreForm.accountTwo.skin( tikas.skin.listSkinDanger );
+			coreForm.addAccount.skin( tikas.skin.addAccountSkinDanger );
+		}
+	}
+	coreForm.redrawBackground();
+}
+
+var nameAndDay = function(escapeStr,timeStr){//返回两个字符值：名字，天数
+	var nameStr = "";
+	var timeNow = time.now();
+	var day     = "";
+		nameStr = perform.decode( escapeStr );
+	var tm      = time( timeStr,"%Y-%m-%d %H:%M:%S" );
+		day     = timeNow.diffday(tm);
+	return nameStr,day;
+}
+
+(function(){
+	select(..globalCord) {
+		case 4 {//webToken 获取失败
+			coreForm.add(
+				plusWebtoken={cls="plus";text='WebToken 获取失败！\n\r如非网络问题，请联系 Tikas 修复！\n\r请重新启动小帮手，再次登录尝试！';left=20;top=170;right=446;bottom=270;align="left";bgcolor=6324655;color=15793151;font=LOGFONT(h=-16);iconStyle={align="left";font=LOGFONT(h=-30;name='FontAwesome');padding={left=30}};iconText='\uF119';textPadding={left=90};z=33};
+			)
+			setSkin(2);
+		}
+		case 11 {//港号获取到游戏账号列表
+			/*
+			..account.rows[1].name,..account.rows[1].day = nameAndDay( ..account.rows[1].ServiceAccountDisplayName,..account.rows[1].CreateTime );
+			coreForm.accountOne.text = ..account.rows[1].name ++ '\n' ++ "来枫谷已有：" ++ ..account.rows[1].day ++ "天";
+			*/
+			coreForm.accountOne.text = ..account.one.displayName ++ '\n' ++ "来枫谷已有：" ++ ..account.one.day ++ "天";
+			coreForm.accountOne.hide = 0;
+			setSkin(1);
+		}
+		case 12 {//港号没有进行进阶认证
+			coreForm.addAccount.text     = "请先完成进阶认证";
+			coreForm.addAccount.iconText = '\uF044';
+			coreForm.addAccount.hide     = 0;
+			setSkin(2);
+		}
+		case 17 {//港号账号已完成进阶认证，但是还没创建游戏账号
+			coreForm.addAccount.hide = 0;
+			setSkin(1);
+		}
+
+	}
+})();
+
+coreForm.addAccount.oncommand = function( id,event ){
+	select(..globalCord) {
+		case 12 {//港号没有进行进阶认证
+			//perform.verify("HK");
+			perform.message(12);
+		}
+		case 14 {//台号没有进行进阶认证
+			//perform.verify("TW");
+			perform.message(14);
+		}
+		case 17 {//港号账号已完成进阶认证，但是还没创建游戏账号
+			perform.msgInput("请输入新增账号的别名：");
+		}
+
+	}
+}
+
+//订阅 msgForm 返回的消息
+subscribe("messageFromMsgform",function(str,code){
+    select(..globalCord) {
+    	case 17 {//港号账号已完成进阶认证，但是还没创建游戏账号
+    		if( perform.addAccount("HK",str) ){//新增游戏账号成功
+    			coreForm.accountOne.text = ..account.one.displayName ++ '\n' ++ "来枫谷已有：" ++ ..account.one.createTime ++ "天";
+    			coreForm.accountOne.hide = 0;
+				setSkin(1);
+				..globalCord = 11;  //港号获取到游戏账号列表
+				return ;
+    		}
+    		coreForm.addAccount.text = "出错了，请重试";
+    		return ;
+    	}
+    	case 1 {
+    	}
+    }
+});
+
+coreForm.copyAccount.oncommand = function( id,event ){
+	coreForm.copyAccount.disabledText = "登录账号已复制";
+}
+coreForm.copyPwd.oncommand = function( id,event ){
+	coreForm.copyPwd.disabledText = "正在获取 OTP 密码";
+}
+coreForm.startGame.oncommand = function( id,event ){
+	coreForm.startGame.disabledText = { '\uF04B';text="正在启动游戏" };
+}
+/*coreForm.gamePath.oncommand = function( id,event ){
+	coreForm.copyAccount.disabledText = null;
+	coreForm.copyPwd.disabledText = null;
+	coreForm.startGame.disabledText = null;
+	coreForm.copyAccount.disabled = false;
+	coreForm.copyPwd.disabled = false;
+	coreForm.startGame.disabled = false;
+
+}*/
+
+
+coreForm.buttonMinimize.skin( tikas.skin.buttonMiniSkin );
+coreForm.buttonClose.skin( tikas.skin.buttonCloseSkin );
+coreForm.buttonClose.oncommand = function(id,event){
+	..userClosed = true;//默认为真
+	coreForm.close();
+}
+coreForm.buttonMinimize.oncommand = function(id,event){
+	::User32.PostMessage(mainForm.hwnd,0x112/*_WM_SYSCOMMAND*/,0xF020/*_SC_MINIMIZE*/, 0);
+}
+coreForm.richedit.text = statusInformation;
+
+//启动游戏的
+/*
+mainForm.button.oncommand = function(id,event){
+	var LRProc = "C:\Users\Tikas\Desktop\Locale_Remulator.1.4.3\LRProc.exe";
+	var LRHookx64 = "C:\Users\Tikas\Desktop\Locale_Remulator.1.4.3\LRHookx64.dll";
+	var gid = "69b8ac36-29d4-4dcf-a0a7-adf89ebb7702";
+	var gamesEXE = "C:\TMS\MapleStory\MapleStory.exe";
+	var gamesDir = "C:\TMS\MapleStory\";
+	raw.execute(LRProc, gid+" "+'\"'+LRHookx64+'\"'+" "+gamesEXE,,,gamesDir,0)
+}
+*/
+
+/*
+import dotNet;
+var dll = dotNet.load("DES","\res\dll\DES.dll");
+dll.import("DES");
+var otpPwd = DES.ECB.DecryStrHex(str,key);
+*/
+
+
+
+coreForm.onClose = function(hwnd,message,wParam,lParam){
+    if( ..userClosed ){ mainForm.close() };
+}
+
+coreForm.onMouseDown  = function(wParam,lParam){ coreForm.hitCaption() };
+
+coreForm.show();
+win.loopMessage();
+return coreForm;

@@ -1,0 +1,528 @@
+//RUNAS//
+import win.ui;
+import tikas;
+import key;
+import web.json;
+import win.reg;
+import fsys;
+import inet.whttp;
+import inet.tls;
+import zlib;
+
+/*
+一此规范：
+	1.禁止使用下划线："_"
+	2.变量名首单词统一为小写，后续单词首字母大写
+	3.所有小括号内部引用相关外部命名空间或相关方法时，前后都需要空一格书写，里面再有小括号，如果是最里面，不要空格，具体书写例子：
+		一个小括号：tikas( 我是括号内内容 );
+		两个小括号：tikas( loveYou(最里面内容不要空格) );
+		三个小括号：tikas( loveYou( too(最里面内容不要空格) ),youLove(我是 tikas 的第二个参数，同样不要空格) );
+		传参数时不加空格：
+			tikas(1);
+			tikas(a,b);
+		因为在 IDE 里没有相关插件让括号变色，发现使用前后加空格能提高阅读体验，所以，在这强制要求执行。
+	4.禁止行尾有多余空格！我有强烈的多余空格反感症，可以安装 Trailing Spaces 以解决此问题
+	5.如果是文本里有英文或数字，又非连惯的，请为他们前后增加空格，以提高阅读体验，如：
+		小T说：明明我已经够气质了，在你面前竟然黯然失色！
+			—— 此小T为连惯性，不要拆分加空格
+		当 Tikas 出现的瞬间，整个乌黑的天空，竟然有一束强光穿破，照耀在 Tikas 身上
+			—— 此时英文单词前后需要加空格
+以上强制执行！
+以下非强制：
+	1.有更好的书写方式，比如更加国际友好的书写方式，请直接更改！但是 aardio 特殊性，请保持禁用 "_"，以及保持命名首字母小写
+	2.有自己更好的命名方式，又不失他人理解的，请直接更改
+	3.功能优化迭代等，不用说，直接改
+	4.小T刚学编程，有需要斧正的，大佬请直接动手，最好是使用降维打击方式
+	5.等待增加...
+*/
+
+globalCord = 1;
+/*
+globalCord 为全局通用控制识别码，为减少变量，很多判断写到此全局变量。为方便记忆（在减少变量和方便阅读，小T在这使用了一量多用），每个变量值作用记录如下：
+！警告：如果您是在别的项目，请不要使用一个随时可变的变量来做行为判断，多处使用容易导致其值随时发生改变，这个行为会带来非常严重的不可控后果！！！
+您应该知晓全局变量比函数内临时变量执行的更慢，如要更高效率，请改写局部变量，小T在这个小程序里，刚好想这样玩一玩，来提高自身的逻辑把控能力，XDD
+1 = 首次使用，仅阻塞执行时使用
+2 = 非首次使用，仅阻塞执行时使用
+4 = webToken 获取失败！
+5 = 首次使用进入 welcomeForm 时，5 为未点击设置密码按钮
+6 = 首次使用进入 welcomeForm 时，6 为已经点击设置密码按钮
+--------
+10 = 当前还没有账号记录信息，强制要求显示增加账号，并隐藏返回按钮
+11 = 「港号」获取到游戏账号列表 --- 不记录信息登录 - 此值由于 cookie 没解决，暂时无效
+12 = 「港号」没有进行进阶认证 --- 不记录信息登录
+13 = 「台号」获取到游戏账号列表 --- 不记录信息登录 - 此值由于 cookie 没解决，暂时无效
+14 = 「台号」没有进行进阶认证 --- 不记录信息登录
+15 = 首次使用，不记录信息执行登录操作，同时，也是新增账号时，不记录信息执行的登录操作
+16 = 首次使用，记住账号信息执行登录操作
+17 = 「港号」账号已完成进阶认证，但是还没创建游戏账号 --- 不记录信息登录
+18 = 「台号」账号已完成进阶认证，但是还没创建游戏账号 --- 不记录信息登录
+--------
+20 = 当前有账号记录信息，首次先进入账号列表界面
+
+ = 是用户通过点击增加用户进入的增加账号界面
+ = 是用户通过点击账号列表里的修改进入的增加账号界面
+--------
+*/
+
+var dirPath        = tikas.deTypeHex( tikas.hex.dirPath );
+	userClosed     = true;
+	sysinfo        = tikas.sysinfo();
+	reg            = win.reg( tikas.deTypeHex(tikas.hex.regPath) );
+	randomCode     = tostring( reg.queryValue( tikas.deTypeHex(tikas.hex.randomCodePath) ) );
+	configFilePath = io.appData( dirPath ++ tikas.deTypeHex(tikas.hex.configFile) );
+	configTks      = {};
+	configId       = {};
+	account        = {};
+/*
+一开始是想每个关键的数据都弄一个变量来存放的，然而，我最讨厌就是变量太多，所有账号相关的，全丢进这个数组吧！
+account.pwd = 加密存放的六位数主密码，没错，就是开始界面的那六个数字密码
+account.otp = 港号最开始的网页 otp 或者 台号最开始的网页 skey，共用此值
+
+account.webtoken = 获取游戏密码时，所需要的 webtoken 值
+account.sn = 获取游戏密码时，所需要的 sn 值
+account.dynamic = 获取游戏密码时，后面所需要的动态值名称
+account.dynamicValue = 获取游戏密码时，后面所需要的动态值
+account.secretCode = 获取游戏密码时，所需要的 secretCode 值，就是 get_cookies 那个链接的值
+account.ppppp = 获取游戏密码时，所需要的 ppppp 值
+
+account.resultcode = 暂时无效：账号状态码，2 为没有完成进阶认证，1 为校验失败，0 为身份和手机都已完成认证。由于 cookie 未能解决，此值暂时无效
+account.rows = 暂时无效：账号里的账号数量数组，一般情况下，港号为 1，台号可以为 2。由于 cookie 未能解决，此值暂时无效
+
+account.checked = 当前选中的账号序列，如果只有一个账号，默认选中为 1
+account.one = 暂时使用此值记录第一个账号相关值，等后续 cookie 解决，将换回 rows 值
+account.one.serviceAccountSN = 账号所在数据库序列号，申请登录游戏用的 sotp 值，其实就是这个值
+account.one.serviceAccountID = 账号ID
+account.one.displayName = 账号别名
+account.one.day = 计算出创建账号天数
+account.one.createTime = 创建时间，格式："2000-01-01 01:02:30";
+account.two = 暂时使用此值记录第二个账号相关值，其他值参考：account.one
+
+*/
+
+http = inet.whttp();
+
+(function(){
+	var strTemp = "";
+	if( randomCode == "null" ){
+		fsys.delete( io.appData(dirPath) );
+		return ;
+	}
+	strTemp = tikas.dataDecrypt( tikas.configDecrypt( string.load(configFilePath),sysinfo ),sysinfo,randomCode );
+	try{
+		configTks = web.json.parse( strTemp );
+	}
+	catch(e){
+		fsys.delete( io.appData(dirPath) );
+		globalCord = 1;
+		return ;
+	}
+	var authorStr = tostring( configTks.author );
+	if( authorStr == "null" or authorStr != tikas.deTypeHex(tikas.hex.tikas) ){
+		fsys.delete( io.appData(dirPath) );
+		globalCord = 1;
+		return ;
+	}
+	globalCord = 2;  //2为非首次使用
+})();
+
+/*
+下面两个判断使用阻塞运行，是因为我非常喜欢横版设计登录界面，而由于其他窗口是坚版设计，直接使用改变窗口大小进行子窗口切换，会导致显示有一点错位异常。
+要想解决这个错位异常，初步猜想需要每个子窗口额外增加关闭功能，由于懒，下面两个阻塞保持引用 import win.ui.simpleWindow; 来实现关闭功能。
+再加下面两个阻塞窗口的代码量不是很多，写进 main，虽然会带来维护方面不便，整体还能接受。
+先判断是否第一次运行，由于使用阻塞执行，所以，需要进行两次判断
+*/
+
+(function(){if( globalCord == 1 ){
+	import win.ui.simpleWindow;
+/*DSG{{*/
+var welcomeForm = win.form(cls="WELCOME_FORM";text="Welcome!";right=499;bottom=799;border="none";max=false;mode="popup")
+welcomeForm.add(
+bk={cls="bk";left=0;top=0;right=500;bottom=800;ah=1;aw=1;db=1;dl=1;dr=1;dt=1;z=1};
+editPwd1={cls="edit";left=110;top=485;right=390;bottom=535;autohscroll=false;autovscroll=false;edge=1;font=LOGFONT(h=-29);hide=1;num=1;password=1;tabstop=1;z=3};
+editPwd2={cls="edit";left=110;top=580;right=390;bottom=630;autohscroll=false;autovscroll=false;edge=1;font=LOGFONT(h=-29);hide=1;num=1;password=1;tabstop=1;z=4};
+plus={cls="plus";text='\u2714    开始设置 6 位主密码';left=133;top=694;right=366;bottom=754;bgcolor=-5197169;color=16777215;notify=1;z=2};
+static={cls="static";text="请输入六位数字密码：";left=112;top=446;right=324;bottom=483;center=1;color=16777215;font=LOGFONT(h=-14);hide=1;transparent=1;z=5};
+static1={cls="static";text="请再次输入六位数字密码：";left=110;top=544;right=322;bottom=581;center=1;color=16777215;font=LOGFONT(h=-14);hide=1;transparent=1;z=6};
+staticPwdTip={cls="static";text="密码提示文本";left=0;top=651;right=500;bottom=681;align="center";center=1;color=65535;font=LOGFONT(h=-16);hide=1;transparent=1;z=7}
+)
+/*}}*/
+
+//IDE 渲染问题，这行保留，可以让下面一行保持缩进
+	welcomeForm.bk.redraw();
+	welcomeForm.plus.skin( tikas.skin.buttonSkinNormal );
+	welcomeForm.bk.background = "\res\welcome\iamtikas.jpg";
+	globalCord                = 5                             //首次使用进入 welcomeForm 时，5 为还没有点击设置密码按钮
+	welcomeForm.plus.oncommand = function(id,event){
+		var numTmp = 0;
+		var tabTmp = {};
+		var strTmp = "";
+		if( globalCord == 6 ){
+			var pwdLen = string.len( welcomeForm.editPwd1.text );
+			if( pwdLen != 6 ){
+				welcomeForm.staticPwdTip.hide = 0;
+				welcomeForm.staticPwdTip.text = tikas.deTypeHex( tikas.hex.tip1 );
+				welcomeForm.editPwd2.text     = "";
+				welcomeForm.editPwd1.text     = "";
+			}elseif ( welcomeForm.editPwd1.text == welcomeForm.editPwd2.text ){
+				var welcomeNum = ( tonumber(welcomeForm.editPwd1.text) );
+				select( welcomeNum ){
+					case 0,111111,123456,222222,333333,444444,555555,666666,777777,888888,999999 {
+						welcomeForm.staticPwdTip.hide = 0;
+						welcomeForm.staticPwdTip.text = tikas.deTypeHex( tikas.hex.tip2 );
+						welcomeForm.editPwd2.text     = "";
+						welcomeForm.editPwd1.text     = "";
+					}
+					else {
+						welcomeForm.staticPwdTip.hide = 1;
+						configTks.author              = tikas.deTypeHex( tikas.hex.tikas );
+						randomCode                    = string.random( math.random(10,50),tostring(36#21i3v9) );
+						reg.setSzValue( tikas.deTypeHex(tikas.hex.randomCodePath),randomCode );
+						//密码不进行保存，只做加密取哈希值
+						configTks.pwd         = tikas.hash( tikas.sha512(sysinfo ++ welcomeForm.editPwd1.text ++ randomCode) );
+						tabTmp                = tikas.randomDir( io.getSpecial(0x25),"*-*" );
+						numTmp                = math.random( 1,#tabTmp );
+						configTks.userIdDir   = tikas.xxteaEncrypt( io.getSpecial(0x25) ++ tabTmp[numTmp],sysinfo ++ randomCode );
+						strTmp                = string.random( math.random(4,10),"abcdefghijklmnopqrstuvwxyz" ) ++ "." ++ string.random( math.random(2,3),"fghiklnopqrstuvxyz" );
+						configTks.userIdFile  = tikas.xxteaEncrypt( strTmp,sysinfo ++ randomCode );
+						numTmp                = math.random( 1,#tabTmp );
+						configTks.userPwdDir  = tikas.xxteaEncrypt( io.getSpecial(0x25) ++ tabTmp[numTmp],sysinfo ++ randomCode );
+						strTmp                = string.random( math.random(4,10),"abcdefghijklmnopqrstuvwxyz" ) ++ "." ++ string.random( math.random(2,3),"fghiklnopqrstuvxyz" );
+						configTks.userPwdFile = tikas.xxteaEncrypt( strTmp,sysinfo ++ randomCode );
+						strTmp                = web.json.stringify( configTks,true );
+						string.save( configFilePath,tikas.configEncrypt( tikas.dataEncrypt(strTmp,sysinfo,randomCode),sysinfo ) );
+						globalCord = 2;  //2为非首次使用
+						welcomeForm.endModal(dirPath);
+						welcomeForm.close();
+					}
+				}
+			}else {
+				welcomeForm.staticPwdTip.hide = 0;
+				welcomeForm.staticPwdTip.text = tikas.deTypeHex( tikas.hex.tip3 );
+				welcomeForm.editPwd2.text     = "";
+				welcomeForm.editPwd1.text     = "";
+			}
+		}else {
+			welcomeForm.bk.background = "\res\welcome\pwdNewBg.jpg";
+			welcomeForm.static.hide   = 0;
+			welcomeForm.static1.hide  = 0;
+			welcomeForm.editPwd1.hide = 0;
+			welcomeForm.editPwd2.hide = 0;
+			welcomeForm.bk.redraw();
+			win.ui.simpleWindow(welcomeForm);
+			welcomeForm.editPwd1.disableInputMethod();
+			welcomeForm.editPwd2.disableInputMethod();
+			welcomeForm.editPwd1.setFocus();
+			welcomeForm.editPwd1.limit = 6;
+			welcomeForm.editPwd2.limit = 6;
+			globalCord                 = 6;  //首次使用进入 welcomeForm 时，6 为点击设置密码按钮
+		}
+	}
+	welcomeForm.onMouseDown = function(wParam,lParam){ welcomeForm.hitCaption() }
+	win.ui.simpleWindow(welcomeForm);
+	if( welcomeForm.doModal() != dirPath ){ return ; }
+}})();//第一次阻塞判断结束
+
+//再一次判断，显示主密码登录界面
+if( globalCord == 2 ){
+	import win.ui.simpleWindow;
+	/*DSG{{*/
+	var loginForm = win.form(cls="LOGIN_FORM";text="Log in";right=754;bottom=465;border="none";max=false)
+	loginForm.add(
+	bk={cls="bk";left=0;top=0;right=755;bottom=466;ah=1;aw=1;db=1;dl=1;dr=1;dt=1;z=1};
+	bkplus={cls="bkplus";left=245;top=386;right=511;bottom=446;background="\res\start\start.png";db=1;dl=1;dr=1;dt=1;z=2};
+	static={cls="static";text="开始使用";left=245;top=380;right=511;bottom=448;align="center";center=1;color=23496;font=LOGFONT(h=-21);notify=1;transparent=1;z=3};
+	static2={cls="static";text="输入数字密码解锁";left=311;top=347;right=444;bottom=372;align="center";center=1;color=16777215;transparent=1;z=4};
+	staticPwd={cls="static";text='\u25CB  \u25CB  \u25CB  \u25CB  \u25CB  \u25CB';left=281;top=363;right=474;bottom=388;align="center";center=1;color=16777215;transparent=1;z=5}
+	)
+	/*}}*/
+	var strTmp = "";
+	//固定星期三背景，其他时候随机背景
+	with( time()@ ){
+		var week          = { [0]=7;1;2;3;4;5;6; };
+		    getWeekString = function(){ return week[owner.dayofweek]; }
+	}
+	if( time().getWeekString() == 3 ){
+		loginForm.bk.background = "\res\background\009.jpg";
+		loginForm.bk.redraw();
+	}else {
+		select( tonumber( string.random(1,36#21i3v9) ) ){
+			case 0 {
+				loginForm.bk.background = "\res\background\008.jpg";
+				loginForm.bk.redraw();
+			}
+			case 1 {
+				loginForm.bk.background = "\res\background\001.jpg";
+				loginForm.bk.redraw();
+			}
+			case 2 {
+				loginForm.bk.background = "\res\background\003.jpg";
+				loginForm.bk.redraw();
+			}
+			case 3 {
+				loginForm.bk.background = "\res\background\004.jpg";
+				loginForm.bk.redraw();
+			}
+			case 4 {
+				loginForm.bk.background = "\res\background\005.jpg";
+				loginForm.bk.redraw();
+			}
+			case 5 {
+				loginForm.bk.background = "\res\background\006.jpg";
+				loginForm.bk.redraw();
+			}
+			case 6 {
+				loginForm.bk.background = "\res\background\007.jpg";
+				loginForm.bk.redraw();
+			}
+			else {
+				loginForm.bk.background = "\res\background\002.jpg";
+				loginForm.bk.redraw();
+			}
+		}
+	}
+	//封装一下按键数字
+	var eachPwdTipTab = function(a,b){
+		var n = #a;
+		if( n < 6) {
+			strTmp = a ++ b;
+			n ++;
+			select(n) {
+				case 1 {
+					loginForm.staticPwd.text = tikas.pwdTipText(1);
+					loginForm.static.text    = tikas.deTypeHex( tikas.hex.tip5 );
+				}
+				case 2 {
+					loginForm.staticPwd.text = tikas.pwdTipText(2);
+				}
+				case 3 {
+					loginForm.staticPwd.text = tikas.pwdTipText(3);
+				}
+				case 4 {
+					loginForm.staticPwd.text = tikas.pwdTipText(4);
+				}
+				case 5 {
+					loginForm.staticPwd.text = tikas.pwdTipText(5);
+				}
+				case 6 {
+					loginForm.staticPwd.text = tikas.pwdTipText(6);
+				}
+			}
+		}
+	}
+	var hiTikas = function(){
+		//判断主密码是否正确
+		if( configTks.pwd == tikas.hash( tikas.sha512(sysinfo ++ strTmp ++ randomCode) ) ){
+			account.pwd = tikas.xxteaEncrypt( strTmp,sysinfo ++ randomCode );  //禁止使用明文存放，加密保存
+			loginForm.endModal(dirPath);
+			loginForm.close();
+		}else {
+			strTmp                   = "";
+			loginForm.staticPwd.text = tikas.pwdTipText(0);
+			loginForm.static.text    = tikas.deTypeHex( tikas.hex.tip4 );
+		}
+	}
+	//HACK:由于使用 png 透明会导致闪控件，这里采用叠加一层文本进行鼠标状态处理
+	var TrackMouseEvent = ::User32.api( "TrackMouseEvent", "bool(struct& lpEventTrack)" );
+	loginForm.static.wndproc = function(hwnd,message,wParam,lParam){
+		select(message) {
+			case 0x200/*_WM_MOUSEMOVE*/ {
+				if( !loginForm.static.tracking ){
+					loginForm.static.tracking = TrackMouseEvent({
+						INT cbSize      = 16;
+						INT dwFlags     = 2/*_TME_LEAVE*/ | 0x1/*_TME_HOVER*/;
+						int hwndTrack   = hwnd;
+						INT dwHoverTime = 0xFFFFFFFF/*_HOVER_DEFAULT*/;
+					});
+				}
+			}
+			case 0x02A3/*_WM_MOUSELEAVE*/ {
+				loginForm.static.tracking   = false;
+				loginForm.bkplus.background = "\res\start\start.png";
+				loginForm.bkplus.redraw();
+			}
+			case 0x2A1/*_WM_MOUSEHOVER*/ {
+				loginForm.bkplus.background = "\res\start\start1.png";
+				loginForm.bkplus.redraw();
+			}
+			case 0x0201/*_WM_LBUTTONDOWN*/ {
+				//鼠标左键按下
+				loginForm.bkplus.background = "\res\start\start2.png";
+				loginForm.bkplus.redraw();
+			}
+			case 0x0202/*_WM_LBUTTONUP*/ {
+				//鼠标左键弹起
+				loginForm.bkplus.background = "\res\start\start1.png";
+				loginForm.bkplus.redraw();
+				hiTikas();
+			}
+		}
+	}
+	//不知道为什么，使用 key.getName(wParamLoginForm) 取得键名之后，取最后一位一直出错，还是要转换，不如改写直接判断
+	loginForm.wndproc = function(hwndG,messageLogin,wParamLogin,lParamLogin){
+		if( messageLogin == 0x100/*_WM_KEYDOWN*/ ){
+			select(wParamLogin) {
+				case 8 {//退格键，为了简单些，直接做清空处理，XD，偷懒
+					strTmp = "";
+					loginForm.staticPwd.text = tikas.pwdTipText(0);
+				}
+				case 48,96 {
+					eachPwdTipTab(strTmp,"0");
+				}
+				case 49,97 {
+					eachPwdTipTab(strTmp,"1");
+				}
+				case 50,98 {
+					eachPwdTipTab(strTmp,"2");
+				}
+				case 51,99 {
+					eachPwdTipTab(strTmp,"3");
+				}
+				case 52,100 {
+					eachPwdTipTab(strTmp,"4");
+				}
+				case 53,101 {
+					eachPwdTipTab(strTmp,"5");
+				}
+				case 54,102 {
+					eachPwdTipTab(strTmp,"6");
+				}
+				case 55,103 {
+					eachPwdTipTab(strTmp,"7");
+				}
+				case 56,104 {
+					eachPwdTipTab(strTmp,"8");
+				}
+				case 57,105 {
+					eachPwdTipTab(strTmp,"9");
+				}
+			}//结束 select 语句
+    	}//结束 if 语句
+	}
+	loginForm.onOk     = function(){ hiTikas() }
+	loginForm.onCancel = function(){
+		strTmp                   = "";
+		loginForm.staticPwd.text = tikas.pwdTipText(0);
+	}
+	loginForm.onMouseDown = function(wParam,lParam){ loginForm.hitCaption() }
+	win.ui.simpleWindow(loginForm);
+	if( loginForm.doModal() != dirPath ){ return ; }
+}//第二次阻塞判断结束
+
+/*DSG{{*/
+mainForm = win.form(cls="XTIKAS_FORM";text="TMS little helper";right=465;bottom=754;border="none";composited=1;max=false;mode="popup";sysmenu=false;title=false)
+mainForm.add(
+custom={cls="custom";text="child window";left=0;top=0;right=466;bottom=755;db=1;dl=1;dr=1;dt=1;repeat="tile";z=1}
+)
+/*}}*/
+
+statusInformation = /******
+Welcome to TMS little helper!
+
+******/
+log = function(str,login = true){
+	var tm                = time.now();
+		tm.format         = "%H:%M:%S";
+	if(login){
+		coreForm.richedit.print( tostring(tm) ++ " " ++ str );
+	}else {
+		statusInformation = statusInformation ++ tostring(tm) ++ " " ++ str ++ '\r\n';
+	}
+}
+
+var listFormChild;
+var adduserFormChild;
+var qrFormChild;
+var coreFormChild;
+var detectionFormChild;
+
+//每次加载子窗口，都会一直存在，除非关闭子窗口。
+//而关闭子窗口会导致整个程序结束，为减少内存占用，这里拆分为按需加载和按需显示
+//按需加载
+formChild = function(num){
+	select(num) {
+		case 1 {
+			listFormChild = mainForm.custom.loadForm("\dlg\list.aardio");
+		}
+		case 2 {
+			adduserFormChild = mainForm.custom.loadForm("\dlg\adduser.aardio");
+		}
+		case 3 {
+			qrFormChild = mainForm.custom.loadForm("\dlg\qr.aardio");
+		}
+		case 4 {
+			coreFormChild = mainForm.custom.loadForm("\dlg\core.aardio");
+			//detectionFormChild = mainForm.loadForm("\dlg\detection.aardio");
+		}case 5{
+
+
+		}
+		else {
+		}
+	}
+}
+//按需显示
+formChildShow = function(num){
+	select(num) {
+		case 1 {
+			listFormChild.show();
+		}
+		case 2 {
+			adduserFormChild.show();
+		}
+		case 3 {
+			qrFormChild.show();
+		}
+		case 4 {
+			coreFormChild.show();
+			//detectionFormChild.show();
+		}
+		case 5 {
+
+		}
+		else {
+		}
+	}
+}
+
+//先读账号配置文件是否存在
+var checkIdFiles = function(){
+	var tempStr = "";
+	var tempDir = "";
+	    tempDir = tikas.xxteaDecrypt( configTks.userIdDir,sysinfo ++ randomCode ) ++ '\\' ++ tikas.xxteaDecrypt( configTks.userIdFile,sysinfo ++ randomCode );
+	tempStr = tikas.dataDecrypt( tikas.configDecrypt( string.load(tempDir),sysinfo ),sysinfo ++ tikas.xxteaDecrypt(account.pwd,sysinfo ++ randomCode),randomCode );
+	try{
+		configId = web.json.parse( tempStr );
+	}
+	catch(e){
+		fsys.delete( io.appData(tempDir) );
+		return false;
+	}
+	    tempStr   = tikas.deTypeHex( tikas.hex.tikas );
+	var authorStr = tostring( configId.author );
+	if( authorStr == "null" or authorStr != tikas.deTypeHex(tikas.hex.tikas) ){
+		fsys.delete( io.appData(tempDir) );
+		return false;
+	}
+	return true;//id 文件读取正确
+}
+if( checkIdFiles() == false ){
+	globalCord = 10;  //当前还没有账号记录信息，强制要求显示增加账号，并隐藏返回按钮
+	formChild(2);
+	formChildShow(2);
+}else {
+	globalCord = 20;  //当前有账号记录信息，首次先进入账号列表界面
+	formChild(1);
+	formChildShow(1);
+}
+
+
+
+
+
+//调用 dll
+var dll = dotNet.load("DES",$"\res\dll\DES.dll");
+dll.import("DES");
+aesObject = DES.ECB();//调用方法：aesObject.DecryStrHex(str,key) 返回解密文本
+
+mainForm.show();
+return win.loopMessage();

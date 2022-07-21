@@ -1,0 +1,91 @@
+﻿//弃用，未完成
+import inet.url;
+
+namespace web begin
+
+eachTab = function(t){
+    var tabTmp = {};
+    var n      = 1;
+        ofor   = function(t){
+        for(k,v in t){
+            if( type(v) == type.table ){ ofor(v) }
+            if(!tabTmp[k]){ tabTmp[k] = v; }
+            else { tabTmp[k++n]=k+":"+v;n += 1; }
+        }
+    }
+    ofor(t);
+    return function(k){ return table.next(tabTmp,k); }
+}
+
+/*
+cookie这一块，写了好几天，都没能写好，暂时放下，待日后学术有成或有大佬教导时，再来完善
+*/
+get = function(url,header="null",auto=true){
+	//这个逻辑写错了，初步认为要再细分是否跳转，以及处理好 cookie 再做自动跳转，整个过程还需要学习，后续再弄
+	var turl       = inet.url.split( url );
+	var scheme     = turl.host ++ "://";
+	var host       = turl.host;
+	var data       = "";
+	var msg        = "";
+	var cookieTemp = "";
+
+	if( ! (#url) ){ return 0,0; }
+	if( locationCode == 3 ){
+		..http.beginRequest(url,"GET",,,0x200000/*_INTERNET_FLAG_NO_AUTO_REDIRECT*/)
+	}else {
+		..http.beginRequest(url,"GET",,,)
+	}
+	for( name,value in this.eachTab(..cookieTab[host])){
+    	cookieTemp += name ++ "=" ++ value ++ "; ";
+	}
+ 	..cookies = cookieTemp;
+	..http.writeHeader("Cookie: " ++ ..cookies)
+	var ret, errMsg, errCode = ..http.send();
+	if( tostring(..cookieTab[host]) == "null" ){ ..cookieTab[host] = {}; }
+	if(..http.statusCode){
+		msg = ..string.concat( ..http.readHeader(), );
+		for m,v in ..string.gmatch(msg, "Set-Cookie\:\s(.*?)\=(.*?)\;") {
+			..cookieTab[host][[m]] = v;
+        }
+		for( name,value in this.eachTab(..cookieTab[host])){
+    		cookieTemp += name ++ "=" ++ value ++ "; ";
+		}
+ 		..cookies = cookieTemp;
+	}
+	if( ..http.statusCode >= 200 && ..http.statusCode < 400 ){
+		var location = ..http.readHeader("Location:");
+		    data     = ..http.readAll();
+		..http.endRequest();
+		if( location ){
+			var locationTurl = ..inet.url.split( location );
+			if( ..string.left(location,1) == "/" ){
+				..locationCode = 2;
+				return scheme ++ host ++ location,data;
+			}
+			if( locationTurl.host == turl.host ){
+				..locationCode = 2;
+				return location,data;
+			}
+			cookieTemp = "";
+			for( name,value in each(cookieTab[locationTurl.host])){
+    			cookieTemp += name ++ "=" ++ value ++ "; ";
+			}
+			..cookies      = cookieTemp;
+			..locationCode = 3;
+			return location,msg;
+		}
+		..locationCode = 2;
+		return location,data;
+	}
+	..http.endRequest();
+	..locationCode = 1;
+	return 0,0;
+}
+
+
+
+
+
+
+
+end;

@@ -1,0 +1,254 @@
+﻿//核心
+namespace tikas{
+
+	namespace hex{
+		//以下文本内容全转换成进制，虽然说开源项目，不需要这样做，没办法，习惯了，这里只做简单的转换，没做更复杂的加密就已经不错了。
+		//如真要加强，后续可以改为加密，懂的都懂。尴尬的是：后续的代码我都没转换，前面转换了就算了，保留
+		dirPath        = "2f74696b61732f";                                                                              //=/tikas/
+		regPath        = "484b45595f4c4f43414c5f4d414348494e455c534f4654574152455c436c61737365735c61707068656c706572";  //=HKEY_LOCAL_MACHINE\SOFTWARE\Classes\apphelper
+		randomCodePath = "617070";                                                                                      //=app
+		configFile     = "636f6e6669672e746b73";                                                                        //=config.tks
+		tikas          = "54696b6173";                                                                                  //=Tikas
+		tip1           = "e4b8bbe5af86e7a081e5bf85e99c80e8aebee7bdaee4b8ba203620e4bd8d";                                //=主密码必需设置为 6 位
+		tip2           = "e6ada4e5af86e7a081e8bf87e4ba8ee7ae80e58d95efbc8ce5b7b2e8a2abe7a681e794a8";                    //=此密码过于简单，已被禁用
+		tip3           = "e4b8a4e6aca1e5af86e7a081e5bf85e99c80e4b880e887b4";                                            //=两次密码必需一致
+		tip4           = "28e2979420d0b4e297942920e5af86e7a081e99499e8afaf";                                            //=(◔ д◔) 密码错误
+		tip5           = "e5bc80e5a78be4bdbfe794a8";                                                                    //=开始使用
+		tip6           = "e99499e8afaf";                                                                                //=错误
+		tip7           = "e5a487e6b3a8e588abe5908de4b88de883bde4b8bae7a9ba";                                            //=备注别名不能为空
+		tip8           = "e8afb7e8be93e585a5e682a8e79a84e8b4a6e58fb7";                                                  //=请输入您的账号
+		tip9           = "e8afb7e8be93e585a5e5af86e7a081";                                                              //=请输入密码
+		tip10          = "e8bf9be998b6e8aea4e8af81e79a84e6898be69cbae58fb7e7a081e4b88de883bde4b8bae7a9ba";              //=进阶认证的手机号码不能为空
+	}
+
+	namespace skin{
+		buttonLink = {//增改账号界面的超链接按钮皮肤
+			background = { active=0xFF204969 };
+			iconColor  = { hover=0xFF0F2230;active=0xFFB1C8D9 };
+			color      = { default=0xFFf0f0f0;hover=0xFF0F2230;active=0xFFB1C8D9 }
+		}
+		buttonCloseSkin = {//关闭按钮皮肤
+			background = { hover=0xFF4F1D16;active=0xFF501C15 }
+		}
+		buttonMiniSkin = {//最小化按钮皮肤
+			background = { hover=0xFF999999;active=0xFFCCCCCC }
+		}
+		buttonSkinNormal = {//按钮皮肤
+			background = { default=0xFF458995;hover=0xFF6FA6B1;active=0xFF02404B;disabled=0xFF02404B };
+			color      = { disabled=0xFFffffff }
+		}
+		listSkinNormal = {//游戏账号列表皮肤
+			background = { default=0xFF166b7b;hover=0xFF3b7883 };
+			color      = { active=0xFFFFFFFF;default=0xFFCCCCCC;hover=0xFF000000 };
+			iconColor  = { hover=0xFF000000 };
+			checked    = {
+				color      = { default=0xFFFFFFFF };
+				background = { default=0xFF166b7b };
+				iconText   = '\uF2BC                      \uF14A'
+			}
+		}
+		addAccountSkinNormal = {//新增游戏账号皮肤、请先完成进阶认证皮肤
+			background = { default=0xFF166b7b;hover=0xFF3b7883 };
+			color      = { active=0xFFFFFFFF;default=0xFFCCCCCC;hover=0xFF000000 };
+			iconColor  = { hover=0xFF000000 }
+		}
+		listSkinWarn = {//游戏账号列表皮肤-警告
+			background = { default=0xFFAF8160;hover=0xFF53331C };
+			color      = { active=0xFFFFFFFF;default=0xFFCCCCCC;hover=0xFF000000 };
+			iconColor  = { hover=0xFF000000 };
+			checked    = {
+				color      = { default=0xFFFFFFFF };
+				background = { default=0xFFAF8160 };
+				iconText   = '\uF2BC                      \uF14A'
+			}
+		}
+		buttonSkinWarn = {//按钮皮肤-警告
+			background = { default=0xFF9B6139;hover=0xFF53331C;active=0xFFAF8160;disabled=0xFFAF8160 };
+			color      = { disabled=0xFFffffff }
+		}
+		addAccountSkinWarn = {//新增游戏账号皮肤、请先完成进阶认证皮肤-警告
+			background = { default=0xFFAF8160;hover=0xFF53331C };
+			color      = { active=0xFFFFFFFF;default=0xFFCCCCCC;hover=0xFF000000 };
+			iconColor  = { hover=0xFF000000 }
+		}
+		listSkinDanger = {//游戏账号列表皮肤-危险
+			background = { default=0xFFA8625A;hover=0xFFFF7662 };
+			color      = { active=0xFFFFFFFF;default=0xFFCCCCCC;hover=0xFF000000 };
+			iconColor  = { hover=0xFF000000 };
+			checked    = {
+				color      = { default=0xFFFFFFFF };
+				background = { default=0xFFA8625A };
+				iconText   = '\uF2BC                      \uF14A'
+			}
+		}
+		buttonSkinDanger = {//按钮皮肤-危险
+			background = { default=0xFF923B31;hover=0xFF4F1D16;active=0xFFA8625A;disabled=0xFFA8625A };
+			color      = { disabled=0xFFffffff }
+		}
+		addAccountSkinDanger = {//新增游戏账号皮肤、请先完成进阶认证皮肤-危险
+			background = { default=0xFFA8625A;hover=0xFFFF7662 };
+			color      = { active=0xFFFFFFFF;default=0xFFCCCCCC;hover=0xFF000000 };
+			iconColor  = { hover=0xFF000000 }
+		}
+	}
+
+	namespace match{
+	    twSkey             = /*strSessionKey\s\=\s\"(.*?)"*/;                         //TW网页一次性OTP
+	    hkOtp              = /*otp1\=(.*?)\&*/;                                       //HK网页一次性OTP
+	    hkSkey             = /*skey\=(.*?)\&*/;                                       //HK网页一次性OTP，请求头专用，还没想好 cookie 怎么写，暂时弃用
+	    googleRc           = /*src\=\'https\:\/\/www\.google\.com\/(.*?)\/api\.js*/;
+	    viewState          = /*id\=\"\_\_VIEWSTATE\"\svalue\=\"(.*?)\"*/;
+	    viewStategenerator = /*id\=\"\_\_VIEWSTATEGENERATOR\"\svalue\=\"(.*?)\"*/;
+	    eventValidation    = /*id\=\"\_\_EVENTVALIDATION\"\svalue\=\"(.*?)\"*/;
+	    token              = /*id\=\"token1\"\svalue\=\"(.*?)\"*/;
+	    pnlMsg             = /*<@pnlMsg@>*/;
+	    verify             = /*<@Verify@>*/;
+	    addAccount         = /*<@btnAddServiceAccount@>*/;
+	    lock               = /*<@class="Stop"@>*/;//本来可以直接找 Stop 的，但是，考虑到可能有人取名叫 Stop，只能这样了
+	    account            = /*\"\ssn\=\"(.*?)\"\sname\=\"(.*?)\"*/;
+	    sn                 = /*BF\&\&\&\&SN\=(.*?)\&\&\&\&*/;//获取游戏密码时，所需要的 sn 值
+	    dynamic            = /*CreateTime\s\+\"\&(.*?)\=(.*?)\"*/;//获取游戏密码时，后面所需要的动态值，值要解 url 编码
+	    secretCode         = /*\'(.*?)\'*/;//获取游戏密码时，所需要的 secretCode 值
+	    data               = /*Data\=(.*?)\"*/;//获取游戏密码时，所需要的 data 值
+	    serviceAccount     = /*ServiceAccount\=(.*?)\&*/;
+	    createTime         = /*CreateTime\=(.*?)\&*/;
+	    ppppp              = /*ppppp\=(.*?)\&*/;
+	    strOutstring       = /*strOutstring\"\:\s\"(.*?)\"*/;
+	}
+
+	loyisa = {
+	    "4c39466f6c487179644e425130695255507265414c4e52636451553d";
+		"45464f6b6d504d44516d62444e44557a4268356b39444670622f4d3d";
+		"5254436d31624a4e48423852657749514e58504d43393549494e673d";
+		"686d7a6e57714d367363326a59456d6a32317a637952514a716a4d3d";
+		"6e50454751393274307755692f2b625a51376d5363494c6f6b476b3d";
+		"72413169712b6d476b4b796841343243682f4d2b79776454594e6b3d";
+		"50675551395a392f77326b7662524b59306d4244663770374a75413d";
+		"616d584b34724370384a556559745550702b6f5845374d6e7245303d";
+	}
+
+	sysinfo = function(){
+		import sys.cpu;
+		import sys.hd;
+		import string;
+		var cpuInfo = sys.cpu.getInfo( 1,{INT eax;INT ebx;INT ecx;INT edx} );
+		var cpuid   = string.format( "%08X%08X",cpuInfo.edx,cpuInfo.eax );
+		return string.repline( cpuid ++ sys.cpu.getBrand() ++ sys.cpu.getVender() ++ ..sys.hd.getInfo()[["sSerialNumber"]],"\s","" );
+	}
+
+	xxteaEncrypt = function(str,pwd){
+		import string.xxtea;
+		import crypt.bin;
+		return crypt.bin.encodeBase64( string.xxtea.encrypt(str,pwd) );
+	}
+
+	xxteaDecrypt = function(str,pwd){
+		import string.xxtea;
+		import crypt.bin;
+		return string.xxtea.decrypt( crypt.bin.decodeBase64(str),pwd );
+	}
+
+	sha512 = function(data){
+		import crypt.rsa;
+		var s512 = crypt.rsa().createHashBySha512();
+		s512.hashData(data);
+		return s512.getHexValue();
+	}
+
+	hash = function(str){
+		import crypt;
+		return crypt.md5(str);
+	}
+
+	deTypeHex = function(str){
+		import crypt.bin;
+		return crypt.bin.decodeHex(str);
+	}
+
+	configEncrypt = function(str,password){
+		import crypt;
+		var csp = crypt();
+		csp.setPassword(password);
+		return csp.encrypt(str);
+	}
+
+	configDecrypt = function(str,password){
+		import crypt;
+		var csp = crypt();
+		csp.setPassword(password);
+		return csp.decrypt(str);
+	}
+
+	dataEncrypt =function(data,password,randomCode){
+		import crypt.bin;
+		import crypt.aes;
+		var aes = crypt.aes();
+		aes.setPassword( password ++ randomCode ++ crypt.bin.decodeHex( "54696b6173" ) ++ randomCode ++ password );
+		return crypt.bin.encodeBase64( aes.encrypt(data) );
+	}
+
+	dataDecrypt =function(data,password,randomCode){
+		import crypt.bin;
+		import crypt.aes;
+		var aes = crypt.aes();
+		aes.setPassword( password ++ randomCode ++ crypt.bin.decodeHex( "54696b6173" ) ++ randomCode ++ password );
+		return aes.decrypt( crypt.bin.decodeUrlBase64(data) );
+	}
+
+	randomDir = function(randomDirStr,wildcard){
+		import fsys;
+		var magicDirTab = {};
+		var num         = 0;
+		fsys.enum( randomDirStr,wildcard,
+			function(dir,filename,fullpath,findData){
+                if(not filename){
+                    num ++;
+                    magicDirTab[num] = '\\' ++ dir;
+                }
+			},false
+		);
+        return magicDirTab;
+	}
+
+	pwdTipText = function(num){
+		select(num) {
+			case 0 {
+				return "○  ○  ○  ○  ○  ○";
+			}
+			case 1 {
+				return "◉  ○  ○  ○  ○  ○";
+			}
+			case 2 {
+				return "◉  ◉  ○  ○  ○  ○";
+			}
+			case 3 {
+				return "◉  ◉  ◉  ○  ○  ○";
+			}
+			case 4 {
+				return "◉  ◉  ◉  ◉  ○  ○";
+			}
+			case 5 {
+				return "◉  ◉  ◉  ◉  ◉  ○";
+			}
+			else {
+				return "◉  ◉  ◉  ◉  ◉  ◉";
+			}
+		}
+	}
+
+}//结束 tikas 命名
+
+/**intellisense(tikas)
+sysinfo() = 返回 CPUID+CPU名称+CPU厂商+HD序列号，已去多余空格
+xxteaEncrypt(.(str要加密的字符串,pwd加密的密码) = 对 str 进行 xxtea 加密，返回 Base64 值
+xxteaDecrypt(.(str要解密的字符串,pwd解密的密码) = 对 str 进行 xxtea 解密
+sha512(.(data) = 对 data 进行取 sha512 运算
+hash(.(str) = 对 str 进行取 md5 运算
+deTypeHex(.(str) = 对 str 二进制进行还原字符串
+configEncrypt(.(str要加密的字符串,password加密的密码) = 对 str 进行加密,返回加密后的字符串
+configDecrypt(.(str要解密的字符串,password解密的密码) = 对 str 进行解密,返回解密后的字符串
+dataEncrypt(.(data要加密的字符串,password加密的密码,randomCode随机码) = 对 data 进行加密,返回加密后的字符串
+dataDecrypt(.(data要解密的字符串,password解密的密码,randomCode随机码) = 对 data 进行解密,返回解密后的字符串
+randomDir(.(randomDirStr传入遍历的目录路径,wildcard通配符) = 对 randomDirStr 进行当前目录下遍历出所有带 *-* 的目录，wildcard通配符可以省略，例：*-*，匹配带有 - 的目录
+pwdTipText(.(num) = 返回对应密码数的提示文本
+end intellisense**/

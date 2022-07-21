@@ -1,0 +1,28 @@
+import win.ui;
+import fonts.fontAwesome;
+import inet.http;
+/*DSG{{*/
+qrCodeForm = win.form(cls="QRCODE_FORM";text="qrCode";right=465;bottom=754;bgcolor=12091705;border="none";max=false)
+qrCodeForm.add(
+buttonBack={cls="plus";text="返回";left=20;top=25;right=70;bottom=75;color=14272689;iconColor=16777215;iconStyle={font=LOGFONT(h=-35;name='FontAwesome');valign="top"};iconText='\uF122';valign="bottom";z=2};
+buttonClose={cls="plus";left=436;top=0;right=466;bottom=30;iconColor=15790320;iconStyle={font=LOGFONT(h=-19;name='FontAwesome')};iconText='\uF00D';z=3};
+static9={cls="static";text="QR Code";left=100;top=37;right=366;bottom=87;align="center";center=1;color=14272689;font=LOGFONT(h=-29);transparent=1;z=1}
+)
+/*}}*/
+
+..userClosed = true;//默认为真
+
+qrCodeForm.buttonClose.skin(tikas.skin.buttonCloseSkin)
+qrCodeForm.buttonClose.oncommand = function( id,event ){
+	..userClosed = true;//默认为真
+	qrCodeForm.close()
+}
+
+qrCodeForm.onClose = function(hwnd,message,wParam,lParam){
+    if(..userClosed){mainForm.close();}
+}
+
+qrCodeForm.onMouseDown  = function(wParam,lParam){qrCodeForm.hitCaption()}
+qrCodeForm.show();
+win.loopMessage();
+return qrCodeForm;

@@ -1,7 +1,7 @@
 name: BUG反馈：小帮手出现 BUG 导致相关功能无法实现
 description: 此模板适用于您已经定位到了问题的具体所在，不需要协助定位问题。报告给开发者予以修复。
 title: "【BUG反馈】："
-labels: bug-report
+labels: bug
 body:
   - type: markdown
     attributes:

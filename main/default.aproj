@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project ver="10" name="little helper for tikas" libEmbed="true" icon="res\xtikas.ico" ui="win" output="TMSHelper.exe" CompanyName="tikas" FileDescription="This is a little helper for TMS that makes you experience maplestory more friendly." LegalCopyright="Copyright (C) 𝒙𝑻𝒊𝒌𝒂𝒔 2022" ProductName="TMS little helper" InternalName="TMS little helper" FileVersion="1.0.0.60" ProductVersion="1.0.0.60" publishDir="/dist/" dstrip="false" local="false" ignored="false">
+	<file name="main.aardio" path="main.aardio" comment="main.aardio"/>
+	<folder name="资源文件" path="res" embed="true" local="false" ignored="false">
+		<folder name="background" path="res\background" embed="true" comment="目录" local="false" ignored="false">
+			<file name="001.jpg" path="res\background\001.jpg" comment="res\background\001.jpg"/>
+			<file name="002.jpg" path="res\background\002.jpg" comment="res\background\002.jpg"/>
+			<file name="003.jpg" path="res\background\003.jpg" comment="res\background\003.jpg"/>
+			<file name="004.jpg" path="res\background\004.jpg" comment="res\background\004.jpg"/>
+			<file name="005.jpg" path="res\background\005.jpg" comment="res\background\005.jpg"/>
+			<file name="006.jpg" path="res\background\006.jpg" comment="res\background\006.jpg"/>
+			<file name="007.jpg" path="res\background\007.jpg" comment="res\background\007.jpg"/>
+			<file name="008.jpg" path="res\background\008.jpg" comment="res\background\008.jpg"/>
+			<file name="009.jpg" path="res\background\009.jpg" comment="res\background\009.jpg"/>
+			<file name="登录背景制作大小及遮罩.png" path="res\background\登录背景制作大小及遮罩.png" comment="res\background\登录背景制作大小及遮罩.png"/>
+		</folder>
+		<folder name="welcome" path="res\welcome" embed="true" comment="目录" local="false" ignored="false">
+			<file name="iamtikas.jpg" path="res\welcome\iamtikas.jpg" comment="res\welcome\iamtikas.jpg"/>
+			<file name="pwdNewBg.jpg" path="res\welcome\pwdNewBg.jpg" comment="res\welcome\pwdNewBg.jpg"/>
+		</folder>
+		<folder name="start" path="res\start" embed="true" comment="目录" local="false" ignored="false">
+			<file name="start.png" path="res\start\start.png" comment="res\start\start.png"/>
+			<file name="start1.png" path="res\start\start1.png" comment="res\start\start1.png"/>
+			<file name="start2.png" path="res\start\start2.png" comment="res\start\start2.png"/>
+		</folder>
+		<file name="xtikas.ico" path="res\xtikas.ico" comment="res\xtikas.ico"/>
+		<folder name="img" path="res\img" comment="res\img" local="false" embed="false" ignored="false">
+			<file name="1.jpg" path="res\img\1.jpg" comment="res\img\1.jpg"/>
+			<file name="10.jpg" path="res\img\10.jpg" comment="res\img\10.jpg"/>
+			<file name="11.jpg" path="res\img\11.jpg" comment="res\img\11.jpg"/>
+			<file name="12.jpg" path="res\img\12.jpg" comment="res\img\12.jpg"/>
+			<file name="13.jpg" path="res\img\13.jpg" comment="res\img\13.jpg"/>
+			<file name="14.jpg" path="res\img\14.jpg" comment="res\img\14.jpg"/>
+			<file name="15.jpg" path="res\img\15.jpg" comment="res\img\15.jpg"/>
+			<file name="16.jpg" path="res\img\16.jpg" comment="res\img\16.jpg"/>
+			<file name="17.jpg" path="res\img\17.jpg" comment="res\img\17.jpg"/>
+			<file name="18.jpg" path="res\img\18.jpg" comment="res\img\18.jpg"/>
+			<file name="19.jpg" path="res\img\19.jpg" comment="res\img\19.jpg"/>
+			<file name="2.jpg" path="res\img\2.jpg" comment="res\img\2.jpg"/>
+			<file name="20.jpg" path="res\img\20.jpg" comment="res\img\20.jpg"/>
+			<file name="21.jpg" path="res\img\21.jpg" comment="res\img\21.jpg"/>
+			<file name="22.jpg" path="res\img\22.jpg" comment="res\img\22.jpg"/>
+			<file name="23.jpg" path="res\img\23.jpg" comment="res\img\23.jpg"/>
+			<file name="24.jpg" path="res\img\24.jpg" comment="res\img\24.jpg"/>
+			<file name="25.jpg" path="res\img\25.jpg" comment="res\img\25.jpg"/>
+			<file name="26.jpg" path="res\img\26.jpg" comment="res\img\26.jpg"/>
+			<file name="27.jpg" path="res\img\27.jpg" comment="res\img\27.jpg"/>
+			<file name="28.jpg" path="res\img\28.jpg" comment="res\img\28.jpg"/>
+			<file name="29.jpg" path="res\img\29.jpg" comment="res\img\29.jpg"/>
+			<file name="3.jpg" path="res\img\3.jpg" comment="res\img\3.jpg"/>
+			<file name="30.jpg" path="res\img\30.jpg" comment="res\img\30.jpg"/>
+			<file name="31.jpg" path="res\img\31.jpg" comment="res\img\31.jpg"/>
+			<file name="32.jpg" path="res\img\32.jpg" comment="res\img\32.jpg"/>
+			<file name="33.jpg" path="res\img\33.jpg" comment="res\img\33.jpg"/>
+			<file name="34.jpg" path="res\img\34.jpg" comment="res\img\34.jpg"/>
+			<file name="35.jpg" path="res\img\35.jpg" comment="res\img\35.jpg"/>
+			<file name="36.jpg" path="res\img\36.jpg" comment="res\img\36.jpg"/>
+			<file name="37.jpg" path="res\img\37.jpg" comment="res\img\37.jpg"/>
+			<file name="38.jpg" path="res\img\38.jpg" comment="res\img\38.jpg"/>
+			<file name="39.jpg" path="res\img\39.jpg" comment="res\img\39.jpg"/>
+			<file name="4.jpg" path="res\img\4.jpg" comment="res\img\4.jpg"/>
+			<file name="40.jpg" path="res\img\40.jpg" comment="res\img\40.jpg"/>
+			<file name="41.jpg" path="res\img\41.jpg" comment="res\img\41.jpg"/>
+			<file name="42.jpg" path="res\img\42.jpg" comment="res\img\42.jpg"/>
+			<file name="43.jpg" path="res\img\43.jpg" comment="res\img\43.jpg"/>
+			<file name="44.jpg" path="res\img\44.jpg" comment="res\img\44.jpg"/>
+			<file name="45.jpg" path="res\img\45.jpg" comment="res\img\45.jpg"/>
+			<file name="46.jpg" path="res\img\46.jpg" comment="res\img\46.jpg"/>
+			<file name="47.jpg" path="res\img\47.jpg" comment="res\img\47.jpg"/>
+			<file name="48.jpg" path="res\img\48.jpg" comment="res\img\48.jpg"/>
+			<file name="49.jpg" path="res\img\49.jpg" comment="res\img\49.jpg"/>
+			<file name="5.jpg" path="res\img\5.jpg" comment="res\img\5.jpg"/>
+			<file name="50.jpg" path="res\img\50.jpg" comment="res\img\50.jpg"/>
+			<file name="51.jpg" path="res\img\51.jpg" comment="res\img\51.jpg"/>
+			<file name="52.jpg" path="res\img\52.jpg" comment="res\img\52.jpg"/>
+			<file name="53.jpg" path="res\img\53.jpg" comment="res\img\53.jpg"/>
+			<file name="54.jpg" path="res\img\54.jpg" comment="res\img\54.jpg"/>
+			<file name="55.jpg" path="res\img\55.jpg" comment="res\img\55.jpg"/>
+			<file name="56.jpg" path="res\img\56.jpg" comment="res\img\56.jpg"/>
+			<file name="57.jpg" path="res\img\57.jpg" comment="res\img\57.jpg"/>
+			<file name="6.jpg" path="res\img\6.jpg" comment="res\img\6.jpg"/>
+			<file name="7.jpg" path="res\img\7.jpg" comment="res\img\7.jpg"/>
+			<file name="8.jpg" path="res\img\8.jpg" comment="res\img\8.jpg"/>
+			<file name="9.jpg" path="res\img\9.jpg" comment="res\img\9.jpg"/>
+		</folder>
+		<folder name="detect" path="res\detect" embed="true" comment="目录" local="false" ignored="false">
+			<file name="bgTikasProtectBottom.png" path="res\detect\bgTikasProtectBottom.png" comment="res\detect\bgTikasProtectBottom.png"/>
+			<file name="bgTikasProtectTop.png" path="res\detect\bgTikasProtectTop.png" comment="res\detect\bgTikasProtectTop.png"/>
+			<file name="tsp.png" path="res\detect\tsp.png" comment="res\detect\tsp.png"/>
+		</folder>
+		<folder name="dll" path="res\dll" embed="true" comment="目录" local="false" ignored="false">
+			<file name="DES.dll" path="res\dll\DES.dll" comment="res\dll\DES.dll"/>
+		</folder>
+	</folder>
+	<folder name="窗体文件" path="dlg" comment="目录" embed="true" local="false" ignored="false">
+		<file name="list.aardio" path="dlg\list.aardio" comment="dlg\list.aardio"/>
+		<file name="adduser.aardio" path="dlg\adduser.aardio" comment="dlg\adduser.aardio"/>
+		<file name="qr.aardio" path="dlg\qr.aardio" comment="dlg\qr.aardio"/>
+		<file name="core.aardio" path="dlg\core.aardio" comment="dlg\core.aardio"/>
+	</folder>
+</project>

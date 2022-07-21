@@ -1,0 +1,488 @@
+//perform
+namespace perform begin
+
+detection = function(){
+	import thread;
+	thread.invoke( function(){
+	import win.ui;
+	import win.ui.fade;
+/*DSG{{*/
+detectionForm = win.form(cls="Detection_FORM";text="Load Detection";right=349;bottom=149;bgcolor=12091705;border="none";exmode="toolwindow";max=false;min=false;mode="popup";sysmenu=false;topmost=1)
+detectionForm.add(
+bgTikasProtect={cls="plus";left=150;top=45;right=340;bottom=105;background="\res\detect\bgTikasProtectBottom.png";db=1;disabled=1;dl=1;dr=1;dt=1;foreLeft=30;foreRepeat="expand";foreRight=30;foreground="\res\detect\bgTikasProtectTop.png";linearGradient=0;z=1};
+plus={cls="plus";text="Tikas's Safety Protection";left=83;top=0;right=344;bottom=31;align="right";color=14272689;disabled=1;font=LOGFONT(h=-14;weight=700);z=2};
+plus2={cls="plus";text="Powered by Tikas";left=83;top=118;right=344;bottom=149;align="right";color=12751961;disabled=1;font=LOGFONT(h=-14);z=3};
+roundTikasProtect={cls="plus";left=10;top=10;right=140;bottom=140;ah=1;aw=1;color=14156031;db=1;dl=1;dr=1;dt=1;font=LOGFONT(h=-21;weight=700);foreRepeat="center";foreground="\res\detect\tsp.png";repeat="center";z=4}
+)
+/*}}*/
+
+//IDE 渲染时会把 DSG 代码取消缩进，并且后一行代码同样效果，请不要修改这里的缩进
+	win.ui.fade(detectionForm);
+	var rWidth, rHeight = win.getScreen();
+	win.setPos( detectionForm.hwnd,rWidth - detectionForm.width,rHeight - detectionForm.height - 58 );
+	detectionForm.bgTikasProtect.setTrackbarRange(1,300);
+	function initialization(){
+		detectionForm.bgTikasProtect.progressPos = 100;
+		var tmId = detectionForm.addtimer( 2,
+			function(hwnd,msg,id,tick){
+				var finished = detectionForm.bgTikasProtect.stepProgress(1);
+				if( !finished ){
+					sleep(3000);
+					detectionForm.close();
+					return 0;
+				}
+			}
+		);
+	}
+	detectionForm.show();
+	initialization();
+	win.loopMessage();
+	return detectionForm;
+	},)
+}
+
+msgInput =function(msg,img=0){
+	var code = `
+	import win.ui;
+	import inet.http;
+	/*DSG{{*/
+	var msgform = win.form(cls="MSG_FORM";text="msg form";right=414;bottom=199;bgcolor=14540253;mode="popup";parent=mainForm)
+	msgform.add(
+	button={cls="button";text="OK";left=146;top=145;right=269;bottom=180;bgcolor=15790320;flat=1;z=1};
+	code={cls="edit";text="code";left=209;top=105;right=374;bottom=135;bgcolor=15790320;edge=1;font=LOGFONT(h=-16);hide=1;multiline=1;z=4};
+	edit={cls="edit";left=41;top=61;right=374;bottom=91;bgcolor=15790320;edge=1;font=LOGFONT(h=-16);multiline=1;z=3};
+	plus={cls="plus";left=41;top=105;right=201;bottom=135;hide=1;z=5};
+	static={cls="static";left=41;top=26;right=374;bottom=56;font=LOGFONT(h=-14);transparent=1;z=2}
+	)
+	/*}}*/
+
+	var args = {...};
+	table.shift(args);
+
+	if( args[2] != 0 ){
+		msgform.plus.background = args[2];
+		msgform.code.setCueBannerText("请输入验证码");
+		msgform.plus.hide = 0;
+		msgform.code.hide = 0;
+	}
+	msgform.static.text = args[1];
+	msgform.edit.setCueBannerText("请输入...");
+
+	msgform.button.oncommand = function(id,event){
+		msgform.button.disabled = true;
+		if( args[2] != 0 ){
+			publish("messageFromMsgform",msgform.edit.text,msgform.code.text);
+		}else {
+			publish("messageFromMsgform",msgform.edit.text,0);
+		}
+		msgform.close();
+	}
+	msgform.onMouseDown = function(wParam,lParam){ msgform.hitCaption() }
+	msgform.show();
+	win.loopMessage();
+	`
+
+	var codeFormTmp = ..mainForm.loadForm(code,msg,img);
+}
+
+message = function(num){
+	import process;
+	var strTmp1 = "非常抱歉！"+'\n\n'+"接下来需要您，亲自前往官网登录后，执行进阶认证"+'\n\n'+"点击确定前往官网登录页面";
+	var strTmp2 = "是否需要提供提示帮助"+'\n\n'+"如果您是首次执行进阶认证，选择需要提示，或许能给您带来一些帮助。";
+	select(num) {
+		case 12 {//港号没有进行进阶认证
+			if( ..win.msgbox(strTmp1,,0x1) == 2 ){
+				return ;
+			}
+			//退出登录 get 链接加时间戳
+			//Ajax.open("GET", "https://bfweb.hk.beanfun.com/beanfun_blockgeneric_handlers/remove_bflogin_session.ashx?d=" + BeanFunCommon.GetTimeStamp(), false);
+			..http.get("https://bfweb.hk.beanfun.com/beanfun_blockgeneric_handlers/remove_bflogin_session.ashx?d=" ++ this.getTimeStamp)
+			process.execute("https://bfweb.hk.beanfun.com/beanfun_block/bflogin/default.aspx");
+			if( ..win.msgbox(strTmp2,,0x1) == 2 ){
+				return ;
+			}
+			var strTmp3 = "如果您还没登录，请先登录"+'\n\n'+"登录后，在浏览器页面的右下角，点击【会员中心】"+'\n'+"您需要进行身份认证，以及电话认证。"+'\n\n'+
+				"1、身份认证：选择【其他证件】，输入自己的身份证号码"+'\n'+"执行认证之后，还需要点击【电话进阶认证】！"+'\n\n'+
+				"2、电话认证：选择【SMS认证(只限海外用家)】"+'\n'+"地区选择 +86，手机号码输入无误后，点击「执行认证」（这个有点不明显，请认真看）"+'\n'+
+				"输入收到的短信启用码，无误后就完成进阶认证了！"+'\n\n'+"注：一个手机号码只能进阶认证一个账号";
+			..win.msgbox(strTmp3,,0x1);
+			return ;
+		}
+		case 14 {//台号没有进行进阶认证
+		}
+	}
+}
+
+verify = function(str){//此功能没有完善 cookie，暂时不可用！
+	import win.ui;
+	import inet.tls;
+	import web.form;
+	import web.form.util;
+	import inet;
+
+	/*DSG{{*/
+	var winform = win.form(cls="WEB_FORM";text="web";right=799;bottom=549)
+	winform.add()
+	/*}}*/
+
+	var userAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36";
+	var wb        = web.form( winform,,,userAgent,true);
+	web.form.util.setUserAgent(wb,userAgent);
+	wb.noScriptErr = true;
+	if(str == "HK"){
+		wb.go("https://bfweb.hk.beanfun.com/HK/member/alter_main.aspx");
+	}else {
+		wb.go("https://tw.beanfun.com/TW/member/alter_main.aspx");
+	}
+	winform.show();
+	win.loopMessage();
+}
+
+getTimeStamp = function(){
+	import string;
+	import time.ole;
+	var tm = time.now();
+	var timeTmp = tm.year ++ string.right("0" ++ tm.month,2) ++ string.right("0" ++ tm.day,2) ++ string.right("0" ++ tm.hour,2) ++
+		string.right("0" ++ tm.minute,2) ++ string.right("0" ++ tm.second,2) ++ "." ++ string.right("00" ++ tm.milliseconds,3);
+	return timeTmp;
+}
+
+deData = function(data){//thanks Loyisa
+	import tikas;
+	var num    = ( tonumber( ..string.left(data,1),16 ) );
+	var keyIdx = num % 4;
+	if( ..string.right(data,1) != "/" ){ data = data ++ "/" }
+	var text    = ..string.right(data,#data - 1);
+	var textTab = ..string.split(text);
+	var strText = "";
+	var i       = 1;
+	var numTmp  = keyIdx + 1;
+	var keyTab  = ..string.split( tikas.xxteaDecrypt( tikas.deTypeHex(tikas.loyisa[numTmp]),tikas.deTypeHex(tikas.hex.tikas) ) );
+	while( i < #textTab ){
+		for( j=1;#keyTab;1 ){
+			if( textTab[i] == keyTab[j] ){ strText = strText ++ ..string.right( tostring(j-1,16),1 ); }
+		}
+		i++;
+	}
+	var key = ..string.slice( strText,num+2,num+9 );
+	var str = ..string.left( strText,num+1 ) ++ ..string.right( strText,#strText-num-9 );
+	return str,key;
+}
+
+
+decode = function(html){
+    return ( string.replace( html, "&#(\d+);", function(c){ c = tonumber(c);return string.fromUnicode( string.pack(c & 0xFF,c>>8 & 0xFF) ); } ) ) );
+}
+
+getOtpKey = function(str){
+	import tikas;
+	import string;
+	var urlstr = "";
+	if( str == "HK" ){//HK OTP 获取
+		try{
+			urlstr = ..http.get("https://bfweb.hk.beanfun.com/beanfun_block/bflogin/default.aspx");
+			..account.otp = tostring( string.match(urlstr,tikas.match.hkOtp) );
+		}
+		catch(e){
+			..log("没能获取网页 OTP ，请检测网络",false);
+			return false;
+		}
+		if( ..account.otp == "null" ){
+			if( tostring( string.match(urlstr,"IP已自動被系統鎖定") ) == "null" ){
+				..log("您的 IP 已被暂时封禁，请稍候再试",false);
+				return false;
+			}
+			..log("访问登录页面时出错，请更换网络",false);
+			return false;
+		}
+		return true;
+	}else {//TW登录
+		try{
+			urlstr        = ..http.get("https://tw.beanfun.com/beanfun_block/bflogin/default.aspx");
+			..account.otp = tostring( string.match(urlstr,tikas.match.twSkey) );
+		}
+		catch(e){
+			..log("没能获取网页 OTP ，请检测网络",false);
+			return false;
+		}
+		if( ..account.otp == "null" ){
+			if( tostring( string.match(urlstr,"IP已自動被系統鎖定") ) == "null" ){
+				..log("您的 IP 已被暂时封禁，请稍候再试",false);
+				return false;
+			}
+			..log("访问登录页面时出错，请更换网络",false);
+			return false;
+		}
+		return true;
+	}
+}
+
+login = function(str,id,key){
+	import string;
+	var urlstr  = "";
+	var payload = {};
+	if( str == "HK" ){//HK登录
+		try{
+			urlstr = ..http.get( "https://login.hk.beanfun.com/login/id-pass_form_newBF.aspx?otp1=" ++ ..account.otp );
+		}
+		catch(e){
+			..log("未能打开登录页面，请检查网络连接情况",false);
+			return false;
+		}
+		if( string.match(urlstr,tikas.match.googleRc) == "recaptcha" ){
+			..log("您的 IP 出现 Google Recaptcha 人机验证",false);
+			return false;
+		}
+		if( string.match(urlstr,"__EVENTVALIDATION") ){
+			payload.__EVENTTARGET        = "";
+			payload.__EVENTARGUMENT      = "";
+			payload.__VIEWSTATEENCRYPTED = "";
+			payload.__VIEWSTATE          = tostring( string.match(urlstr,tikas.match.viewState) );
+			payload.__VIEWSTATEGENERATOR = tostring( string.match(urlstr,tikas.match.viewStategenerator) );
+			payload.__EVENTVALIDATION    = tostring( string.match(urlstr,tikas.match.eventValidation) );
+			payload.t_AccountID          = id;
+			payload.t_Password           = key;
+			payload.token1               = tostring( string.match(urlstr,tikas.match.token) );
+			payload.btn_login            = "登入";
+			urlstr = ..http.post("https://login.hk.beanfun.com/login/id-pass_form_newBF.aspx?otp1=" ++ ..account.otp,payload);
+			if( string.match(urlstr,tikas.match.pnlMsg) == "pnlMsg" ){
+				..log("登录失败：账号或密码错误",false);
+				return false;
+			}
+			//import win.clip;
+			//..win.clip.write(urlstr);
+			..log("登录成功",false);
+			return true;
+		}
+		..log("登录失败：请检查您的网络",false);
+		return false;
+	}else {//TW登录
+		try{
+			urlstr = ..http.get( "https://tw.newlogin.beanfun.com/login/id-pass_form.aspx?skey=" ++ ..account.otp );
+		}
+		catch(e){
+			..log("未能打开登录页面，请检查网络连接情况",false);
+			return false;
+		}
+		if( string.match(urlstr,tikas.match.googleRc) == "recaptcha" ){
+			..log("您的 IP 出现 Google Recaptcha 人机验证",false);
+			return false;
+			//有 RC 会 post 此值：g-recaptcha-response
+		}
+		if( string.find(urlstr,"__EVENTVALIDATION") ){
+			payload.__EVENTTARGET        = "";
+			payload.__EVENTARGUMENT      = "";
+			payload.__VIEWSTATE          = tostring( string.match(urlstr,tikas.match.viewState) );
+			payload.__VIEWSTATEGENERATOR = tostring( string.match(urlstr,tikas.match.viewStategenerator) );
+			payload.__EVENTVALIDATION    = tostring( string.match(urlstr,tikas.match.eventValidation) );
+			payload.t_AccountID          = id;
+			payload.t_Password           = key;
+			payload.btn_login            = "登入";
+			urlstr                       = ..http.post("https://tw.newlogin.beanfun.com/login/id-pass_form.aspx?skey=" ++ ..account.otp,payload);
+			if( string.match(urlstr,tikas.match.pnlMsg) == "pnlMsg" ){
+				..log("登录失败：账号或密码错误",false);
+				return false;
+			}
+			..log("登录成功",false);
+			return true;
+		}
+		..log("登录失败：请检查您的网络",false);
+		return false;
+	}
+}
+
+getWebToken = function(str){
+	import web.json;
+	import string;
+	var jsonTab = {};
+	if( str == "HK" ){
+		try{
+			jsonTab = web.json.parse( ..http.get("https://bfweb.hk.beanfun.com//beanfun_block/generic_handlers/get_sng_token.ashx") );
+		}
+		catch(e){
+			..log("获取 webToken 失败！请检查网络连接是否正常！",false);
+			return false;
+		}
+	}else {
+		try{
+			jsonTab = web.json.parse( ..http.get("https://tw.beanfun.com/beanfun_block/generic_handlers/get_sng_token.ashx") );
+		}
+		catch(e){
+			..log("获取 webToken 失败！请检查网络连接是否正常！",false);
+			return false;
+		}
+	}
+	var webTokenStr = tostring( jsonTab.webToken );
+	if( webTokenStr == "null" ){
+		..log("获取 webToken 失败！如非网络原因，请联系 Tikas 修复！",false);
+		return false;
+	}
+	..account.webtoken = jsonTab.webToken;
+	return true;
+}
+
+getBFM = function(str){
+	import tikas;
+	var num = ..configId.current;
+	var jsonTab = {}; 
+	var bfmID = "";
+	try{
+		jsonTab = web.json.parse( ..http.get("https://bfweb.hk.beanfun.com/beanfun_block/generic_handlers/echo_token.ashx?webtoken=1") );
+		bfmID = jsonTab.MainAccountID;
+		..configId.sequence[num][[2]] = str ++"：BFM***" ++ ..string.right( bfmID,3 );
+		..configId.sequence[num][[6]] = tikas.xxteaEncrypt( bfmID,..sysinfo ++ ..randomCode );
+		return true;
+	}
+	catch(e){
+		..log("获取 BFM 失败！");
+		return false;
+	}
+}
+
+getAccountList = function(str){//只能返回数值，3 为锁号，2 为没有进阶，1 为没有账号，0 为有账号
+	import tikas;
+	import inet.url;
+	var payload = {};
+	var urlstr = "";
+	var strTmp = "";
+	var str = "";
+	var key = "";
+	var tm;
+	var tmNow = time.now();
+	if( str == "HK" ){//港号
+		strTmp = "https://bfweb.hk.beanfun.com/beanfun_block/auth.aspx?channel=game_zone&page_and_query=game_start.aspx%3Fservice_code_and_region%3D610074_T9&web_token=";
+		urlstr = ..http.get( strTmp ++ ..account.webtoken );
+		//首先看看有没有进阶
+		if( ..string.match(urlstr,tikas.match.verify) == "Verify" ){
+			..log("请先完成进阶认证：1、身份验证，完成后再认证：2、电话验证",false);
+			return 2;
+		}
+		//再看看是否新号
+		if( ..string.match(urlstr,tikas.match.addAccount) == "btnAddServiceAccount" ){
+			..log("您当前还没有创建游戏账号，请先创建游戏账号",false);
+			return 1;
+		}
+		//检索游戏账号
+		..account.one = {};//初始化
+		//获取游戏账号的序列号和账号别名
+		..account.one.serviceAccountSN,..account.one.displayName = ..string.match(urlstr,tikas.match.account);
+
+		//再看看是否锁号
+		if( ..string.match(urlstr,tikas.match.lock) == 'class\=\"Stop\"' ){
+			..log(..account.one.displayName ++ "账号已被锁定，锁定原因查询中",false);
+			return 3;
+		}
+		
+		//直接进入开始游戏
+		payload.service_code = "610074";
+		payload.service_region = "T9";
+		payload.sotp = hkSN;
+		urlstr = ..http.get( "https://bfweb.hk.beanfun.com/beanfun_block/game_zone/game_start_step2.aspx",payload );
+		//取得获取登录密码用的 sn 值，以及后面参数值
+		..account.sn = ..string.match(urlstr,tikas.match.sn);
+		..account.dynamic,strTmp = ..string.match(urlstr,tikas.match.dynamic);
+		..account.dynamicValue = inet.url.decodeUnicode(strTmp);//转个编码保存
+
+		str,key = this.deData( ..string.match(urlstr,tikas.match.data) );
+		strTmp = ..aesObject.DecryStrHex(str,key);
+		//取得获取登录密码用的 ppppp 值、账号、账号创建时间
+		..account.ppppp = ..string.match(strTmp,tikas.match.ppppp);
+		..account.one.serviceAccountID = ..string.match(strTmp,tikas.match.serviceAccount);
+		..account.one.createTime = ..string.match(strTmp,tikas.match.createTime);
+		//顺便计算一下天数
+		tm = time(..account.one.createTime,"%Y-%m-%d %H:%M:%S");
+		..account.one.day = tm.diffday(tmNow);
+
+		strTmp = ..http.get( "https://login.hk.beanfun.com/generic_handlers/get_cookies.ashx" );
+		//取得获取登录密码用的 secretCode 值
+		..account.secretCode = ..string.match(strTmp,tikas.match.secretCode);
+
+		//获取登录游戏权限
+		payload = {};
+		payload.service_code = "610074";
+		payload.service_region = "T9";
+		payload.service_account_id = ..account.one.serviceAccountID;
+		payload.sotp = ..account.one.serviceAccountSN;
+		payload.service_account_display_name = ..account.one.displayName;
+		payload.service_account_create_time = ..account.one.createTime;
+		try{
+			strTmp = ..http.post( "https://bfweb.hk.beanfun.com/beanfun_block/generic_handlers/record_service_start.ashx",payload )
+			if( ..string.match(strTmp,tikas.match.strOutstring) != "Success" ){
+				payload[..account.dynamic] = ..account.dynamicValue;
+				..http.post( "https://bfweb.hk.beanfun.com/beanfun_block/generic_handlers/record_service_start.ashx",payload )
+			}
+		}
+		catch(e){
+			..log("请检查你的网络连接情况，之后再来尝试",false);
+		}
+		return 0; 
+	}else {//台号
+
+	}
+	return 0;
+}
+
+addAccount = function(str,name){
+	import .web.json;
+	import time.ole;
+	var payload = {};
+	var jsonTab = {};
+	var tm;
+	var tmNow = time.now();
+	if(str == "HK"){
+		payload.strFunction = "AddServiceAccount";
+		payload.npsc        = "";
+		payload.npsr        = "";
+		payload.sc          = "610074";
+		payload.sr          = "T9";
+		payload.sadn        = name;
+		payload.sag         = "";
+		try{
+			jsonTab = web.json.parse( ..http.post("https://bfweb.hk.beanfun.com/generic_handlers/gamezone.ashx",payload) );
+			//import win.clip;
+			//..win.clip.write(strTmp);
+			/*
+			返回：
+			{
+				"intResult"   : 1,
+				"strOutstring": "",
+				"objResult"   : {
+					"service_account_sn": "1234567",
+					"service_account_id": "T9e42e212345678900",
+					"create_time"       : "2000-01-02 01:02:30",
+					"result"            : "1",
+					"outstring"         : "",
+					"display_name"      : "Tikas"
+				}
+			}
+			*/
+		}
+		catch(e){
+			..log("新增游戏账号失败：请检查您的网络是否良好，再来尝试！");
+			return false;
+		}
+		..account.one                  = {};
+		..account.one.serviceAccountSN = jsonTab.objResult.service_account_sn;
+		..account.one.serviceAccountID = jsonTab.objResult.service_account_id;
+		..account.one.displayName      = this.decode( jsonTab.objResult.display_name );
+		..account.one.createTime       = jsonTab.objResult.create_time;
+		tm                             = time(jsonTab.objResult.create_time,"%Y-%m-%d %H:%M:%S");
+		..account.one.day              = tm.diffday(tmNow);
+		return true;
+	}else {//台号
+
+	}
+}
+
+end;
+
+/**intellisense(perform)
+detection() = 线程启动 TSP 界面
+getBFM(.(归属地) = 获取 BFM 账号
+getAccountList(.(归属地) = 获取账号列表信息，返回 2 为未进阶认证，返回 1 为未创建游戏账号，返回 0 为获取到游戏账号列表
+verify(.(归属地) = 此功能没有完善 cookie，暂时不可用！
+decode(.(unescape html 解码) = 返回解码的 utf-8 值，如："&#23567;T&#21516;&#23398;" = 小T同学
+getWebToken(.(str归属地) = 此操作需要先登录，获取 webToken 值，str只要不是 HK，都默认为 TW，成功返回 true，失败返回 false
+getOtpKeylogin(.(str归属地) = 获取网页 OTP 值，str只要不是 HK，都默认为 TW，成功返回 true，失败返回 false
+login(.(str归属地,id账号,pwd密码) = 此操作需要先获取网页 OTP 值，str只要不是 HK，都默认为 TW，成功返回 true，失败返回 false
+end intellisense**/

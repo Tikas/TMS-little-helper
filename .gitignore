@@ -1,0 +1,17 @@
+# TMS-little-helper build files
+main/.build/
+
+# TMS-little-helper dist files
+main/dist/
+
+# Node modules
+node_modules/
+
+# MacOS Desktop Services Store
+.DS_Store
+
+# Log files
+*.log
+
+# Debug files
+Debug/
