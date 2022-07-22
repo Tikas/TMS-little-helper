@@ -133,10 +133,6 @@ README：~~English~~ | 中文
 
 >请不要在公开场合，透露个人信息（如账号、密码），因此导致损失，自行承担！
 
-### Star趋势
-
-<img src="https://starchart.cc/Tikas/TMS-little-helper.svg">
-
 ### 展示图
 
 ![display](https://raw.githubusercontent.com/Tikas/TMS-little-helper/main/image/display.webp)
@@ -144,3 +140,7 @@ README：~~English~~ | 中文
 ### 版权许可
 
 [License MIT](../LICENSE)
+
+### Star趋势
+
+<img src="https://starchart.cc/Tikas/TMS-little-helper.svg">
