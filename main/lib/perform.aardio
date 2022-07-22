@@ -53,13 +53,26 @@ getTimeNow = function(){
 	import time;
 	var tm = time.now();
 	tm.format="%Y%m%d%H%M%S";
-	return tostring(tm); 
+	return tostring(tm);
+}
+
+strDateTime = function(){
+	import time.ole;
+	var tm    = time.ole();
+	tm.year   = 1970;
+	tm.month  = 1;
+	tm.day    = 1;
+	tm.hour   = 0;
+	tm.minute = 0;
+	tm.second = 0;
+	tm2       = time.now();
+	return tm2.diffsecond(tm) ++ tm2.milliseconds; //返回的是当前时间与协调世界时 1970 年 1 月 1 日午夜之间的时间差（以毫秒为单位测量）1658503392023
 }
 
 deData = function(data){//thanks Loyisa
 	import tikas;
 	if(data == null){
-		return 0,0; 
+		return 0,0;
 	}
 	var num    = ( tonumber( ..string.left(data,1),16 ) );
 	var keyIdx = num % 4;
@@ -366,7 +379,7 @@ getBFM = function(str){
 	}
 }
 
-getAccountList = function(str){//只能返回数值，4 为出错，3 为锁号，2 为没有进阶，1 为没有账号，0 为有账号
+getAccountList = function(str){//只能返回数值，5 为台号两个号都锁了， 4 为出错，3 为锁号，2 为没有进阶，1 为没有账号，0 为有账号
 	import tikas;
 	import inet.url;
 	import time.ole;
@@ -390,11 +403,11 @@ getAccountList = function(str){//只能返回数值，4 为出错，3 为锁号�
 			return 1;
 		}
 
-		    ..account.one                  = {};
-		var hkID,                           hkSN, hkName = ..string.match(urlstr,tikas.match.account);
-		    ..account.one.serviceAccountSN = tostring(hkSN);
-		    ..account.one.displayName      = hkName;
-		    ..account.one.serviceAccountID = hkID;
+		..account.one                  = {};
+		var hkID,hkSN,hkName           = ..string.match(urlstr,tikas.match.account);
+		..account.one.serviceAccountSN = tostring(hkSN);
+		..account.one.displayName      = hkName;
+		..account.one.serviceAccountID = hkID;
 
 		if( ..string.match(urlstr,tikas.match.lock) == 'class\=\"Stop\"' ){
 			..log("游戏账号：" ++ ..account.one.displayName ++ " 已被锁定，锁定原因查询中...",false);

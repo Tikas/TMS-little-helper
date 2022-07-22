@@ -31,6 +31,45 @@ beforeStartDir = function(){
 	return true;
 }
 
+beforeStartOtpPwd = function(){
+	var strTmp  = "";
+	var payload = {};
+	var key     = "";
+	var data    = "";
+	if( ..account.checked == 0 ){
+		..("未选择游戏账号，请您选择游戏账号再来");
+		return false;
+	}
+	if( ..account.checked == 4 ){
+		..("所选择的游戏账号，暂时无法获取一次性 OTP 登录密码，请确认账号是否锁号状态");
+		return false;
+	}
+	payload.SN            = ..account.sn;
+	payload.WebToken      = ..account.webtoken;
+	payload.SecretCode    = ..account.secretCode;
+	payload.ppppp         = ..account.ppppp;
+	payload.ServiceCode   = "610074";
+	payload.ServiceRegion = "T9";
+	if( ..account.checked == 1 ){
+		payload.ServiceAccount = ..account.one.serviceAccountID;
+		payload.CreateTime     = ..account.one.createTime;
+	}elseif( ..account.checked == 2 ){//其实可以不用写的，算了，为了防止此值赋值了其他值而导致出错
+		payload.ServiceAccount = ..account.two.serviceAccountID;
+		payload.CreateTime     = ..account.two.createTime;
+	}
+	payload.d = time.tick();//此值为系统运行的时间
+	strTmp    = ..http.post( "https://bfweb.hk.beanfun.com/beanfun_block/generic_handlers/get_webstart_otp.ashx",payload );
+	//返回strTmp = "1;63BA2E1E5D60888E31834B3085202A0898C6C7B4";
+	if( ..string.left(strTmp,1) == "1" ){
+		data             = ..string.right( strTmp,#strTmp - 10 );
+		key              = ..string.right( ..string.left(strTmp,10),8 );
+		..account.otpPwd = ..aesObject.DecryStrHex(data,key);
+		return true;
+	}
+	..("网络出错，请检查网络连接情况");
+	return false;
+}
+
 beforeStartLocale = function(id,key){
 	import sys.locale;
 	import fsys;

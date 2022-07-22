@@ -88,11 +88,12 @@ account.dynamic = 获取游戏密码时，后面所需要的动态值名称
 account.dynamicValue = 获取游戏密码时，后面所需要的动态值
 account.secretCode = 获取游戏密码时，所需要的 secretCode 值，就是 get_cookies 那个链接的值
 account.ppppp = 获取游戏密码时，所需要的 ppppp 值
+account.otpPwd = 获取一次性 OTP 登录密码，共用，不分账号
 
 account.resultcode = 暂时无效：账号状态码，2 为没有完成进阶认证，1 为校验失败，0 为身份和手机都已完成认证。由于 cookie 未能解决，此值暂时无效
 account.rows = 暂时无效：账号里的账号数量数组，一般情况下，港号为 1，台号可以为 2。由于 cookie 未能解决，此值暂时无效
 
-account.checked = 当前选中的账号序列，如果只有一个账号，默认选中为 1
+account.checked = 当前选中的账号序列，如果只有一个账号，默认选中为 1, 台号选中第二个账号为 2，没有选择账号值为 0 ，锁号状态不可用时值为 4
 account.one = 暂时使用此值记录第一个账号相关值，等后续 cookie 解决，将换回 rows 值
 account.one.serviceAccountSN = 账号所在数据库序列号，申请登录游戏用的 sotp 值，其实就是这个值
 account.one.serviceAccountID = 账号ID
