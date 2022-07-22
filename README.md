@@ -116,7 +116,7 @@ README：~~English~~ | 中文
 
 ### 如何构建
 
-本程序使用 aardio 开发，下载 aarido 最新版本( 仅 6.5MB，绿色免安装，永久免费 )：
+本程序使用 aardio 开发，下载 aarido 最新版本( 仅 6.5MB，绿色免安装，永久免费 )
 
 [https://ide.update.aardio.com/releases/aardio.7z](https://ide.update.aardio.com/releases/aardio.7z)
 

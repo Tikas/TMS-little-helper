@@ -31,7 +31,7 @@ beforeStartDir = function(){
 	return true;
 }
 
-beforeStartOtpPwd = function(){
+beforeStartGetOtpPwd = function(){
 	var strTmp  = "";
 	var payload = {};
 	var key     = "";
@@ -66,7 +66,7 @@ beforeStartOtpPwd = function(){
 		..account.otpPwd = ..aesObject.DecryStrHex(data,key);
 		return true;
 	}
-	..("网络出错，请检查网络连接情况");
+	..log("网络出错，请检查网络连接情况");
 	return false;
 }
 
