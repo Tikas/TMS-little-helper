@@ -24,6 +24,8 @@
     </a>
 </p>
 
+![Status](https://repobeats.axiom.co/api/embed/c65e9372e59dbf80f59b3e35a8a1dfc34ae343a0.svg)
+
 ### 国际化
 
 README：~~English~~ | 中文
@@ -40,7 +42,7 @@ README：~~English~~ | 中文
 
 ### 功能特色
 
-- ~~去运行库~~：由于 DES 解密使用了 Pungin 的代码，使用 `.Net` 核心 CLR 调用，理论上，只要有 `.Net` 运行库就能执行。`Win 10+` 无需要进行额外设置，`Win 7` 用户建议安装 `.Net 4.0+` 以上的版本即可。
+- ~~去运行库~~：由于使用 C# 生成的 DLL 进行 DES 解密，加上使用 LR 进行转区，您的电脑系统，理应要有 `.Net 4.0+` 的运行库，如果是 Win 10 以上的系统，不需要关注这点，系统已经自带 `.Net` 运行库。
 - 更友好体验：尽可能做到发生一些情况时，能主动出现原因或解决方法，而不用去询问网络或他人。
 - 更安全：增加许多安全功能，以提高安全性。
 - ~~更多实用功能~~：目前还处于基础功能开发状态，这个后续再加。
@@ -87,12 +89,14 @@ README：~~English~~ | 中文
 |   |—— config.aardio               项目配置文件
 |   |—— listboxExx.aardio           用户列表自绘库
 |   |—— perform.aardio              相关功能执行程序
+|   |—— startGame.aardio            启动游戏前后相关的程序集
 |   |—— tikas.aardio                一些核心加解密及初始值
 |   |—— web.aardio                  弃用：还没写好的网络请求功能
 | |—— res                           资源文件
 |   |—— background                  登录程序的背景图片
 |   |—— detect                      登录时 TSP 相关图片
 |   |—— dll                         dll 文件
+|     |—— lr144b1                   LR 转区 1.4.4-bate.1 版本
 |   |—— img                         用户列表账号的缩略图
 |   |—— start                       start 按钮相关图片
 |   |—— welcome                     首次使用时的背景图片，图为本人，不得侵犯肖像权
@@ -112,7 +116,11 @@ README：~~English~~ | 中文
 
 ### 如何构建
 
-本程序使用 aardio 开发，下载 aarido 最新版本( 仅 6.5MB，绿色免安装，永久免费 ):[https://ide.update.aardio.com/releases/aardio.7z](https://ide.update.aardio.com/releases/aardio.7z)，打开本项目，即可构建。
+本程序使用 aardio 开发，下载 aarido 最新版本( 仅 6.5MB，绿色免安装，永久免费 )：
+
+[https://ide.update.aardio.com/releases/aardio.7z](https://ide.update.aardio.com/releases/aardio.7z)
+
+打开本项目，即可构建。
 
 ### 赞助
 

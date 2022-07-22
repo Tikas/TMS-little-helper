@@ -245,19 +245,6 @@ coreForm.buttonMinimize.oncommand = function(id,event){
 }
 coreForm.richedit.text = statusInformation;
 
-//启动游戏的
-/*
-sys.locale.getUserDefault();//返回区域语言，如 zh-CN
-mainForm.button.oncommand = function(id,event){
-	var LRProc = "C:\Users\Tikas\Desktop\Locale_Remulator.1.4.3\LRProc.exe";
-	var LRHookx64 = "C:\Users\Tikas\Desktop\Locale_Remulator.1.4.3\LRHookx64.dll";
-	var gid = "69b8ac36-29d4-4dcf-a0a7-adf89ebb7702";
-	var gamesEXE = "C:\TMS\MapleStory\MapleStory.exe";
-	var gamesDir = "C:\TMS\MapleStory\";
-	raw.execute(LRProc, gid+" "+'\"'+LRHookx64+'\"'+" "+gamesEXE,,,gamesDir,0)
-}
-*/
-
 
 
 

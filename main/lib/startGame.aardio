@@ -1,0 +1,81 @@
+﻿
+namespace startGame begin
+
+beforeStartDir = function(){
+	import fsys.dlg;
+	import win.reg;
+	import fsys.version;
+	if( ..configTks.gamePath == "Tikas" or ..configTks.gamePath == null ){
+		var reg = win.regReaderWow64("HKEY_LOCAL_MACHINE\SOFTWARE\GAMANIA\MAPLESTORY");
+		..configTks.gamePath = tostring( reg.queryValue("Path") );
+	}
+	if( ..configTks.gamePath == "null" ){
+		if( ..win.msgbox("TMS小帮手似乎没有找到游戏程序，请手动指定新枫之谷 MapleStory.exe 的位置",,0x1) == 2 ){
+			..log("由于没有指定游戏位置，无法执行启动操作");
+			return false;
+		}
+		var path = fsys.dlg.open("MapleStory|MapleStory.exe|",,,..mainForm,,"MapleStory.exe");
+		if(!path){
+			..log("由于没有指定游戏位置，无法执行启动操作");
+			return false;
+		}
+		//做个简单校验是否正确的启动程序
+		var tmsInfoTab = fsys.version.getInfo(path);
+		if( tmsInfoTab.companyName != "Wizet" ){
+			..log("此程序并非 Wizet 公司的 MapleStory 启动程序，如游戏公司已换名，请反馈给小T同学，或自行下载源代码修改");
+			return false;
+		}
+		..configTks.gamePath = path;
+		..saveConfigTks();
+	}
+	return true;
+}	
+
+beforeStartLocale = function(id,key){
+	import sys.locale;
+	import fsys;
+	import crypt;
+	var md5Tmp = ""; 
+	var localeID = sys.locale.getId();
+
+	if( localeID == 5124 or localeID == 1028 or localeID == 3076 ){//繁体：澳5124、台1028、港3076，这个 if 可以优化写法吗？
+		//TODO：启动游戏直接登录
+		return ; 
+	}
+	var fileExists = fsys.searchFile( "LRConfig.xml",..io.appData(..dirPath ++ "lr44b1") );//true = path, false = null
+	md5Tmp = crypt.md5( ..string.load( tostring(fileExists) ) );
+	if( md5Tmp != "4548B6B1F82A960D629A6010FD3997D8" ){ ..string.save(..io.appData(..dirPath ++ "lr44b1/LRConfig.xml"),"/res/dll/lr44b1/LRConfig.xml") }
+	fileExists = fsys.searchFile( "LRHookx32.dll",..io.appData(..dirPath ++ "lr44b1") );
+	md5Tmp = crypt.md5( ..string.load( tostring(fileExists) ) );
+	if( md5Tmp != "B184C79CE1646F0FB1C472A1A87EE359" ){ ..string.save(..io.appData(..dirPath ++ "lr44b1/LRHookx32.dll"),"/res/dll/lr44b1/LRHookx32.dll") }
+	fileExists = fsys.searchFile( "LRHookx64.dll",..io.appData(..dirPath ++ "lr44b1") );
+	md5Tmp = crypt.md5( ..string.load( tostring(fileExists) ) );
+	if( md5Tmp != "6E8AFC16951E844256B1ADBEF7CE629E" ){ ..string.save(..io.appData(..dirPath ++ "lr44b1/LRHookx64.dll"),"/res/dll/lr44b1/LRHookx64.dll") }
+	fileExists = fsys.searchFile( "LRProc.exe",..io.appData(..dirPath ++ "lr44b1") );
+	md5Tmp = crypt.md5( ..string.load( tostring(fileExists) ) );
+	if( md5Tmp != "4AF686551D01B11BCC80C56103354156" ){ ..string.save(..io.appData(..dirPath ++ "lr44b1/LRProc.exe"),"/res/dll/lr44b1/LRProc.exe") }
+	fileExists = fsys.searchFile( "LRSubMenus.dll",..io.appData(..dirPath ++ "lr44b1") );
+	md5Tmp = crypt.md5( ..string.load( tostring(fileExists) ) );
+	if( md5Tmp != "D64D94F0291A3B161F1D8964F957B8DD" ){ ..string.save(..io.appData(..dirPath ++ "lr44b1/LRSubMenus.dll"),"/res/dll/lr44b1/LRSubMenus.dll") }
+	fileExists = fsys.searchFile( "SharpShell.dll",..io.appData(..dirPath ++ "lr44b1") );
+	md5Tmp = crypt.md5( ..string.load( tostring(fileExists) ) );
+	if( md5Tmp != "70125553EDFF4465DCE49B2EEECB9BB0" ){ ..string.save(..io.appData(..dirPath ++ "lr44b1/SharpShell.dll"),"/res/dll/lr44b1/SharpShell.dll") }
+	//启动游戏的
+	/*
+	sys.locale.getUserDefault();//返回区域语言，如 zh-CN
+	mainForm.button.oncommand = function(id,event){
+		var LRProc = "C:\Users\Tikas\Desktop\Locale_Remulator.1.4.3\LRProc.exe";
+		var LRHookx64 = "C:\Users\Tikas\Desktop\Locale_Remulator.1.4.3\LRHookx64.dll";
+		var gid = "69b8ac36-29d4-4dcf-a0a7-adf89ebb7702";
+		var gamesEXE = "C:\TMS\MapleStory\MapleStory.exe";
+		var gamesDir = "C:\TMS\MapleStory\";
+		raw.execute(LRProc, gid+" "+'\"'+LRHookx64+'\"'+" "+gamesEXE,,,gamesDir,0)
+	}
+	*/
+	return ;
+}
+
+
+
+
+end;

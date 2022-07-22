@@ -56,18 +56,6 @@ getTimeNow = function(){
 	return tostring(tm); 
 }
 
-strDateTime = function(){
-	/*
-	var d = new Date();
-	var strDateTime = "" + d.getYear() + d.getMonth() + d.getDate() + d.getHours() + d.getMinutes() + d.getSeconds() + d.getMilliseconds();
-	
-	import time;
-	var d = time.data;
-	var str = "" + d.year + d.month + d.day + d.hour + d.minute + d.second + d.milliseconds;
-	return str; 
-	*/
-}
-
 deData = function(data){//thanks Loyisa
 	import tikas;
 	if(data == null){
@@ -452,8 +440,6 @@ getAccountList = function(str){//只能返回数值，4 为出错，3 为锁号�
 			..account.ppppp = ..string.match(strTmp,tikas.match.ppppp);
 			return 0;
 		}
-		//import win.clip;
-		//..win.clip.write(..account.ppppp);
 		..log("请检查你的网络连接情况，之后再来尝试",false);
 		return 4;
 	}else {//台号

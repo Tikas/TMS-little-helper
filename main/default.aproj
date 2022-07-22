@@ -89,6 +89,14 @@
 		</folder>
 		<folder name="dll" path="res\dll" embed="true" comment="目录" local="false" ignored="false">
 			<file name="DES.dll" path="res\dll\DES.dll" comment="res\dll\DES.dll"/>
+			<folder name="lr144b1" path="res\dll\lr144b1" embed="true" comment="目录" local="false" ignored="false">
+				<file name="LRConfig.xml" path="res\dll\lr144b1\LRConfig.xml" comment="res\dll\lr144b1\LRConfig.xml"/>
+				<file name="LRHookx32.dll" path="res\dll\lr144b1\LRHookx32.dll" comment="res\dll\lr144b1\LRHookx32.dll"/>
+				<file name="LRHookx64.dll" path="res\dll\lr144b1\LRHookx64.dll" comment="res\dll\lr144b1\LRHookx64.dll"/>
+				<file name="LRProc.exe" path="res\dll\lr144b1\LRProc.exe" comment="res\dll\lr144b1\LRProc.exe"/>
+				<file name="LRSubMenus.dll" path="res\dll\lr144b1\LRSubMenus.dll" comment="res\dll\lr144b1\LRSubMenus.dll"/>
+				<file name="SharpShell.dll" path="res\dll\lr144b1\SharpShell.dll" comment="res\dll\lr144b1\SharpShell.dll"/>
+			</folder>
 		</folder>
 		<file name="logo.ico" path="res\logo.ico" comment="res\logo.ico"/>
 	</folder>

@@ -67,15 +67,16 @@ globalCord 为全局通用控制识别码，为减少变量，很多判断写到
 --------
 */
 
-var dirPath        = tikas.deTypeHex( tikas.hex.dirPath );
-	userClosed     = true;
-	sysinfo        = tikas.sysinfo();
-	reg            = win.reg( tikas.deTypeHex(tikas.hex.regPath) );
-	randomCode     = tostring( reg.queryValue( tikas.deTypeHex(tikas.hex.randomCodePath) ) );
-	configFilePath = io.appData( dirPath ++ tikas.deTypeHex(tikas.hex.configFile) );
-	configTks      = {};
-	configId       = {};
-	account        = {};
+dirPath        = tikas.deTypeHex( tikas.hex.dirPath );
+userClosed     = true;
+sysinfo        = tikas.sysinfo();
+reg            = win.reg( tikas.deTypeHex(tikas.hex.regPath) );
+randomCode     = tostring( reg.queryValue( tikas.deTypeHex(tikas.hex.randomCodePath) ) );
+configFilePath = io.appData( dirPath ++ tikas.deTypeHex(tikas.hex.configFile) );
+configTks      = {};
+configId       = {};
+account        = {};
+
 /*
 一开始是想每个关键的数据都弄一个变量来存放的，然而，我最讨厌就是变量太多，所有账号相关的，全丢进这个数组吧！
 account.pwd = 加密存放的六位数主密码，没错，就是开始界面的那六个数字密码
@@ -178,6 +179,7 @@ staticPwdTip={cls="static";text="密码提示文本";left=0;top=651;right=500;bo
 					else {
 						welcomeForm.staticPwdTip.hide = 1;
 						configTks.author              = tikas.deTypeHex( tikas.hex.tikas );
+						configTks.gamePath            = tikas.deTypeHex( tikas.hex.tikas );
 						randomCode                    = string.random( math.random(10,50),tostring(36#21i3v9) );
 						reg.setSzValue( tikas.deTypeHex(tikas.hex.randomCodePath),randomCode );
 						//密码不进行保存，只做加密取哈希值
@@ -520,6 +522,12 @@ if( checkIdFiles() == false ){
 	formChildShow(1);
 }
 
+
+
+saveConfigTks = function(){
+	var strTmp = web.json.stringify( configTks,true );
+	string.save( configFilePath,tikas.configEncrypt( tikas.dataEncrypt(strTmp,sysinfo,randomCode),sysinfo ) );
+}
 
 
 

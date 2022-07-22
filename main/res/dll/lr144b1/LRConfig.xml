@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LRConfig>
+  <Profiles>
+    <Profile Name="zh-TW" Guid="2f079392-c7d6-4671-8640-14f4d03505d5">
+      <Location>zh-TW</Location>
+      <CodePage>950</CodePage>
+      <Font>None</Font>
+      <RunAsAdmin>true</RunAsAdmin>
+      <HookIME>true</HookIME>
+    </Profile>
+  </Profiles>
+</LRConfig>
