@@ -28,25 +28,19 @@
 
 README：~~English~~ | 中文
 
-### 项目介绍
-
-TMS小帮手，一个致力于 TMS (TW MapleStory) 启动、登录、多账号管理等相关的小程序。
-
-![display](https://raw.githubusercontent.com/Tikas/TMS-little-helper/main/image/display.webp)
-
 ### 开发背景
 
-在现有的 [繽放 - 樂豆第三方客戶端](https://github.com/pungin/Beanfun) 不支持港号新登录入口，而 [秋水橘子香港登入工具](https://github.com/starmcc/qs-beanfun) 又仅支持港号登录。
+在现有的 [繽放 - 樂豆第三方客戶端](https://github.com/pungin/Beanfun) 还不支持港号新登录入口，而 [秋水橘子香港登入工具](https://github.com/starmcc/qs-beanfun) 又仅仅只支持港号登录，台号无法登录。
 
 他们都有个共同点：依赖运行库。
 
-在提交了 [issues](https://github.com/pungin/Beanfun/issues/85) 想 pungin 增加港号新登录入口时，却迟迟得不到下文，从这可以看出 pungin 一定忙于其他事。
+在提交了 [issues](https://github.com/pungin/Beanfun/issues/85) 想 Pungin 增加港号新登录入口时，却迟迟得不到下文，从这可以看出 Pungin 忙于其他事。
 
 为此，只好重复造轮子了。
 
 ### 功能特色
 
-- ~~去运行库~~：由于 DES 解密使用了 pungin 的代码，使用 .Net 核心 CLR 调用，理论上，只要有 .Net 运行库就能执行。win 10 + 无需要进行额外设置，win 7 用户建议安装 ,Net 4.0+ 以上的版本即可。
+- ~~去运行库~~：由于 DES 解密使用了 Pungin 的代码，使用 `.Net` 核心 CLR 调用，理论上，只要有 `.Net` 运行库就能执行。`Win 10+` 无需要进行额外设置，`Win 7` 用户建议安装 `.Net 4.0+` 以上的版本即可。
 - 更友好体验：尽可能做到发生一些情况时，能主动出现原因或解决方法，而不用去询问网络或他人。
 - 更安全：增加许多安全功能，以提高安全性。
 - ~~更多实用功能~~：目前还处于基础功能开发状态，这个后续再加。
@@ -71,7 +65,7 @@ TMS小帮手，一个致力于 TMS (TW MapleStory) 启动、登录、多账号�
 
 <details><summary>点我 打开/关闭 贡献者列表</summary>
 
-- [Loyisa](https://github.com/Loyisa) - 技术大神，高尚的人格魅力，强大的技术能力，还 TM 的帅气！。
+- [Loyisa](https://github.com/Loyisa) - 技术大神，高尚的人格魅力，强大的技术能力，还 TM 的帅气！
 
 </details>
 
@@ -111,13 +105,33 @@ TMS小帮手，一个致力于 TMS (TW MapleStory) 启动、登录、多账号�
 |—— README.md                       中文 README
 ```
 
+### 相关功能依赖项
+
+- Locale Remulator 系统区域和语言模拟器：[https://github.com/InWILL/Locale_Remulator](https://github.com/InWILL/Locale_Remulator)
+- Pungin 的 DES 源码构建 DES.dll：[https://github.com/pungin/Beanfun/blob/code/Beanfun/API/WCDESComp.cs](https://github.com/pungin/Beanfun/blob/code/Beanfun/API/WCDESComp.cs)
+
 ### 如何构建
 
-本程序使用 aardio 开发，[下载 aarido 最新版本( 仅 6.5MB，绿色免安装，永久免费 )](https://ide.update.aardio.com/releases/aardio.7z)，打开本项目，即可构建。
+本程序使用 aardio 开发，下载 aarido 最新版本( 仅 6.5MB，绿色免安装，永久免费 ):[https://ide.update.aardio.com/releases/aardio.7z](https://ide.update.aardio.com/releases/aardio.7z)，打开本项目，即可构建。
 
 ### 赞助
 
 开发不易，觉得有很大帮助的朋友可以赏助(不接受学生赞赏)，以方便作者更有动力去开发。
+
+### 反馈
+
+- 给开发者的反馈：[https ://github.com/Tikas/TMS-little-helper/issues](https://github.com/Tikas/TMS-little-helper/issues)
+- 与其他用户讨论：[https://github.com/Tikas/TMS-little-helper/discussions](https://github.com/Tikas/TMS-little-helper/discussions)
+
+>请不要在公开场合，透露个人信息（如账号、密码），因此导致损失，自行承担！
+
+### Star趋势
+
+<img src="https://starchart.cc/Tikas/TMS-little-helper.svg">
+
+### 展示图
+
+![display](https://raw.githubusercontent.com/Tikas/TMS-little-helper/main/image/display.webp)
 
 ### 版权许可
 

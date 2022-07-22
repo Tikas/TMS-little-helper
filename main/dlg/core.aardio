@@ -247,6 +247,7 @@ coreForm.richedit.text = statusInformation;
 
 //启动游戏的
 /*
+sys.locale.getUserDefault();//返回区域语言，如 zh-CN
 mainForm.button.oncommand = function(id,event){
 	var LRProc = "C:\Users\Tikas\Desktop\Locale_Remulator.1.4.3\LRProc.exe";
 	var LRHookx64 = "C:\Users\Tikas\Desktop\Locale_Remulator.1.4.3\LRHookx64.dll";
@@ -257,12 +258,6 @@ mainForm.button.oncommand = function(id,event){
 }
 */
 
-/*
-import dotNet;
-var dll = dotNet.load("DES","\res\dll\DES.dll");
-dll.import("DES");
-var otpPwd = DES.ECB.DecryStrHex(str,key);
-*/
 
 
 
@@ -272,9 +267,7 @@ coreForm.onClose = function(hwnd,message,wParam,lParam){
 		mainForm.close();
 	}
 }
-
 coreForm.onMouseDown  = function(wParam,lParam){ coreForm.hitCaption() };
-
 coreForm.show();
 win.loopMessage();
 return coreForm;
