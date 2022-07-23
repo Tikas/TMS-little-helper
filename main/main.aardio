@@ -8,6 +8,7 @@ import fsys;
 import inet.whttp;
 import inet.tls;
 import zlib;
+import dotNet;
 
 /*
 一此规范：
@@ -76,6 +77,10 @@ configFilePath = io.appData( dirPath ++ tikas.deTypeHex(tikas.hex.configFile) );
 configTks      = {};
 configId       = {};
 account        = {};
+//调用 dll
+dll = dotNet.load("DES",$"\res\dll\DES.dll");
+dll.import("DES");
+aesObject = DES.ECB();//调用方法：aesObject.DecryStrHex(str,key) 返回解密文本
 
 /*
 一开始是想每个关键的数据都弄一个变量来存放的，然而，我最讨厌就是变量太多，所有账号相关的，全丢进这个数组吧！
@@ -104,7 +109,9 @@ account.two = 暂时使用此值记录第二个账号相关值，其他值参考
 
 */
 
+//inet.clearCookie();
 http = inet.whttp();
+http.addHeaders = { "User-Agent" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"; }
 
 (function(){
 	var strTemp = "";
@@ -414,8 +421,6 @@ if( globalCord == 2 ){
 	if( loginForm.doModal() != dirPath ){ return ; }
 }//第二次阻塞判断结束
 
-import dotNet;
-
 /*DSG{{*/
 mainForm = win.form(cls="XTIKAS_FORM";text="TMS little helper";right=465;bottom=754;border="none";composited=1;max=false;mode="popup";sysmenu=false;title=false)
 mainForm.add(
@@ -532,11 +537,6 @@ saveConfigTks = function(){
 
 
 
-
-//调用 dll
-var dll = dotNet.load("DES",$"\res\dll\DES.dll");
-dll.import("DES");
-aesObject = DES.ECB();//调用方法：aesObject.DecryStrHex(str,key) 返回解密文本
 
 mainForm.show();
 return win.loopMessage();

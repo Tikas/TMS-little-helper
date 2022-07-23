@@ -32,16 +32,17 @@ beforeStartDir = function(){
 }
 
 beforeStartGetOtpPwd = function(){
+	import time;
 	var strTmp  = "";
 	var payload = {};
 	var key     = "";
 	var data    = "";
 	if( ..account.checked == 0 ){
-		..("未选择游戏账号，请您选择游戏账号再来");
+		..log("未选择游戏账号，请您选择游戏账号再来");
 		return false;
 	}
 	if( ..account.checked == 4 ){
-		..("所选择的游戏账号，暂时无法获取一次性 OTP 登录密码，请确认账号是否锁号状态");
+		..log("所选择的游戏账号，暂时无法获取一次性 OTP 登录密码，请确认账号是否锁号状态");
 		return false;
 	}
 	payload.SN            = ..account.sn;
@@ -66,7 +67,7 @@ beforeStartGetOtpPwd = function(){
 		..account.otpPwd = ..aesObject.DecryStrHex(data,key);
 		return true;
 	}
-	..log("网络出错，请检查网络连接情况");
+	..log("网络出错，请检查网络连接情况" ++ tostring(strTmp) );
 	return false;
 }
 

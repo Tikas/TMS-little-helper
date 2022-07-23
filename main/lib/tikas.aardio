@@ -107,13 +107,15 @@ namespace tikas{
 	    lock               = /*<@class="Stop"@>*/;
 	    account            = /*\"\>\<div\sid\=\"(.*?)\"\ssn\=\"(\d+)\"\sname\=\"(.*?)\"*/;
 	    sn                 = /*GetResultByLongPolling\&key\=(.*?)\"*/;                //获取游戏密码时，所需要的 sn 值
-	    dynamic            = /*CreateTime\s\+\"\&(.*?)\=(.*?)\"*/;                    //获取游戏密码时，后面所需要的动态值，值要解 url 编码
+	    dynamicStr         = /*MyAccountData\.ServiceAccountCreateTime(.*?)\;*/;      //这里折分出来，是因为当时排错时拆分出来的，
+	    dynamic            = /*\"\&(.*?)\=*/;                                         //当时这样找常出错：/*CreateTime\s\+\s\"\&(.*?)\=(.*?)\"*/，后来排错时拆分出来了
+	    dyValue            = /*\=(.*?)\"*/; 
 	    secretCode         = /*\'(.*?)\'*/;                                           //获取游戏密码时，所需要的 secretCode 值
 	    data               = /*Data\=(.*?)\"*/;                                       //获取游戏密码时，所需要的 data 值
 	    serviceAccount     = /*ServiceAccount\=(.*?)\&*/;
 	    createTime         = /*ServiceAccountCreateTime\:\s\"(.*?)\"*/;
 	    ppppp              = /*ppppp\=(.*?)\&*/;
-	    strOutstring       = /*strOutstring\"\:\s\"(.*?)\"*/;
+	    strOutstring       = "Success";
 	    advanceCheck       = /*<@AdvanceCheck@>*/;
 	}
 

@@ -56,7 +56,7 @@ getTimeNow = function(){
 	return tostring(tm);
 }
 
-strDateTime = function(){
+getDateTime = function(){
 	import time.ole;
 	var tm    = time.ole();
 	tm.year   = 1970;
@@ -68,6 +68,27 @@ strDateTime = function(){
 	tm2       = time.now();
 	return tm2.diffsecond(tm) ++ tm2.milliseconds; //返回的是当前时间与协调世界时 1970 年 1 月 1 日午夜之间的时间差（以毫秒为单位测量）1658503392023
 }
+
+strDateTime = function(){
+	import time;
+	var tm = time.now();
+	/*
+	官方源代码：
+	var d = new Date();
+    var strDateTime = "" + d.getYear() + d.getMonth() + d.getDate() + d.getHours() + d.getMinutes() + d.getSeconds() + d.getMilliseconds();
+    此值比较奇怪，因此值导致出错造成排错 N 天，真服了！
+    生成的值是以当前时间，减去 1970 年 1 月 1 日 00:00:00 UTC 的时间。
+    问题来了：
+    由于语言上的问题，年份规定了 0-99 为 1900 年至 1999 年。如果按 2022 年来算，此值前面就应该是 122 开头(2000年为 100，再加 22 就是 2022)，这也就是一直出错的地方！
+    第二个坑：
+    月份是从 0 开始，0-11，代表了 1月-12月，其实这也没什么的，但是，你再看日期就知道为什么是个坑了！
+    第三个坑：
+    日期是从 1 开始，好！很好！非常好！！！
+	*/
+	var strTmp = (tonumber( tm.year)-1900) ++ (tm.month - 1) ++ tm.day ++ tm.hour ++ tm.minute ++ tm.second ++ tm.milliseconds;
+	return strTmp; 
+}
+
 
 deData = function(data){//thanks Loyisa
 	import tikas;
@@ -154,7 +175,7 @@ message = function(num){
 			}
 			//退出登录 get 链接加时间戳
 			//Ajax.open("GET", "https://bfweb.hk.beanfun.com/beanfun_blockgeneric_handlers/remove_bflogin_session.ashx?d=" + BeanFunCommon.GetTimeStamp(), false);
-			..http.get("https://bfweb.hk.beanfun.com/beanfun_blockgeneric_handlers/remove_bflogin_session.ashx?d=" ++ getTimeStamp)
+			..http.get("https://bfweb.hk.beanfun.com/beanfun_blockgeneric_handlers/remove_bflogin_session.ashx?d=" ++ getTimeStamp() )
 			process.execute("https://bfweb.hk.beanfun.com/beanfun_block/bflogin/default.aspx");
 			if( ..win.msgbox(strTmp2,,0x1) == 2 ){
 				return ;
@@ -172,7 +193,7 @@ message = function(num){
 			}
 			//退出登录 get 链接加时间戳
 			//Ajax.open("GET", "https://bfweb.hk.beanfun.com/beanfun_blockgeneric_handlers/remove_bflogin_session.ashx?d=" + BeanFunCommon.GetTimeStamp(), false);
-			..http.get("https://bfweb.hk.beanfun.com/beanfun_blockgeneric_handlers/remove_bflogin_session.ashx?d=" ++ getTimeStamp)
+			..http.get("https://bfweb.hk.beanfun.com/beanfun_blockgeneric_handlers/remove_bflogin_session.ashx?d=" ++ getTimeStamp() )
 			process.execute("https://bfweb.hk.beanfun.com/beanfun_block/bflogin/default.aspx");
 			if( ..win.msgbox(strTmp2,,0x1) == 2 ){
 				return ;
@@ -287,7 +308,6 @@ login = function(str,id,key){
 				..log("登录失败：账号或密码错误",false);
 				return false;
 			}
-
 			..log("登录成功",false);
 			return true;
 		}
@@ -311,15 +331,17 @@ login = function(str,id,key){
 			//此验证未进阶前，会验证邮箱，进阶后，会验证电话
 		}
 		if( ..string.find(urlstr,"__EVENTVALIDATION") ){
-			payload.__EVENTTARGET        = "";
-			payload.__EVENTARGUMENT      = "";
-			payload.__VIEWSTATE          = tostring( ..string.match(urlstr,tikas.match.viewState) );
-			payload.__VIEWSTATEGENERATOR = tostring( ..string.match(urlstr,tikas.match.viewStategenerator) );
-			payload.__EVENTVALIDATION    = tostring( ..string.match(urlstr,tikas.match.eventValidation) );
-			payload.t_AccountID          = id;
-			payload.t_Password           = key;
-			payload.btn_login            = "登入";
-			urlstr                       = ..http.post("https://tw.newlogin.beanfun.com/login/id-pass_form.aspx?skey=" ++ ..account.otp,payload);
+			payload.__EVENTTARGET             = "";
+			payload.__EVENTARGUMENT           = "";
+			payload.__VIEWSTATE               = tostring( ..string.match(urlstr,tikas.match.viewState) );
+			payload.__VIEWSTATEGENERATOR      = tostring( ..string.match(urlstr,tikas.match.viewStategenerator) );
+			payload.__EVENTVALIDATION         = tostring( ..string.match(urlstr,tikas.match.eventValidation) );
+			payload.t_AccountID               = id;
+			payload.t_Password                = key;
+			payload.token1                    = "";
+			payload.btn_login                 = "登入";
+			payload.checkbox_remember_account = "on";
+			urlstr                            = ..http.post("https://tw.newlogin.beanfun.com/login/id-pass_form.aspx?skey=" ++ ..account.otp,payload);
 			if( ..string.match(urlstr,tikas.match.pnlMsg) == "pnlMsg" ){
 				..log("登录失败：账号或密码错误",false);
 				return false;
@@ -388,16 +410,17 @@ getAccountList = function(str){//只能返回数值，5 为台号两个号都锁
 	var strTmp  = "";
 	var data    = "";
 	var key     = "";
+	var dynamic = "";
+	var dyValue = "";
 	var tm;
 	var tmNow = time.now();
 	if( str == "HK" ){//港号
-		urlstr = ..http.get( "https://bfweb.hk.beanfun.com/beanfun_block/auth.aspx?channel=game_zone&page_and_query=game_start.aspx?service_code_and_region=610074_T9&web_token=" ++ ..account.webtoken );
+		urlstr = ..http.get( "https://bfweb.hk.beanfun.com/beanfun_block/auth.aspx?channel=game_zone&page_and_query=game_start.aspx%3Fservice_code_and_region%3D610074_T9&web_token=" ++ ..account.webtoken );
 
 		if( ..string.match(urlstr,tikas.match.verify) == "Verify" ){
 			..log("请先完成进阶认证：1、身份验证，完成后再认证：2、电话验证",false);
 			return 2;
 		}
-
 		if( ..string.match(urlstr,tikas.match.addAccount) == "btnAddServiceAccount" ){
 			..log("您当前还没有创建游戏账号，请先创建游戏账号",false);
 			return 1;
@@ -414,46 +437,50 @@ getAccountList = function(str){//只能返回数值，5 为台号两个号都锁
 			return 3;
 		}
 
-		urlstr                   = ..http.get( "https://bfweb.hk.beanfun.com/beanfun_block/game_zone/game_start_step2.aspx?service_code=610074&service_region=T9&sotp=" ++ ..account.one.serviceAccountSN );
+		data                     = "?service_code=610074&service_region=T9&sotp=" ++ ..account.one.serviceAccountSN ++ "&dt=" ++ strDateTime();
+		urlstr                   = ..http.get( "https://bfweb.hk.beanfun.com/beanfun_block/game_zone/game_start_step2.aspx" ++ data );
 		..account.sn             = ..string.match(urlstr,tikas.match.sn);
 		..account.one.createTime = ..string.match(urlstr,tikas.match.createTime);
 		tm                       = time(..account.one.createTime,"%Y-%m-%d %H:%M:%S");
 		..account.one.day        = tmNow.diffday(tm);
-		strTmp                   = ..http.get( "https://login.hk.beanfun.com/generic_handlers/get_cookies.ashx" );
-		..account.secretCode     = ..string.match(strTmp,tikas.match.secretCode);
+		strTmp                   = ..string.match(urlstr,tikas.match.dynamicStr);
+		dynamic                  = ..string.match(strTmp,tikas.match.dynamic);
+		dyValue                  = ..string.match(strTmp,tikas.match.dyValue);
+		data                     = ..http.get( "https://login.hk.beanfun.com/generic_handlers/get_cookies.ashx" );
+		..account.secretCode     = ..string.match(data,tikas.match.secretCode);
 
-		payload                              = {};
-		payload.service_code                 = "610074";
-		payload.service_region               = "T9";
-		payload.service_account_id           = ..account.one.serviceAccountID;
-		payload.sotp                         = ..account.one.serviceAccountSN;
-		payload.service_account_display_name = ..account.one.displayName;
-		payload.service_account_create_time  = ..account.one.createTime;
-		strTmp                               = ..http.post( "https://bfweb.hk.beanfun.com/beanfun_block/generic_handlers/record_service_start.ashx",payload )
-
-		if( ..string.match(strTmp,tikas.match.strOutstring) == "Success" ){
-			//第一次解码出来必错：ppppp=Error! SourceToEncrypt Length error!，需要请求 post 之后，再来一次
-			urlstr      = ..http.get( "https://bfweb.hk.beanfun.com/beanfun_block/game_zone/game_start_step2.aspx?service_code=610074&service_region=T9&sotp=" ++ ..account.one.serviceAccountSN );
-			data,key    = deData( ..string.match(urlstr,tikas.match.data) );
-			if( data == 0 ){
-				..log("Data 解码失败",false);
-				..http.get( "https://bfweb.hk.beanfun.com/beanfun_block/auth.aspx?channel=game_zone&page_and_query=game_start.aspx%3Fservice_code_and_region%3D610074_T9&web_token=" ++ ..account.webtoken );
-				urlstr                   = ..http.get( "https://bfweb.hk.beanfun.com/beanfun_block/game_zone/game_start_step2.aspx?service_code=610074&service_region=T9&sotp=" ++ ..account.one.serviceAccountSN );
-				..account.sn             = ..string.match(urlstr,tikas.match.sn);
-				..account.one.createTime = ..string.match(strTmp,tikas.match.createTime);
-				tm                       = time(..account.one.createTime,"%Y-%m-%d %H:%M:%S");
-				..account.one.day        = tm.diffday(tmNow);
-				data,key                 = deData( ..string.match(urlstr,tikas.match.data) );
-			}
-			if( data == 0 ){//重新尝试一次还是 0 ，就直接放弃！
-				..log("请检查你的网络连接情况，之后再来尝试",false);
-				return 4;
-			}
+		data = "service_code=610074&service_region=T9&service_account_id=" ++ ..account.one.serviceAccountID ++ "&sotp=" ++
+				..account.one.serviceAccountSN ++ "&service_account_display_name=" ++ ..account.one.displayName ++
+				"&service_account_create_time=" ++ ..account.one.createTime ++ "&" ++ dynamic ++ "=" ++ dyValue;
+		strTmp = ..http.post( "https://bfweb.hk.beanfun.com/beanfun_block/generic_handlers/record_service_start.ashx",data )
+		
+		if( ..string.find(strTmp,tikas.match.strOutstring) ){
+			strTmp          = ..string.match(urlstr,tikas.match.data);
+			data,key        = deData( strTmp );
 			strTmp          = ..aesObject.DecryStrHex(data,key);
 			..account.ppppp = ..string.match(strTmp,tikas.match.ppppp);
+
+			if( ..string.left(..account.ppppp,5) != "Error" ){ return 0; }
+
+			..log("Data 出现解码失败一次，正在重新尝试",false);
+			..http.get( "https://bfweb.hk.beanfun.com/beanfun_block/auth.aspx?channel=game_zone&page_and_query=game_start.aspx%3Fservice_code_and_region%3D610074_T9&web_token=" ++ ..account.webtoken );
+			data                     = "?service_code=610074&service_region=T9&sotp=" ++ ..account.one.serviceAccountSN ++ "&dt=" ++ strDateTime();
+			urlstr                   = ..http.get( "https://bfweb.hk.beanfun.com/beanfun_block/game_zone/game_start_step2.aspx" ++ data );
+			..account.sn             = ..string.match(urlstr,tikas.match.sn);
+			..account.one.createTime = ..string.match(strTmp,tikas.match.createTime);
+			tm                       = time(..account.one.createTime,"%Y-%m-%d %H:%M:%S");
+			..account.one.day        = tm.diffday(tmNow);
+			data,key                 = deData( ..string.match(urlstr,tikas.match.data) );
+			strTmp          = ..aesObject.DecryStrHex(data,key);
+			..account.ppppp = ..string.match(strTmp,tikas.match.ppppp);
+			if( ..string.left(..account.ppppp,5) == "Error" ){
+				..account.ppppp = "F9B45415B9321DB9635028EFDBDDB44BEA33080BD5FCAC89A80447C9DC5ECFA9E881314D0339A142DE2B8CCDD685B31C2DDEABD83964249DFCAA15ED7695BE9A";
+				..log("Data 再次解码失败，已设置固定值",false);
+				return 4;
+			}
 			return 0;
 		}
-		..log("请检查你的网络连接情况，之后再来尝试",false);
+		..log("服务器未能返回成功值，请检查 post 值是否正确，或者检查网络连接情况",false);
 		return 4;
 	}else {//台号
 

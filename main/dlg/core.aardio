@@ -8,7 +8,7 @@ import perform;
 			..globalCord = 4;  //webToken 获取失败！
 			return ;
 		}
-		numTmp = perform.getAccountList("HK");//3 为锁号，2 为没有进阶，1 为没有账号，0 为有账号
+		numTmp = perform.getAccountList("HK");//5 为台号两个号都锁了，4 为出错，3 为锁号，2 为没有进阶，1 为没有账号，0 为有账号
 		select(numTmp) {
 			case 0 {
 				..globalCord = 11;  //港号获取到游戏账号列表
@@ -37,7 +37,7 @@ import perform;
 			..globalCord = 4;  //webToken 获取失败！
 			return ;
 		}
-		numTmp = perform.getAccountList("TW");//3 为锁号，2 为没有进阶，1 为没有账号，0 为有账号
+		numTmp = perform.getAccountList("TW");//5 为台号两个号都锁了，4 为出错，3 为锁号，2 为没有进阶，1 为没有账号，0 为有账号
 		select(numTmp) {
 			case 0 {
 				..globalCord = 13;  //台号获取到游戏账号列表
@@ -82,6 +82,8 @@ import win.ui;
 import fonts.fontAwesome;
 import process;
 import time.ole;
+import startGame;
+
 /*DSG{{*/
 coreForm = win.form(cls="TIKASCORE_FORM";text="TMS little helper";right=465;bottom=754;bgcolor=6575626;border="none";max=false)
 coreForm.add(
@@ -109,7 +111,7 @@ plus8={cls="plus";left=298;top=725;right=328;bottom=755;iconColor=15790320;iconS
 plus9={cls="plus";left=338;top=725;right=368;bottom=755;iconColor=15790320;iconStyle={font=LOGFONT(h=-20;name='FontAwesome')};iconText='\uF21E';transparent=1;z=13};
 richedit={cls="richedit";left=1;top=550;right=465;bottom=720;autohscroll=false;bgcolor=8615995;color=13421772;multiline=1;readonly=1;z=4};
 setting={cls="plus";left=18;top=35;right=88;bottom=105;autohscroll=false;autovscroll=false;iconColor=16776960;iconStyle={align="right";font=LOGFONT(h=-29;name='FontAwesome');valign="bottom"};iconText='\uF013';transparent=1;z=32};
-startGame={cls="plus";text="启动并进入游戏";left=251;top=445;right=431;bottom=515;bgcolor=11580047;color=15790320;font=LOGFONT(h=-16);iconStyle={font=LOGFONT(h=-22;name='FontAwesome');padding={top=10};valign="top"};iconText='\uF11B';textPadding={bottom=10};valign="bottom";z=28};
+startGame={cls="plus";text="启动并进入游戏";left=251;top=445;right=431;bottom=515;bgcolor=11580047;color=15790320;font=LOGFONT(h=-16);iconStyle={font=LOGFONT(h=-22;name='FontAwesome');padding={top=10};valign="top"};iconText='\uF11B';notify=1;textPadding={bottom=10};valign="bottom";z=28};
 static={cls="static";text="分步操作";left=34;top=350;right=132;bottom=375;color=15790320;font=LOGFONT(h=-16);transparent=1;z=23};
 static11={cls="static";text="一步到位";left=333;top=350;right=431;bottom=375;align="right";color=15790320;font=LOGFONT(h=-16);transparent=1;z=29};
 static14={cls="static";text="只有指定游戏路径后才能启动游戏，并且直接登录进入游戏";left=256;top=380;right=406;bottom=430;align="right";color=11184810;transparent=1;z=30};
@@ -185,6 +187,7 @@ var setSkin = function(num){//传值 1 为正常，2 为警告，3 为危险
 		case 11 {//港号获取到游戏账号列表
 			coreForm.accountOne.text = ..account.one.displayName ++ '\n' ++ "来枫谷已有：" ++ ..account.one.day ++ "天";
 			coreForm.accountOne.hide = 0;
+			coreForm.accountOne.checked = true;
 			setSkin(1);
 		}
 		case 12 {//港号没有进行进阶认证
@@ -245,6 +248,9 @@ coreForm.copyPwd.oncommand = function( id,event ){
 }
 coreForm.startGame.oncommand = function( id,event ){
 	coreForm.startGame.disabledText = { '\uF04B';text="正在启动游戏" };
+	//..account.checked = 1;
+	//startGame.beforeStartGetOtpPwd();
+	//..log("OTP 密码为：" ++ tostring(..account.otpPwd) );
 }
 /*coreForm.gamePath.oncommand = function( id,event ){
 	coreForm.copyAccount.disabledText = null;
