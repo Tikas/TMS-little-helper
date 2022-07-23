@@ -137,7 +137,7 @@ http = inet.whttp();
 先判断是否第一次运行，由于使用阻塞执行，所以，需要进行两次判断
 */
 
-(function(){if( globalCord == 1 ){
+if( globalCord == 1 ){
 	import win.ui.simpleWindow;
 /*DSG{{*/
 var welcomeForm = win.form(cls="WELCOME_FORM";text="Welcome!";right=499;bottom=799;border="none";max=false;mode="popup")
@@ -226,7 +226,7 @@ staticPwdTip={cls="static";text="密码提示文本";left=0;top=651;right=500;bo
 	welcomeForm.onMouseDown = function(wParam,lParam){ welcomeForm.hitCaption() }
 	win.ui.simpleWindow(welcomeForm);
 	if( welcomeForm.doModal() != dirPath ){ return ; }
-}})();//第一次阻塞判断结束
+}//第一次阻塞判断结束
 
 //再一次判断，显示主密码登录界面
 if( globalCord == 2 ){

@@ -1,7 +1,9 @@
-<p align="center">
-    <h3 align="center">TMS little helper</h3>
-    <p align="center">一个致力于 TMS (TW MapleStory) 更好的启动、登录、多账号管理等相关解决方案。</p>
-</p>
+<div align="right">
+  Language:
+  cn
+</div>
+
+# TMS little helper
 
 <p align="center">
     <a href="https://github.com/Tikas/TMS-little-helper/LICENSE">
@@ -26,26 +28,64 @@
 
 ![Status](https://repobeats.axiom.co/api/embed/c65e9372e59dbf80f59b3e35a8a1dfc34ae343a0.svg)
 
-### 国际化
+文档：📖 撰写中...
 
-README：~~English~~ | 中文
+一个致力于 TMS (TW MapleStory) 更好的启动、登录、多账号管理等相关解决方案。
 
-### 开发背景
+## 🖥️ 使用
 
-在现有的 [繽放 - 樂豆第三方客戶端](https://github.com/pungin/Beanfun) 还不支持港号新登录入口，而 [秋水橘子香港登入工具](https://github.com/starmcc/qs-beanfun) 又仅仅只支持港号登录，台号无法登录。
+### 下载
 
-他们都有个共同点：依赖运行库。
+前往 [https://github.com/Tikas/TMS-little-helper/releases](https://github.com/Tikas/TMS-little-helper/releases) 下载最新版本
 
-在提交了 [issues](https://github.com/pungin/Beanfun/issues/85) 想 Pungin 增加港号新登录入口时，却迟迟得不到下文，从这可以看出 Pungin 忙于其他事。
+### 使用环境
 
-为此，只好重复造轮子了。
+TMS little helper 本身无需任何运行库即可运行，但是使用了一些第三方工具会需要以下运行库，请确保电脑的操作系统已安装。
 
-### 功能特色
+- [Locale Remulator 系统区域和语言模拟器](https://github.com/InWILL/Locale_Remulator)
+- [Pungin 的 DES 源码构建 DES.dll](https://github.com/pungin/Beanfun/blob/code/Beanfun/API/WCDESComp.cs)
 
-- ~~去运行库~~：由于使用 C# 生成的 DLL 进行 DES 解密，加上使用 LR 进行转区，您的电脑系统，理应要有 `.Net 4.0+` 的运行库，如果是 Win 10 以上的系统，不需要关注这点，系统已经自带 `.Net` 运行库。
-- 更友好体验：尽可能做到发生一些情况时，能主动出现原因或解决方法，而不用去询问网络或他人。
-- 更安全：增加许多安全功能，以提高安全性。
-- ~~更多实用功能~~：目前还处于基础功能开发状态，这个后续再加。
+Locale Remulator 核心 Dll 必需使用 Microsoft Visual C++ Redistributable 运行库：
+
+[vs 2015-2022 x64 运行库](https://aka.ms/vs/17/release/vc_redist.x64.exe) | [vs 2015-2022 x86 运行库](https://aka.ms/vs/17/release/vc_redist.x86.exe)
+
+Locale Remulator 调用程序以及 DES.dll 必需要使用 .NET Framework 4.8 运行库：
+
+[.NET Framework 4.8 运行库](https://dotnet.microsoft.com/en-us/download/dotnet-framework/thank-you/net48-web-installer) Windows 10 + 已经自带，不需要再安装，Windows 7 用户需要安装
+
+### 使用过程所需要的相关文件
+
+TMS little helper 会在以下位置存放一些文件：
+
+- C:\Users\电脑的用户名\AppData\Local\tikas
+  - 主要存放配置文件（加密），以及 LR 转区工具
+- C:\Windows\system32
+  - 随机目录创建随机文件及随机文件名，主要存放两个加密文件，一个是：账号信息文件；另一个是：账号所对应的密码文件。
+- 在注册表：HKEY_LOCAL_MACHINE\SOFTWARE\Classes\apphelper 创建 app 记录随机码
+
+本程序加密强度大，删除配置文件，或者，删除注册表记录的随机码，将会导致账号信息、密码文件无法正常解读。
+
+加密文件使用高强度密码加密，账号的密码更是使用登录前解锁的 6 位主密码进行加密，此密码请不要告诉别人，这是最后的防线！
+
+## 🎉 特色
+
+- [x] 更加安全：强制使用 6 位主密码，没有正确的密码不允许解锁使用，以防止远程电脑时所有账号信息不设防
+- [x] 更加安全：加密使用电脑特征码 + 随机码 + 6 位主密码进行高强度加密
+- [x] 更加安全：账号记录信息和密码记录信息分开存放，并且使用随机存放
+- [x] 更加安全：所有保存的账号全部强制转换 BFM 账号并以此账号登录，是否记住原始账号（如 Email）看个人需求，如记录，此账号仅修改时显示使用
+- [x] 更加安全：密码记录文件所对应的账号，使用 BFM 账号进行 sha512 之后取希哈值。如此，就算得到密码的记录文件，也不知道原始账号，更别说还是加密的文件
+- [ ] 更加安全：会主动探测密码的安全性，以及账号是否存在社工库信息，如密码不安全或账号不安全，会提示，（密码只分析强度，不做其他操作，账号会联网一些网站查询。如：[firefox](https://monitor.firefox.com/)）
+- [ ] 更加安全：如果设置此账号仅自己一人知晓密码，会在本地配置文件目录生成此账号的登录记录，每次启动游戏或获取登录密码都会记录，之后会同官方后台的登录记录匹配。如发现没有记录在内，界面会变红色调，并提示
+- [x] 更友好的操作体验：个性化登录页面，除星期三是固定背景图之外，其他时间都是随机背景图展示
+- [x] 更友好的操作体验：账号列表不分港号、台号，用户直接选择记录的账号，就可以执行登录操作。
+- [x] 更友好的操作体验：所有记录的账号信息，强制要求设置备注别人，以更直观知晓此账号是大号还是别人的号，又或者是工具号、仓库号等等
+- [x] 更友好的操作体验：不同的账号状态，软件会自动创建对应状态的相关提示或功能
+- [ ] 更友好的操作体验：锁号时，会自动查询原因，并提示解决方案
+- [ ] 更友好的操作体验：出现 reCaptcha 时，会自动切换外部浏览器登录
+- [ ] 更友好的操作体验：多处出现贴心提示，并会有长时间游戏，出现放松休息提示
+- [ ] 还有很多，完成后再来补充
+
+## 🏆 项目的开发人员
 
 ### 维护者
 
@@ -71,7 +111,17 @@ README：~~English~~ | 中文
 
 </details>
 
-### 架构
+## 🪄 如何构建
+
+### 构建方法
+
+本程序使用 aardio 开发，下载 aarido 最新版本( 仅 6.5MB，绿色免安装，永久免费 )
+
+[https://ide.update.aardio.com/releases/aardio.7z](https://ide.update.aardio.com/releases/aardio.7z)
+
+打开本项目，即可构建。
+
+### 项目架构
 
 ```md
 |—— .github                         Github 配置文件
@@ -109,22 +159,21 @@ README：~~English~~ | 中文
 |—— README.md                       中文 README
 ```
 
-### 相关功能依赖项
-
-- Locale Remulator 系统区域和语言模拟器：[https://github.com/InWILL/Locale_Remulator](https://github.com/InWILL/Locale_Remulator)
-- Pungin 的 DES 源码构建 DES.dll：[https://github.com/pungin/Beanfun/blob/code/Beanfun/API/WCDESComp.cs](https://github.com/pungin/Beanfun/blob/code/Beanfun/API/WCDESComp.cs)
-
-### 如何构建
-
-本程序使用 aardio 开发，下载 aarido 最新版本( 仅 6.5MB，绿色免安装，永久免费 )
-
-[https://ide.update.aardio.com/releases/aardio.7z](https://ide.update.aardio.com/releases/aardio.7z)
-
-打开本项目，即可构建。
+## 🪶 碎碎念
 
 ### 赞助
 
 开发不易，觉得有很大帮助的朋友可以赏助(不接受学生赞赏)，以方便作者更有动力去开发。
+
+### 开发背景
+
+在现有的 [繽放 - 樂豆第三方客戶端](https://github.com/pungin/Beanfun) 还不支持港号新登录入口，而 [秋水橘子香港登入工具](https://github.com/starmcc/qs-beanfun) 又仅仅只支持港号登录，台号无法登录。
+
+他们都有个共同点：依赖运行库。
+
+在提交了 [issues](https://github.com/pungin/Beanfun/issues/85) 想 Pungin 增加港号新登录入口时，却迟迟得不到下文，从这可以看出 Pungin 忙于其他事。
+
+为此，只好重复造轮子了。
 
 ### 反馈
 
@@ -133,14 +182,14 @@ README：~~English~~ | 中文
 
 >请不要在公开场合，透露个人信息（如账号、密码），因此导致损失，自行承担！
 
-### 展示图
+## 🖼️ 展示图
 
 ![display](https://raw.githubusercontent.com/Tikas/TMS-little-helper/main/image/display.webp)
 
-### 版权许可
+## 💯 版权许可
 
 [License MIT](../LICENSE)
 
-### Star趋势
+## ✨ Star趋势
 
 <img src="https://starchart.cc/Tikas/TMS-little-helper.svg">
