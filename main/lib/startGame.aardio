@@ -70,6 +70,16 @@ beforeStartGetOtpPwd = function(){
 	return false;
 }
 
+beforeStartUserName = function(){
+	import sys;
+	var strTmp = sys.getUserName();
+	if( string.find(strTmp,":") ){
+        ..log("系统用户名有中文，可能会导致游戏无法正常启动");
+		return false;
+	}
+	return true;
+}
+
 beforeStartLocale = function(id,key){
 	import sys.locale;
 	import fsys;
