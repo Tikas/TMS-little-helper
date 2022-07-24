@@ -59,7 +59,7 @@ beforeStartGetOtpPwd = function(){
 		payload.CreateTime     = ..account.two.createTime;
 	}
 	payload.d = time.tick();//此值为系统运行的时间
-	strTmp    = ..http.post( "https://bfweb.hk.beanfun.com/beanfun_block/generic_handlers/get_webstart_otp.ashx",payload );
+	strTmp    = ..http.get( "https://bfweb.hk.beanfun.com/beanfun_block/generic_handlers/get_webstart_otp.ashx",payload );
 	//返回strTmp = "1;63BA2E1E5D60888E31834B3085202A0898C6C7B4";
 	if( ..string.left(strTmp,1) == "1" ){
 		data             = ..string.right( strTmp,#strTmp - 10 );
