@@ -83,7 +83,6 @@ import fonts.fontAwesome;
 import process;
 import time.ole;
 import startGame;
-
 /*DSG{{*/
 coreForm = win.form(cls="TIKASCORE_FORM";text="TMS little helper";right=465;bottom=754;bgcolor=6575626;border="none";max=false)
 coreForm.add(
@@ -247,10 +246,10 @@ coreForm.copyPwd.oncommand = function( id,event ){
 	coreForm.copyPwd.disabledText = "正在获取 OTP 密码";
 }
 coreForm.startGame.oncommand = function( id,event ){
-	coreForm.startGame.disabledText = { '\uF04B';text="正在启动游戏" };
-	//..account.checked = 1;
-	//startGame.beforeStartGetOtpPwd();
-	//..log("OTP 密码为：" ++ tostring(..account.otpPwd) );
+	//coreForm.startGame.disabledText = { '\uF04B';text="正在启动游戏" };
+	..account.checked = 1;
+	startGame.beforeStartGetOtpPwd();
+	..log("OTP 密码为：" ++ tostring(..account.otpPwd) );
 }
 /*coreForm.gamePath.oncommand = function( id,event ){
 	coreForm.copyAccount.disabledText = null;
