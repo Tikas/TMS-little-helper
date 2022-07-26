@@ -151,7 +151,6 @@ TMS little helper 会在以下位置存放一些文件：
 |   |—— perform.aardio              相关功能执行程序
 |   |—— startGame.aardio            启动游戏前后相关的程序集
 |   |—— tikas.aardio                一些核心加解密及初始值
-|   |—— web.aardio                  弃用：还没写好的网络请求功能
 | |—— res                           资源文件
 |   |—— background                  登录程序的背景图片
 |   |—— detect                      登录时 TSP 相关图片
