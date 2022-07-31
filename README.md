@@ -196,7 +196,3 @@ TMS little helper 会在以下位置存放一些文件：
 ## 💯 版权许可
 
 [License MIT](../LICENSE)
-
-## ✨ Star趋势
-
-<img src="https://starchart.cc/Tikas/TMS-little-helper.svg">

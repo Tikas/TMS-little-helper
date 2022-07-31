@@ -5,10 +5,9 @@ import key;
 import web.json;
 import win.reg;
 import fsys;
-import inet.whttp;
-import inet.tls;
-import zlib;
 import dotNet;
+import web.blink;
+import web.blink.view;
 
 /*
 一此规范：
@@ -109,9 +108,8 @@ account.two = 暂时使用此值记录第二个账号相关值，其他值参考
 
 */
 
-//inet.clearCookie();
-http = inet.whttp();
-http.addHeaders = { "User-Agent" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"; }
+http = web.blink.view();
+http.userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36";
 
 (function(){
 	var strTemp = "";
@@ -252,7 +250,7 @@ if( globalCord == 2 ){
 	//固定星期三背景，其他时候随机背景
 	with( time()@ ){
 		var week          = { [0]=7;1;2;3;4;5;6; };
-		    getWeekString = function(){ return week[owner.dayofweek]; }
+			getWeekString = function(){ return week[owner.dayofweek]; }
 	}
 	if( time().getWeekString() == 3 ){
 		loginForm.bk.background = "\res\background\009.jpg";
@@ -409,7 +407,7 @@ if( globalCord == 2 ){
 					eachPwdTipTab(strTmp,"9");
 				}
 			}//结束 select 语句
-    	}//结束 if 语句
+		}//结束 if 语句
 	}
 	loginForm.onOk     = function(){ hiTikas() }
 	loginForm.onCancel = function(){
@@ -418,6 +416,8 @@ if( globalCord == 2 ){
 	}
 	loginForm.onMouseDown = function(wParam,lParam){ loginForm.hitCaption() }
 	win.ui.simpleWindow(loginForm);
+	//先访问一次心跳，这样可以加速后面的网络请求
+	http.go("https://bfweb.hk.beanfun.com/beanfun_block/generic_handlers/echo_token.ashx?webtoken=1");
 	if( loginForm.doModal() != dirPath ){ return ; }
 }//第二次阻塞判断结束
 
@@ -501,7 +501,7 @@ formChildShow = function(num){
 var checkIdFiles = function(){
 	var tempStr = "";
 	var tempDir = "";
-	    tempDir = tikas.xxteaDecrypt( configTks.userIdDir,sysinfo ++ randomCode ) ++ '\\' ++ tikas.xxteaDecrypt( configTks.userIdFile,sysinfo ++ randomCode );
+		tempDir = tikas.xxteaDecrypt( configTks.userIdDir,sysinfo ++ randomCode ) ++ '\\' ++ tikas.xxteaDecrypt( configTks.userIdFile,sysinfo ++ randomCode );
 	tempStr = tikas.dataDecrypt( tikas.configDecrypt( string.load(tempDir),sysinfo ),sysinfo ++ tikas.xxteaDecrypt(account.pwd,sysinfo ++ randomCode),randomCode );
 	try{
 		configId = web.json.parse( tempStr );
@@ -510,7 +510,7 @@ var checkIdFiles = function(){
 		fsys.delete( io.appData(tempDir) );
 		return false;
 	}
-	    tempStr   = tikas.deTypeHex( tikas.hex.tikas );
+		tempStr   = tikas.deTypeHex( tikas.hex.tikas );
 	var authorStr = tostring( configId.author );
 	if( authorStr == "null" or authorStr != tikas.deTypeHex(tikas.hex.tikas) ){
 		fsys.delete( io.appData(tempDir) );
@@ -534,9 +534,6 @@ saveConfigTks = function(){
 	var strTmp = web.json.stringify( configTks,true );
 	string.save( configFilePath,tikas.configEncrypt( tikas.dataEncrypt(strTmp,sysinfo,randomCode),sysinfo ) );
 }
-
-
-
 
 mainForm.show();
 return win.loopMessage();

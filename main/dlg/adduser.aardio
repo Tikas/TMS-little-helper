@@ -189,8 +189,8 @@ var check = function(){
 
 //登录被点击
 var login = function(){ if( check() ){
-	    adduserForm.static.disabled = true;
-	    adduserForm.static.text     = "正在执行";
+		adduserForm.static.disabled = true;
+		adduserForm.static.text     = "正在执行";
 	var saveBoolean                 = adduserForm.checkboxSave.checked;
 	if( saveBoolean ){ saveConifgId(); }
 	select(..globalCord) {

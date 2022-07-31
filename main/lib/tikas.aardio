@@ -96,31 +96,31 @@ namespace tikas{
 	    twSkey             = /*strSessionKey\s\=\s\"(.*?)"*/;                         //TW网页一次性OTP
 	    hkOtp              = /*otp1\=(.*?)\&*/;                                       //HK网页一次性OTP
 	    hkSkey             = /*skey\=(.*?)\&*/;                                       //HK网页一次性OTP，请求头专用，还没想好 cookie 怎么写，暂时弃用
-	    googleRc           = /*src\=\'https\:\/\/www\.google\.com\/(.*?)\/api\.js*/;
-	    viewState          = /*id\=\"\_\_VIEWSTATE\"\svalue\=\"(.*?)\"*/;
-	    viewStategenerator = /*id\=\"\_\_VIEWSTATEGENERATOR\"\svalue\=\"(.*?)\"*/;
-	    eventValidation    = /*id\=\"\_\_EVENTVALIDATION\"\svalue\=\"(.*?)\"*/;
-	    token              = /*id\=\"token1\"\svalue\=\"(.*?)\"*/;
-	    pnlMsg             = /*<@pnlMsg@>*/;
-	    verify             = /*<@Verify@>*/;
-	    addAccount         = /*<@btnAddServiceAccount@>*/;
-	    lock               = /*<@class="Stop"@>*/;
-	    account            = /*\"\>\<div\sid\=\"(.*?)\"\ssn\=\"(\d+)\"\sname\=\"(.*?)\"*/;
+		googleRc           = /*src\=\'https\:\/\/www\.google\.com\/(.*?)\/api\.js*/;
+		viewState          = /*id\=\"\_\_VIEWSTATE\"\svalue\=\"(.*?)\"*/;
+		viewStategenerator = /*id\=\"\_\_VIEWSTATEGENERATOR\"\svalue\=\"(.*?)\"*/;
+		eventValidation    = /*id\=\"\_\_EVENTVALIDATION\"\svalue\=\"(.*?)\"*/;
+		token              = /*id\=\"token1\"\svalue\=\"(.*?)\"*/;
+		pnlMsg             = /*<@pnlMsg@>*/;
+		verify             = /*<@Verify@>*/;
+		addAccount         = /*<@btnAddServiceAccount@>*/;
+		lock               = /*<@class="Stop"@>*/;
+		account            = /*\"\>\<div\sid\=\"(.*?)\"\ssn\=\"(\d+)\"\sname\=\"(.*?)\"*/;
 	    sn                 = /*GetResultByLongPolling\&key\=(.*?)\"*/;                //获取游戏密码时，所需要的 sn 值
 	    dynamicStr         = /*MyAccountData\.ServiceAccountCreateTime(.*?)\;*/;      //这里折分出来，是因为当时排错时拆分出来的，
 	    dynamic            = /*\"\&(.*?)\=*/;                                         //当时这样找常出错：/*CreateTime\s\+\s\"\&(.*?)\=(.*?)\"*/，后来排错时拆分出来了
-	    dyValue            = /*\=(.*?)\"*/; 
+		dyValue            = /*\=(.*?)\"*/;
 	    secretCode         = /*\'(.*?)\'*/;                                           //获取游戏密码时，所需要的 secretCode 值
 	    data               = /*Data\=(.*?)\"*/;                                       //获取游戏密码时，所需要的 data 值
-	    serviceAccount     = /*ServiceAccount\=(.*?)\&*/;
-	    createTime         = /*ServiceAccountCreateTime\:\s\"(.*?)\"*/;
-	    ppppp              = /*ppppp\=(.*?)\&*/;
-	    strOutstring       = "Success";
-	    advanceCheck       = /*<@AdvanceCheck@>*/;
+		serviceAccount     = /*ServiceAccount\=(.*?)\&*/;
+		createTime         = /*ServiceAccountCreateTime\:\s\"(.*?)\"*/;
+		ppppp              = /*ppppp\=(.*?)\&*/;
+		strOutstring       = "Success";
+		advanceCheck       = /*<@AdvanceCheck@>*/;
 	}
 
 	loyisa = {
-	    "4c39466f6c487179644e425130695255507265414c4e52636451553d";
+		"4c39466f6c487179644e425130695255507265414c4e52636451553d";
 		"45464f6b6d504d44516d62444e44557a4268356b39444670622f4d3d";
 		"5254436d31624a4e48423852657749514e58504d43393549494e673d";
 		"686d7a6e57714d367363326a59456d6a32317a637952514a716a4d3d";

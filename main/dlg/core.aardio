@@ -223,19 +223,19 @@ coreForm.addAccount.oncommand = function( id,event ){
 //订阅 msgForm 返回的消息
 subscribe("messageFromMsgform",function(str,code){
     select(..globalCord) {
-    	case 17 {//港号账号已完成进阶认证，但是还没创建游戏账号
-    		if( perform.addAccount("HK",str) ){//新增游戏账号成功
-    			coreForm.accountOne.text = ..account.one.displayName ++ '\n' ++ "来枫谷已有：" ++ ..account.one.createTime ++ "天";
-    			coreForm.accountOne.hide = 0;
+		case 17 {//港号账号已完成进阶认证，但是还没创建游戏账号
+			if( perform.addAccount("HK",str) ){//新增游戏账号成功
+				coreForm.accountOne.text = ..account.one.displayName ++ '\n' ++ "来枫谷已有：" ++ ..account.one.createTime ++ "天";
+				coreForm.accountOne.hide = 0;
 				setSkin(1);
 				..globalCord = 11;  //港号获取到游戏账号列表
 				return ;
-    		}
-    		coreForm.addAccount.text = "出错了，请重试";
-    		return ;
-    	}
-    	case 1 {
-    	}
+			}
+			coreForm.addAccount.text = "出错了，请重试";
+			return ;
+		}
+		case 1 {
+		}
     }
 });
 
