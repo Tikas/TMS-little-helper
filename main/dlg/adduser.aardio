@@ -11,7 +11,7 @@ import perform;
 	2.账号缩写显示值，统一为前三位 + *** + 后三位
 	3.账号备注名称
 	4.账号显示的图片编号
-	5.是否转换 BFM，为 1 时，删除原账号，为 0 时，保存原账号
+	5.是否保留原账号，为 1 时，保留原账号，为 0 时，原账号值为 "0"
 	6.BFM 账号一定记录，加密记录
 	7.账号是否仅自己一人知道密码，1 为是，0 为否
 	8.进阶认证的手机号码，由于台号为必需，连带港号也一起需要，这样还能方便联系客服时，查看一下手机号码，加密记录，TODO：后续有时间港号做个是否记录手机号码
@@ -50,7 +50,7 @@ bkplus={cls="bkplus";left=100;top=657;right=366;bottom=717;background="\res\star
 buttonBack={cls="plus";text="返回";left=20;top=25;right=70;bottom=75;color=14272689;iconColor=16777215;iconStyle={font=LOGFONT(h=-35;name='FontAwesome');valign="top"};iconText='\uF122';valign="bottom";z=24};
 buttonClose={cls="plus";left=436;top=0;right=466;bottom=30;iconColor=15790320;iconStyle={font=LOGFONT(h=-19;name='FontAwesome')};iconText='\uF00D';z=27};
 checkbox={cls="checkbox";text="此账号仅自己知道账号密码";left=95;top=355;right=395;bottom=385;bgcolor=12091705;font=LOGFONT(h=-16);tabstop=1;z=26};
-checkboxBFM={cls="checkbox";text="转换 BFM 账号保存";left=240;top=390;right=420;bottom=420;bgcolor=12091705;checked=1;font=LOGFONT(h=-16);z=11};
+checkboxID={cls="checkbox";text="保存原账号信息";left=240;top=390;right=420;bottom=420;bgcolor=12091705;checked=1;font=LOGFONT(h=-16);z=11};
 checkboxSave={cls="checkbox";text="保存信息";left=95;top=390;right=230;bottom=420;bgcolor=12091705;font=LOGFONT(h=-16);tabstop=1;z=10};
 combobox={cls="combobox";left=60;top=520;right=160;bottom=545;bgcolor=14272689;border=1;items={};mode="dropdown";tabstop=1;vscroll=1;z=14};
 editID={cls="edit";left=95;top=235;right=405;bottom=270;autohscroll=false;autovscroll=false;bgcolor=14272689;color=6900000;font=LOGFONT(h=-20);tabstop=1;z=5};
@@ -111,7 +111,7 @@ adduserForm.combobox.setCueBannerText("不选为随机");
 //当前没有账号记录，需要添加用户，并隐藏返回按钮
 var addUserInitialization = function(){
 	adduserForm.radiobuttonHK.checked     = true;
-	adduserForm.buttonBack.hide             = true;
+	adduserForm.buttonBack.hide           = true;
 	adduserForm.pictureboxUserImage.image = '\\'+"res"+'\\'+"img"+'\\'++math.random(1,#adduserForm.combobox.items)+".jpg";
 }
 
@@ -121,7 +121,7 @@ var saveConifgId = function(num){
 		case 10 {//还没有账号记录时，默认写入为第一组数据
 			numTemp = 1;
 			//如果选中转换 BFM，由于首次还不知道 BFM 账号，先赋值字符 0，登录之后再修改此值
-			if( adduserForm.checkboxBFM.checked ){
+			if( adduserForm.checkboxID.checked ){
 				..configId.sequence[numTemp][[2]] = "0";
 			}else {
 				..configId.sequence[numTemp][[2]] = string.left(adduserForm.editID.text,3) ++ "***" ++ string.right(adduserForm.editID.text,3);
@@ -143,8 +143,8 @@ var saveConifgId = function(num){
 	..configId.sequence[numTemp][[3]] = adduserForm.editRemark.text;
 	//账号显示的图片编号，"0" 为随机
 	..configId.sequence[numTemp][[4]] = tostring( adduserForm.combobox.selIndex );
-	//账号是否转换为 BFM
-	if( adduserForm.checkboxBFM.checked ){ ..configId.sequence[numTemp][[5]] = "1"; }
+	//是否保留原账号
+	if( adduserForm.checkboxID.checked ){ ..configId.sequence[numTemp][[5]] = "1"; }
 	else { ..configId.sequence[numTemp][[5]] = "0"; }
 	//!注意：BFM 账号值需要在场景内判断，此值需要加密
 	//账号是否仅自己一人知道密码

@@ -238,7 +238,9 @@ getOtpKey = function(str){
 	var urlstr = "";
 	if( str == "HK" ){//HK OTP 获取
 		try{
-			urlstr = ..http.get("https://bfweb.hk.beanfun.com/beanfun_block/bflogin/default.aspx");
+			..http.go( "https://bfweb.hk.beanfun.com/beanfun_block/bflogin/default.aspx" );
+			..http.wait();
+			urlstr        = ..http.read();
 			..account.otp = tostring( ..string.match(urlstr,tikas.match.hkOtp) );
 		}
 		catch(e){
@@ -256,7 +258,9 @@ getOtpKey = function(str){
 		return true;
 	}else {//TW登录
 		try{
-			urlstr        = ..http.get("https://tw.beanfun.com/beanfun_block/bflogin/default.aspx");
+			..http.go( "https://tw.beanfun.com/beanfun_block/bflogin/default.aspx" );
+			..http.wait();
+			urlstr        = ..http.read();
 			..account.otp = tostring( ..string.match(urlstr,tikas.match.twSkey) );
 		}
 		catch(e){
@@ -278,10 +282,14 @@ getOtpKey = function(str){
 login = function(str,id,key){
 	import tikas;
 	var urlstr  = "";
-	var payload = {};
+	//var payload = {};
+	var tAccountID;
+	var tPassword;
 	if( str == "HK" ){//HK登录
 		try{
-			urlstr = ..http.get( "https://login.hk.beanfun.com/login/id-pass_form_newBF.aspx?otp1=" ++ ..account.otp );
+			..http.go( "https://login.hk.beanfun.com/login/id-pass_form_newBF.aspx?otp1=" ++ ..account.otp );
+			..http.wait();
+			urlstr = ..http.read();
 		}
 		catch(e){
 			..log("未能打开登录页面，请检查网络连接情况",false);
@@ -292,6 +300,7 @@ login = function(str,id,key){
 			return false;
 		}
 		if( ..string.match(urlstr,"__EVENTVALIDATION") ){
+			/*
 			payload.__EVENTTARGET             = "";
 			payload.__EVENTARGUMENT           = "";
 			payload.__VIEWSTATE               = tostring( ..string.match(urlstr,tikas.match.viewState) );
@@ -304,6 +313,14 @@ login = function(str,id,key){
 			payload.btn_login                 = "登入";
 			payload.checkbox_remember_account = "on";
 			urlstr = ..http.post("https://login.hk.beanfun.com/login/id-pass_form_newBF.aspx?otp1=" ++ ..account.otp,payload);
+			*/
+			tAccountID       = ..http.getEle( "t_AccountID" );
+			tAccountID.value = id;
+			tPassword        = ..http.getEle( "t_Password" );
+			tPassword.value  = key;
+			..http.click( "btn_login" );
+			..http.wait();
+			urlstr = ..http.read();
 			if( ..string.match(urlstr,tikas.match.pnlMsg) == "pnlMsg" ){
 				..log("登录失败：账号或密码错误",false);
 				return false;
@@ -315,7 +332,9 @@ login = function(str,id,key){
 		return false;
 	}else {//TW登录
 		try{
-			urlstr = ..http.get( "https://tw.newlogin.beanfun.com/login/id-pass_form.aspx?skey=" ++ ..account.otp );
+			..http.go( "https://tw.newlogin.beanfun.com/login/id-pass_form.aspx?skey=" ++ ..account.otp );
+			..http.wait();
+			urlstr = ..http.read();
 		}
 		catch(e){
 			..log("未能打开登录页面，请检查网络连接情况",false);
@@ -331,6 +350,7 @@ login = function(str,id,key){
 			//此验证未进阶前，会验证邮箱，进阶后，会验证电话
 		}
 		if( ..string.find(urlstr,"__EVENTVALIDATION") ){
+			/*
 			payload.__EVENTTARGET             = "";
 			payload.__EVENTARGUMENT           = "";
 			payload.__VIEWSTATE               = tostring( ..string.match(urlstr,tikas.match.viewState) );
@@ -342,6 +362,14 @@ login = function(str,id,key){
 			payload.btn_login                 = "登入";
 			payload.checkbox_remember_account = "on";
 			urlstr                            = ..http.post("https://tw.newlogin.beanfun.com/login/id-pass_form.aspx?skey=" ++ ..account.otp,payload);
+			*/
+			tAccountID       = ..http.getEle( "t_AccountID" );
+			tAccountID.value = id;
+			tPassword        = ..http.getEle( "t_Password" );
+			tPassword.value  = key;
+			..http.click( "btn_login" );
+			..http.wait();
+			urlstr = ..http.read();
 			if( ..string.match(urlstr,tikas.match.pnlMsg) == "pnlMsg" ){
 				..log("登录失败：账号或密码错误",false);
 				return false;
