@@ -286,15 +286,10 @@ login = function(str,id,key){
 	var tAccountID;
 	var tPassword;
 	if( str == "HK" ){//HK登录
-		try{
-			..http.go( "https://login.hk.beanfun.com/login/id-pass_form_newBF.aspx?otp1=" ++ ..account.otp );
-			..http.wait();
-			urlstr = ..http.read();
-		}
-		catch(e){
-			..log("未能打开登录页面，请检查网络连接情况",false);
-			return false;
-		}
+		..http.go( "https://login.hk.beanfun.com/login/id-pass_form_newBF.aspx?otp1=" ++ ..account.otp );
+		..http.wait();
+		urlstr = ..http.read();
+
 		if( ..string.match(urlstr,tikas.match.googleRc) == "recaptcha" ){
 			..log("您的 IP 出现 Google Recaptcha 人机验证",false);
 			return false;
@@ -331,15 +326,10 @@ login = function(str,id,key){
 		..log("登录失败：请检查您的网络",false);
 		return false;
 	}else {//TW登录
-		try{
-			..http.go( "https://tw.newlogin.beanfun.com/login/id-pass_form.aspx?skey=" ++ ..account.otp );
-			..http.wait();
-			urlstr = ..http.read();
-		}
-		catch(e){
-			..log("未能打开登录页面，请检查网络连接情况",false);
-			return false;
-		}
+		..http.go( "https://tw.newlogin.beanfun.com/login/id-pass_form.aspx?skey=" ++ ..account.otp );
+		..http.wait();
+		urlstr = ..http.read();
+
 		if( ..string.match(urlstr,tikas.match.googleRc) == "recaptcha" ){
 			..log("您的 IP 出现 Google Recaptcha 人机验证",false);
 			return false;
@@ -383,27 +373,21 @@ login = function(str,id,key){
 }
 
 getWebToken = function(str){
-	import web.json;
-	var jsonTab = {};
+	import tikas;
+	var urlstr   = "";
+	var webToken = "";
 	if( str == "HK" ){
-		try{
-			jsonTab = web.json.parse( ..http.get("https://bfweb.hk.beanfun.com//beanfun_block/generic_handlers/get_sng_token.ashx") );
-		}
-		catch(e){
-			..log("获取 webToken 失败！请检查网络连接是否正常！",false);
-			return false;
-		}
-	}else {
-		try{
-			jsonTab = web.json.parse( ..http.get("https://tw.beanfun.com/beanfun_block/generic_handlers/get_sng_token.ashx") );
-		}
-		catch(e){
-			..log("获取 webToken 失败！请检查网络连接是否正常！",false);
-			return false;
-		}
+		..http.go( "https://bfweb.hk.beanfun.com//beanfun_block/generic_handlers/get_sng_token.ashx" );
+		..http.wait();
+		urlstr   = ..http.read();
+		webToken = ..string.match( urlstr,tikas.match.webToken );
+	}else{
+		..http.go( "https://tw.beanfun.com/beanfun_block/generic_handlers/get_sng_token.ashx" );
+		..http.wait();
+		urlstr   = ..http.read();
+		webToken = ..string.match( urlstr,tikas.match.webToken );
 	}
-	var webTokenStr = tostring( jsonTab.webToken );
-	if( webTokenStr == "null" ){
+	if( tostring(webToken) == "null" ){
 		..log("获取 webToken 失败！如非网络原因，请联系 Tikas 修复！",false);
 		return false;
 	}

@@ -96,6 +96,7 @@ namespace tikas{
 	    twSkey             = /*strSessionKey\s\=\s\"(.*?)"*/;                         //TW网页一次性OTP
 	    hkOtp              = /*otp1\=(.*?)\&*/;                                       //HK网页一次性OTP
 	    hkSkey             = /*skey\=(.*?)\&*/;                                       //HK网页一次性OTP，请求头专用，还没想好 cookie 怎么写，暂时弃用
+	    webToken           = /*webToken\"\:\"(.*?)\"*/;
 		googleRc           = /*src\=\'https\:\/\/www\.google\.com\/(.*?)\/api\.js*/;
 		viewState          = /*id\=\"\_\_VIEWSTATE\"\svalue\=\"(.*?)\"*/;
 		viewStategenerator = /*id\=\"\_\_VIEWSTATEGENERATOR\"\svalue\=\"(.*?)\"*/;
