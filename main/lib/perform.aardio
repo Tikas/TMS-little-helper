@@ -391,26 +391,33 @@ getWebToken = function(str){
 		..log("获取 webToken 失败！如非网络原因，请联系 Tikas 修复！",false);
 		return false;
 	}
-	..account.webtoken = jsonTab.webToken;
+	..account.webtoken = webToken;
 	return true;
 }
 
 getBFM = function(str){
 	import tikas;
-	var num     = ..configId.current;
-	var jsonTab = {};
-	var bfmID   = "";
-	try{
-		jsonTab                       = web.json.parse( ..http.get("https://bfweb.hk.beanfun.com/beanfun_block/generic_handlers/echo_token.ashx?webtoken=1") );
-		bfmID                         = jsonTab.MainAccountID;
-		..configId.sequence[num][[2]] = str ++"：BFM***" ++ ..string.right( bfmID,3 );
-		..configId.sequence[num][[6]] = tikas.xxteaEncrypt( bfmID,..sysinfo ++ ..randomCode );
-		return true;
+	var num    = ..configId.current;
+	var urlstr = "";
+	var bfmID  = "";
+	if( str == "HK" ){
+		..http.go( "https://bfweb.hk.beanfun.com/beanfun_block/generic_handlers/echo_token.ashx?webtoken=1" );
+		..http.wait();
+		urlstr = ..http.read();
+		bfmID  = ..string.match( urlstr,tikas.match.bfm );
+	}else{
+		..http.go( "https://tw.beanfun.com/beanfun_block/generic_handlers/echo_token.ashx?webtoken=1" );
+		..http.wait();
+		urlstr = ..http.read();
+		bfmID  = ..string.match( urlstr,tikas.match.bfm );
 	}
-	catch(e){
+	if( tostring(bfmID) == "null" ){
 		..log("获取 BFM 失败！",false);
 		return false;
 	}
+	..configId.sequence[num][[2]] = str ++"：BFM***" ++ ..string.right( bfmID,3 );
+	..configId.sequence[num][[6]] = tikas.xxteaEncrypt( "BFM" ++ bfmID,..sysinfo ++ ..randomCode );
+	return true;
 }
 
 getAccountList = function(str){//只能返回数值，5 为台号两个号都锁了， 4 为出错，3 为锁号，2 为没有进阶，1 为没有账号，0 为有账号
