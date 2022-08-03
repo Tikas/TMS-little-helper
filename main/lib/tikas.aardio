@@ -235,7 +235,7 @@ namespace tikas{
 			case 5 {
 				return "◉  ◉  ◉  ◉  ◉  ○";
 			}
-			else {
+			else{
 				return "◉  ◉  ◉  ◉  ◉  ◉";
 			}
 		}

@@ -5,36 +5,6 @@ import key;
 import web.json;
 import win.reg;
 import fsys;
-import dotNet;
-import web.blink;
-import web.blink.view;
-
-/*
-一此规范：
-	1.禁止使用下划线："_"
-	2.变量名首单词统一为小写，后续单词首字母大写
-	3.所有小括号内部引用相关外部命名空间或相关方法时，前后都需要空一格书写，里面再有小括号，如果是最里面，不要空格，具体书写例子：
-		一个小括号：tikas( 我是括号内内容 );
-		两个小括号：tikas( loveYou(最里面内容不要空格) );
-		三个小括号：tikas( loveYou( too(最里面内容不要空格) ),youLove(我是 tikas 的第二个参数，同样不要空格) );
-		传参数时不加空格：
-			tikas(1);
-			tikas(a,b);
-		因为在 IDE 里没有相关插件让括号变色，发现使用前后加空格能提高阅读体验，所以，在这强制要求执行。
-	4.禁止行尾有多余空格！我有强烈的多余空格反感症，可以安装 Trailing Spaces 以解决此问题
-	5.如果是文本里有英文或数字，又非连惯的，请为他们前后增加空格，以提高阅读体验，如：
-		小T说：明明我已经够气质了，在你面前竟然黯然失色！
-			—— 此小T为连惯性，不要拆分加空格
-		当 Tikas 出现的瞬间，整个乌黑的天空，竟然有一束强光穿破，照耀在 Tikas 身上
-			—— 此时英文单词前后需要加空格
-以上强制执行！
-以下非强制：
-	1.有更好的书写方式，比如更加国际友好的书写方式，请直接更改！但是 aardio 特殊性，请保持禁用 "_"，以及保持命名首字母小写
-	2.有自己更好的命名方式，又不失他人理解的，请直接更改
-	3.功能优化迭代等，不用说，直接改
-	4.小T刚学编程，有需要斧正的，大佬请直接动手，最好是使用降维打击方式
-	5.等待增加...
-*/
 
 globalCord = 1;
 /*
@@ -66,7 +36,6 @@ globalCord 为全局通用控制识别码，为减少变量，很多判断写到
  = 是用户通过点击账号列表里的修改进入的增加账号界面
 --------
 */
-
 dirPath        = tikas.deTypeHex( tikas.hex.dirPath );
 userClosed     = true;
 sysinfo        = tikas.sysinfo();
@@ -76,11 +45,6 @@ configFilePath = io.appData( dirPath ++ tikas.deTypeHex(tikas.hex.configFile) );
 configTks      = {};
 configId       = {};
 account        = {};
-//调用 dll
-dll = dotNet.load("DES",$"\res\dll\DES.dll");
-dll.import("DES");
-aesObject = DES.ECB();//调用方法：aesObject.DecryStrHex(str,key) 返回解密文本
-
 /*
 一开始是想每个关键的数据都弄一个变量来存放的，然而，我最讨厌就是变量太多，所有账号相关的，全丢进这个数组吧！
 account.pwd = 加密存放的六位数主密码，没错，就是开始界面的那六个数字密码
@@ -94,9 +58,6 @@ account.secretCode = 获取游戏密码时，所需要的 secretCode 值，就�
 account.ppppp = 获取游戏密码时，所需要的 ppppp 值
 account.otpPwd = 获取一次性 OTP 登录密码，共用，不分账号
 
-account.resultcode = 暂时无效：账号状态码，2 为没有完成进阶认证，1 为校验失败，0 为身份和手机都已完成认证。由于 cookie 未能解决，此值暂时无效
-account.rows = 暂时无效：账号里的账号数量数组，一般情况下，港号为 1，台号可以为 2。由于 cookie 未能解决，此值暂时无效
-
 account.checked = 当前选中的账号序列，如果只有一个账号，默认选中为 1, 台号选中第二个账号为 2，没有选择账号值为 0 ，锁号状态不可用时值为 4
 account.one = 暂时使用此值记录第一个账号相关值，等后续 cookie 解决，将换回 rows 值
 account.one.serviceAccountSN = 账号所在数据库序列号，申请登录游戏用的 sotp 值，其实就是这个值
@@ -107,10 +68,6 @@ account.one.createTime = 创建时间，格式："2000-01-01 01:02:30";
 account.two = 暂时使用此值记录第二个账号相关值，其他值参考：account.one
 
 */
-
-http = web.blink.view();
-http.userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36";
-
 (function(){
 	var strTemp = "";
 	if( randomCode == "null" ){
@@ -134,14 +91,12 @@ http.userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (
 	}
 	globalCord = 2;  //2为非首次使用
 })();
-
 /*
 下面两个判断使用阻塞运行，是因为我非常喜欢横版设计登录界面，而由于其他窗口是坚版设计，直接使用改变窗口大小进行子窗口切换，会导致显示有一点错位异常。
 要想解决这个错位异常，初步猜想需要每个子窗口额外增加关闭功能，由于懒，下面两个阻塞保持引用 import win.ui.simpleWindow; 来实现关闭功能。
 再加下面两个阻塞窗口的代码量不是很多，写进 main，虽然会带来维护方面不便，整体还能接受。
 先判断是否第一次运行，由于使用阻塞执行，所以，需要进行两次判断
 */
-
 if( globalCord == 1 ){
 	import win.ui.simpleWindow;
 /*DSG{{*/
@@ -182,7 +137,7 @@ staticPwdTip={cls="static";text="密码提示文本";left=0;top=651;right=500;bo
 						welcomeForm.editPwd2.text     = "";
 						welcomeForm.editPwd1.text     = "";
 					}
-					else {
+					else{
 						welcomeForm.staticPwdTip.hide = 1;
 						configTks.author              = tikas.deTypeHex( tikas.hex.tikas );
 						configTks.gamePath            = tikas.deTypeHex( tikas.hex.tikas );
@@ -206,13 +161,13 @@ staticPwdTip={cls="static";text="密码提示文本";left=0;top=651;right=500;bo
 						welcomeForm.close();
 					}
 				}
-			}else {
+			}else{
 				welcomeForm.staticPwdTip.hide = 0;
 				welcomeForm.staticPwdTip.text = tikas.deTypeHex( tikas.hex.tip3 );
 				welcomeForm.editPwd2.text     = "";
 				welcomeForm.editPwd1.text     = "";
 			}
-		}else {
+		}else{
 			welcomeForm.bk.background = "\res\welcome\pwdNewBg.jpg";
 			welcomeForm.static.hide   = 0;
 			welcomeForm.static1.hide  = 0;
@@ -232,7 +187,6 @@ staticPwdTip={cls="static";text="密码提示文本";left=0;top=651;right=500;bo
 	win.ui.simpleWindow(welcomeForm);
 	if( welcomeForm.doModal() != dirPath ){ return ; }
 }//第一次阻塞判断结束
-
 //再一次判断，显示主密码登录界面
 if( globalCord == 2 ){
 	import win.ui.simpleWindow;
@@ -254,43 +208,19 @@ if( globalCord == 2 ){
 	}
 	if( time().getWeekString() == 3 ){
 		loginForm.bk.background = "\res\background\009.jpg";
-		loginForm.bk.redraw();
-	}else {
+	}else{
 		select( tonumber( string.random(1,36#21i3v9) ) ){
-			case 0 {
-				loginForm.bk.background = "\res\background\008.jpg";
-				loginForm.bk.redraw();
-			}
-			case 1 {
-				loginForm.bk.background = "\res\background\001.jpg";
-				loginForm.bk.redraw();
-			}
-			case 2 {
-				loginForm.bk.background = "\res\background\003.jpg";
-				loginForm.bk.redraw();
-			}
-			case 3 {
-				loginForm.bk.background = "\res\background\004.jpg";
-				loginForm.bk.redraw();
-			}
-			case 4 {
-				loginForm.bk.background = "\res\background\005.jpg";
-				loginForm.bk.redraw();
-			}
-			case 5 {
-				loginForm.bk.background = "\res\background\006.jpg";
-				loginForm.bk.redraw();
-			}
-			case 6 {
-				loginForm.bk.background = "\res\background\007.jpg";
-				loginForm.bk.redraw();
-			}
-			else {
-				loginForm.bk.background = "\res\background\002.jpg";
-				loginForm.bk.redraw();
-			}
+			case 0 { loginForm.bk.background = "\res\background\008.jpg"; }
+			case 1 { loginForm.bk.background = "\res\background\001.jpg"; }
+			case 2 { loginForm.bk.background = "\res\background\003.jpg"; }
+			case 3 { loginForm.bk.background = "\res\background\004.jpg"; }
+			case 4 { loginForm.bk.background = "\res\background\005.jpg"; }
+			case 5 { loginForm.bk.background = "\res\background\006.jpg"; }
+			case 6 { loginForm.bk.background = "\res\background\007.jpg"; }
+			else{ loginForm.bk.background = "\res\background\002.jpg"; }
 		}
 	}
+	loginForm.bk.redraw();
 	//封装一下按键数字
 	var eachPwdTipTab = function(a,b){
 		var n = #a;
@@ -302,21 +232,11 @@ if( globalCord == 2 ){
 					loginForm.staticPwd.text = tikas.pwdTipText(1);
 					loginForm.static.text    = tikas.deTypeHex( tikas.hex.tip5 );
 				}
-				case 2 {
-					loginForm.staticPwd.text = tikas.pwdTipText(2);
-				}
-				case 3 {
-					loginForm.staticPwd.text = tikas.pwdTipText(3);
-				}
-				case 4 {
-					loginForm.staticPwd.text = tikas.pwdTipText(4);
-				}
-				case 5 {
-					loginForm.staticPwd.text = tikas.pwdTipText(5);
-				}
-				case 6 {
-					loginForm.staticPwd.text = tikas.pwdTipText(6);
-				}
+				case 2 { loginForm.staticPwd.text = tikas.pwdTipText(2); }
+				case 3 { loginForm.staticPwd.text = tikas.pwdTipText(3); }
+				case 4 { loginForm.staticPwd.text = tikas.pwdTipText(4); }
+				case 5 { loginForm.staticPwd.text = tikas.pwdTipText(5); }
+				case 6 { loginForm.staticPwd.text = tikas.pwdTipText(6); }
 			}
 		}
 	}
@@ -326,7 +246,7 @@ if( globalCord == 2 ){
 			account.pwd = tikas.xxteaEncrypt( strTmp,sysinfo ++ randomCode );  //禁止使用明文存放，加密保存
 			loginForm.endModal(dirPath);
 			loginForm.close();
-		}else {
+		}else{
 			strTmp                   = "";
 			loginForm.staticPwd.text = tikas.pwdTipText(0);
 			loginForm.static.text    = tikas.deTypeHex( tikas.hex.tip4 );
@@ -376,36 +296,16 @@ if( globalCord == 2 ){
 					strTmp = "";
 					loginForm.staticPwd.text = tikas.pwdTipText(0);
 				}
-				case 48,96 {
-					eachPwdTipTab(strTmp,"0");
-				}
-				case 49,97 {
-					eachPwdTipTab(strTmp,"1");
-				}
-				case 50,98 {
-					eachPwdTipTab(strTmp,"2");
-				}
-				case 51,99 {
-					eachPwdTipTab(strTmp,"3");
-				}
-				case 52,100 {
-					eachPwdTipTab(strTmp,"4");
-				}
-				case 53,101 {
-					eachPwdTipTab(strTmp,"5");
-				}
-				case 54,102 {
-					eachPwdTipTab(strTmp,"6");
-				}
-				case 55,103 {
-					eachPwdTipTab(strTmp,"7");
-				}
-				case 56,104 {
-					eachPwdTipTab(strTmp,"8");
-				}
-				case 57,105 {
-					eachPwdTipTab(strTmp,"9");
-				}
+				case 48,96 { eachPwdTipTab(strTmp,"0"); }
+				case 49,97 { eachPwdTipTab(strTmp,"1"); }
+				case 50,98 { eachPwdTipTab(strTmp,"2"); }
+				case 51,99 { eachPwdTipTab(strTmp,"3"); }
+				case 52,100 { eachPwdTipTab(strTmp,"4"); }
+				case 53,101 { eachPwdTipTab(strTmp,"5"); }
+				case 54,102 { eachPwdTipTab(strTmp,"6"); }
+				case 55,103 { eachPwdTipTab(strTmp,"7"); }
+				case 56,104 { eachPwdTipTab(strTmp,"8"); }
+				case 57,105 { eachPwdTipTab(strTmp,"9"); }
 			}//结束 select 语句
 		}//结束 if 语句
 	}
@@ -416,10 +316,25 @@ if( globalCord == 2 ){
 	}
 	loginForm.onMouseDown = function(wParam,lParam){ loginForm.hitCaption() }
 	win.ui.simpleWindow(loginForm);
-	//先访问一次心跳，这样可以加速后面的网络请求
-	http.go("https://bfweb.hk.beanfun.com/beanfun_block/generic_handlers/echo_token.ashx?webtoken=1");
 	if( loginForm.doModal() != dirPath ){ return ; }
 }//第二次阻塞判断结束
+
+import dotNet;
+//初始化 DES dll 调用
+dll = dotNet.load("DES",$"\res\dll\DES.dll");
+dll.import("DES");
+aesObject = DES.ECB();  //调用方法：aesObject.DecryStrHex(str,key) 返回解密文本
+
+import web.blink;
+import web.blink.view;
+//初始化 blink
+http = web.blink.view();
+http.cookieClear();
+http.enableHeadless(true);
+http.userAgent       = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36";
+httpUrlStr           = "";
+http.onDocumentReady = function(isMainFrame,hFrame){ httpUrlStr = http.read() }
+http.onAlertBox      = function(str){ return true; }
 
 /*DSG{{*/
 mainForm = win.form(cls="XTIKAS_FORM";text="TMS little helper";right=465;bottom=754;border="none";composited=1;max=false;mode="popup";sysmenu=false;title=false)
@@ -427,6 +342,16 @@ mainForm.add(
 custom={cls="custom";text="child window";left=0;top=0;right=466;bottom=755;db=1;dl=1;dr=1;dt=1;repeat="tile";z=1}
 )
 /*}}*/
+
+import win.timer;
+timer = win.timer( mainForm );
+timer.setInterval(1000);
+timer.onTimer = function(hwnd,msg,id,tick){
+	//定时器执行的代码
+}
+
+
+
 
 statusInformation = /******
 Welcome to TMS little helper!
@@ -437,7 +362,7 @@ log = function(str,login = true){
 		tm.format         = "%H:%M:%S";
 	if(login){
 		coreForm.richedit.print( tostring(tm) ++ " " ++ str );
-	}else {
+	}else{
 		statusInformation = statusInformation ++ tostring(tm) ++ " " ++ str ++ '\r\n';
 	}
 }
@@ -469,7 +394,7 @@ formChild = function(num){
 
 
 		}
-		else {
+		else{
 		}
 	}
 }
@@ -492,7 +417,7 @@ formChildShow = function(num){
 		case 5 {
 
 		}
-		else {
+		else{
 		}
 	}
 }
@@ -522,7 +447,7 @@ if( checkIdFiles() == false ){
 	globalCord = 10;  //当前还没有账号记录信息，强制要求显示增加账号，并隐藏返回按钮
 	formChild(2);
 	formChildShow(2);
-}else {
+}else{
 	globalCord = 20;  //当前有账号记录信息，首次先进入账号列表界面
 	formChild(1);
 	formChildShow(1);

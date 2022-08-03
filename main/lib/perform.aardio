@@ -20,14 +20,14 @@ roundTikasProtect={cls="plus";left=10;top=10;right=140;bottom=140;ah=1;aw=1;colo
 	win.ui.fade(detectionForm);
 	var rWidth, rHeight = win.getScreen();
 	win.setPos( detectionForm.hwnd,rWidth - detectionForm.width,rHeight - detectionForm.height - 58 );
-	detectionForm.bgTikasProtect.setTrackbarRange(1,300);
+	detectionForm.bgTikasProtect.setTrackbarRange(1,500);
 	function initialization(){
 		detectionForm.bgTikasProtect.progressPos = 100;
-		var tmId = detectionForm.addtimer( 2,
+		var tmId = detectionForm.addtimer( 1,
 			function(hwnd,msg,id,tick){
 				var finished = detectionForm.bgTikasProtect.stepProgress(1);
 				if( !finished ){
-					sleep(3000);
+					sleep(5000);
 					detectionForm.close();
 					return 0;
 				}
@@ -151,7 +151,7 @@ msgInput =function(msg,img=0){
 		msgform.button.disabled = true;
 		if( args[2] != 0 ){
 			publish("messageFromMsgform",msgform.edit.text,msgform.code.text);
-		}else {
+		}else{
 			publish("messageFromMsgform",msgform.edit.text,0);
 		}
 		msgform.close();
@@ -226,7 +226,7 @@ verify = function(str){//此功能没有完善 cookie，暂时不可用！
 	wb.noScriptErr = true;
 	if(str == "HK"){
 		wb.go("https://bfweb.hk.beanfun.com/HK/member/alter_main.aspx");
-	}else {
+	}else{
 		wb.go("https://tw.beanfun.com/TW/member/alter_main.aspx");
 	}
 	winform.show();
@@ -237,13 +237,22 @@ getOtpKey = function(str){
 	import tikas;
 	var urlstr = "";
 	if( str == "HK" ){//HK OTP 获取
-		try{
+		..http.go( "https://bfweb.hk.beanfun.com/beanfun_block/bflogin/default.aspx" );
+		if( not ..http.wait( ,15000 ) ){
+			..http.stopLoading();
+			..log("未能在 15 秒内打开 bfweb.hk.beanfun.com，第二次访问正在尝试",false);
 			..http.go( "https://bfweb.hk.beanfun.com/beanfun_block/bflogin/default.aspx" );
-			..http.wait();
-			urlstr        = ..http.read();
-			..account.otp = tostring( ..string.match(urlstr,tikas.match.hkOtp) );
+			if( not ..http.wait( ,30000 ) ){
+				..http.stopLoading();
+				..log("第二次访问，未能在 30 秒打开网页，请检查网络连接情况",false);
+				return false;
+			}
 		}
-		catch(e){
+		urlstr        = ..http.read();
+		..account.otp = tostring( ..string.match(urlstr,tikas.match.hkOtp) );
+		import win.clip;
+		win.clip.write(..account.otp)
+		if( ..account.otp == "null" ){
 			..log("没能获取网页 OTP ，请检测网络",false);
 			return false;
 		}
@@ -256,10 +265,10 @@ getOtpKey = function(str){
 			return false;
 		}
 		return true;
-	}else {//TW登录
+	}else{//TW登录
 		try{
 			..http.go( "https://tw.beanfun.com/beanfun_block/bflogin/default.aspx" );
-			..http.wait();
+			..http.wait("https://tw.beanfun.com/beanfun_block/bflogin/default.aspx",15000);
 			urlstr        = ..http.read();
 			..account.otp = tostring( ..string.match(urlstr,tikas.match.twSkey) );
 		}
@@ -314,6 +323,7 @@ login = function(str,id,key){
 			tPassword        = ..http.getEle( "t_Password" );
 			tPassword.value  = key;
 			..http.click( "btn_login" );
+			..win.delay(1000);
 			..http.wait();
 			urlstr = ..http.read();
 			if( ..string.match(urlstr,tikas.match.pnlMsg) == "pnlMsg" ){
@@ -325,7 +335,7 @@ login = function(str,id,key){
 		}
 		..log("登录失败：请检查您的网络",false);
 		return false;
-	}else {//TW登录
+	}else{//TW登录
 		..http.go( "https://tw.newlogin.beanfun.com/login/id-pass_form.aspx?skey=" ++ ..account.otp );
 		..http.wait();
 		urlstr = ..http.read();
@@ -434,8 +444,9 @@ getAccountList = function(str){//只能返回数值，5 为台号两个号都锁
 	var tm;
 	var tmNow = time.now();
 	if( str == "HK" ){//港号
-		urlstr = ..http.get( "https://bfweb.hk.beanfun.com/beanfun_block/auth.aspx?channel=game_zone&page_and_query=game_start.aspx%3Fservice_code_and_region%3D610074_T9&web_token=" ++ ..account.webtoken );
-
+		..http.go( "https://bfweb.hk.beanfun.com/beanfun_block/auth.aspx?channel=game_zone&page_and_query=game_start.aspx%3Fservice_code_and_region%3D610074_T9&web_token=" ++ ..account.webtoken );
+		..http.wait();
+		urlstr = ..http.read();
 		if( ..string.match(urlstr,tikas.match.verify) == "Verify" ){
 			..log("请先完成进阶认证：1、身份验证，完成后再认证：2、电话验证",false);
 			return 2;
@@ -456,8 +467,12 @@ getAccountList = function(str){//只能返回数值，5 为台号两个号都锁
 			return 3;
 		}
 
-		data                     = "?service_code=610074&service_region=T9&sotp=" ++ ..account.one.serviceAccountSN ++ "&dt=" ++ strDateTime();
-		urlstr                   = ..http.get( "https://bfweb.hk.beanfun.com/beanfun_block/game_zone/game_start_step2.aspx" ++ data );
+		data = "?service_code=610074&service_region=T9&sotp=" ++ ..account.one.serviceAccountSN ++ "&dt=" ++ strDateTime();
+		..http.go( "https://bfweb.hk.beanfun.com/beanfun_block/game_zone/game_start_step2.aspx" ++ data );
+		..http.wait();
+		urlstr = ..http.read();
+
+/*
 		..account.sn             = ..string.match(urlstr,tikas.match.sn);
 		..account.one.createTime = ..string.match(urlstr,tikas.match.createTime);
 		tm                       = time(..account.one.createTime,"%Y-%m-%d %H:%M:%S");
@@ -499,9 +514,10 @@ getAccountList = function(str){//只能返回数值，5 为台号两个号都锁
 			}
 			return 0;
 		}
+*/
 		..log("服务器未能返回成功值，请检查 post 值是否正确，或者检查网络连接情况",false);
 		return 4;
-	}else {//台号
+	}else{//台号
 
 	}
 }
@@ -551,7 +567,7 @@ addAccount = function(str,name){
 		tm                             = time(jsonTab.objResult.create_time,"%Y-%m-%d %H:%M:%S");
 		..account.one.day              = tm.diffday(tmNow);
 		return true;
-	}else {//台号
+	}else{//台号
 
 	}
 }

@@ -32,7 +32,7 @@ import perform;
 				return ;
 			}
 		}
-	}else {//台号
+	}else{//台号
 		if( perform.getWebToken("TW") == false ){
 			..globalCord = 4;  //webToken 获取失败！
 			return ;
@@ -153,7 +153,7 @@ var setSkin = function(num){//传值 1 为正常，2 为警告，3 为危险
 			coreForm.accountTwo.skin( tikas.skin.listSkinWarn );
 			coreForm.addAccount.skin( tikas.skin.addAccountSkinWarn );
 		}
-		else {
+		else{
 			coreForm.bgcolor          = 3226514;
 			coreForm.bk2.bgcolor      = 5923496;
 			coreForm.richedit.bgcolor = 5923496;

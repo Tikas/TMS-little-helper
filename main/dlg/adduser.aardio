@@ -123,7 +123,7 @@ var saveConifgId = function(num){
 			//如果选中转换 BFM，由于首次还不知道 BFM 账号，先赋值字符 0，登录之后再修改此值
 			if( adduserForm.checkboxID.checked ){
 				..configId.sequence[numTemp][[2]] = "0";
-			}else {
+			}else{
 				..configId.sequence[numTemp][[2]] = string.left(adduserForm.editID.text,3) ++ "***" ++ string.right(adduserForm.editID.text,3);
 			}
 			..configId.sequence[numTemp][[6]] = "0";                                                                         //首次使用，在没有登录的情况下，无法获取 BFM，先赋值字符 0，登录之后再修改此值
@@ -137,7 +137,7 @@ var saveConifgId = function(num){
 	..configId.author = tikas.deTypeHex( tikas.hex.tikas );
 	//账号归属地
 	if( adduserForm.radiobuttonHK.checked ){ ..configId.sequence[numTemp][[1]] = "HK"; }
-	else { ..configId.sequence[numTemp][[1]] = "TW"; }
+	else{ ..configId.sequence[numTemp][[1]] = "TW"; }
 	//!注意：账号缩写显示值需要在场景内判断
 	//账号备注名称
 	..configId.sequence[numTemp][[3]] = adduserForm.editRemark.text;
@@ -145,11 +145,11 @@ var saveConifgId = function(num){
 	..configId.sequence[numTemp][[4]] = tostring( adduserForm.combobox.selIndex );
 	//是否保留原账号
 	if( adduserForm.checkboxID.checked ){ ..configId.sequence[numTemp][[5]] = "1"; }
-	else { ..configId.sequence[numTemp][[5]] = "0"; }
+	else{ ..configId.sequence[numTemp][[5]] = "0"; }
 	//!注意：BFM 账号值需要在场景内判断，此值需要加密
 	//账号是否仅自己一人知道密码
 	if( adduserForm.checkbox.checked ){ ..configId.sequence[numTemp][[7]] = "1"; }
-	else { ..configId.sequence[numTemp][[7]] = "0"; }
+	else{ ..configId.sequence[numTemp][[7]] = "0"; }
 	//!注意：进阶认证的手机号码需要在场景内判断，此值需要加密
 	//!注意：原账号需要在场景内判断，此值需要加密
 
@@ -215,7 +215,7 @@ var login = function(){ if( check() ){
 				if( saveBoolean ){
 					..globalCord = 16;  //首次使用，记住账号信息执行登录操作
 				}
-				else {
+				else{
 					..globalCord        = 15;    //首次使用，不记录信息执行登录操作
 					..configId.current  = 0;
 					..configId.tempArea = "HK";  //使用临时值记录归属地
@@ -224,7 +224,7 @@ var login = function(){ if( check() ){
 				..formChild(4);
 				..formChildShow(4);
 				mainForm.show(true);
-			}else {//台号
+			}else{//台号
 				if( not perform.getOtpKey("HK") ){
 					mainForm.show(true);
 					adduserForm.static.text = "登  录";
@@ -242,7 +242,7 @@ var login = function(){ if( check() ){
 				if( saveBoolean ){
 					..globalCord = 16;  //首次使用，记住账号信息执行登录操作
 				}
-				else {
+				else{
 					..globalCord        = 15;    //首次使用，不记录信息执行登录操作
 					..configId.current  = 0;
 					..configId.tempArea = "HK";  //使用临时值记录归属地
@@ -355,7 +355,7 @@ adduserForm.registerTW.oncommand = function( id,event ){//台号注册链接
 adduserForm.retrievePwd.oncommand = function( id,event ){//找回密码
 	if( adduserForm.radiobuttonHK.checked ){
 		process.execute("https://bfweb.hk.beanfun.com/member/forgot_pwd.aspx");
-	}else {
+	}else{
 		process.execute("https://tw.beanfun.com/member/forgot_pwd.aspx");
 	}
 }

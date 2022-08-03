@@ -25,7 +25,7 @@ class listboxExx{
                     if( delete ){
                         font = ::LOGFONT(weight=60;color=0x8D95D2;name='FontAwesome';h=-16);
                         ..gdi.textOut(hdc,font,'\uF057 删除',/*rc.width()/2+345*/rc.right-60, rc.top+25);
-                    }else {
+                    }else{
                         font = ::LOGFONT(weight=60;color=0x9C9C9C;name='FontAwesome';h=-16);
                         ..gdi.textOut(hdc,font,'\uF057 删除',/*rc.width()/2+345*/rc.right-60, rc.top+25);
                     }
@@ -33,11 +33,11 @@ class listboxExx{
                     if( revise ){
                         font = ::LOGFONT(weight=60;color=0xADD195;name='FontAwesome';h=-16);
                         ..gdi.textOut(hdc,font,'\uF0F6 修改',/*rc.width()/2+345*/rc.right-120, rc.top+25);
-                    }else {
+                    }else{
                         font = ::LOGFONT(weight=60;color=0x9C9C9C;name='FontAwesome';h=-16);
                         ..gdi.textOut(hdc,font,'\uF0F6 修改',/*rc.width()/2+345*/rc.right-120, rc.top+25);
                     }
-                }else {
+                }else{
                     if( listboxsel == (drawItem.itemID+1) ){ ..gdi.fillRect(hdc,hoverColor,rc); }
                 }
 
@@ -83,7 +83,7 @@ class listboxExx{
                                     break;
                                 }
                                 continue ; //一直在内部区域游动,则不更新
-                            }else {
+                            }else{
                                 if( delete == true ){ //鼠标从内到外
                                     delete = false;
                                     //设置更新区,并更新
@@ -110,7 +110,7 @@ class listboxExx{
                                     break;
                                 }
                                 continue ; //一直在内部区域游动,则不更新
-                            }else {
+                            }else{
                                 if( revise == true ){ //鼠标从内到外
                                     revise = false;
                                     //设置更新区,并更新
@@ -123,12 +123,12 @@ class listboxExx{
                         }
                     };}//为减少缩进，select 写在前面一行，for 结束
                     return ;
-                }else {
+                }else{
                     //设置hover效果
                     listboxsel = item;
                     if( beforesel == null ){ //第一次执行,初始化
                         beforesel = listboxsel;
-                    }else {
+                    }else{
                         //先关闭上次绘制区域
                         if( beforesel ){ winform.invalidate( winform.getItemRect(beforesel),0 ) };
                         beforesel = listboxsel;
@@ -154,7 +154,7 @@ class listboxExx{
                 var wheelDelta = ..raw.convert( {int wParam=wParam},{word vk;word delta} ).delta;
                 if( wheelDelta > 0 ){
                     ::SendMessageInt( winform.hwnd, 0x115/*_WM_VSCROLL*/, 0, 0 );
-                }else {
+                }else{
                     ::SendMessageInt( winform.hwnd, 0x115/*_WM_VSCROLL*/, 1, 0 );
                 };
                 return 0;
