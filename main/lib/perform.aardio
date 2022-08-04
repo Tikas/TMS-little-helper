@@ -298,83 +298,40 @@ loginStep = function(num){
 	}
 }
 
-loginStepOne = function(){
+loginStepOneGetOtp = function(){//获取OTP
+	import tikas;
+	var urlstr = ..httpUrlStr;
 	if( ..account.ascription == "HK" ){
-
-	}else{
-
-	}
-}
-
-
-
-
-getOtpKey = function(str){
-	import tikas;
-	var urlstr = "";
-	if( str == "HK" ){//HK OTP 获取
-		..http.go( "https://bfweb.hk.beanfun.com/beanfun_block/bflogin/default.aspx" );
-		if( not ..http.wait( ,15000 ) ){
-			..http.stopLoading();
-			..log("未能在 15 秒内打开 bfweb.hk.beanfun.com，第二次访问正在尝试",false);
-			..http.go( "https://bfweb.hk.beanfun.com/beanfun_block/bflogin/default.aspx" );
-			if( not ..http.wait( ,30000 ) ){
-				..http.stopLoading();
-				..log("第二次访问，未能在 30 秒打开网页，请检查网络连接情况",false);
-				return false;
-			}
-		}
-		urlstr        = ..http.read();
 		..account.otp = tostring( ..string.match(urlstr,tikas.match.hkOtp) );
-		import win.clip;
-		win.clip.write(..account.otp)
-		if( ..account.otp == "null" ){
-			..log("没能获取网页 OTP ，请检测网络",false);
+		if( ..string.match(urlstr,"IP已自動被系統鎖定") ){
+			..log("您的 IP 已被暂时封禁，请稍候再试",false);
 			return false;
 		}
 		if( ..account.otp == "null" ){
-			if( tostring( ..string.match(urlstr,"IP已自動被系統鎖定") ) == "null" ){
-				..log("您的 IP 已被暂时封禁，请稍候再试",false);
-				return false;
-			}
-			..log("访问登录页面时出错，请更换网络",false);
+			..log("没能获取网页 OTP ，请检测网络",false);
 			return false;
 		}
 		return true;
-	}else{//TW登录
-		try{
-			..http.go( "https://tw.beanfun.com/beanfun_block/bflogin/default.aspx" );
-			..http.wait("https://tw.beanfun.com/beanfun_block/bflogin/default.aspx",15000);
-			urlstr        = ..http.read();
-			..account.otp = tostring( ..string.match(urlstr,tikas.match.twSkey) );
-		}
-		catch(e){
-			..log("没能获取网页 OTP ，请检测网络",false);
+	}else{//台号
+		..account.otp = tostring( ..string.match(urlstr,tikas.match.twSkey) );
+		if( ..string.match(urlstr,"IP已自動被系統鎖定") ){
+			..log("您的 IP 已被暂时封禁，请稍候再试",false);
 			return false;
 		}
 		if( ..account.otp == "null" ){
-			if( tostring( ..string.match(urlstr,"IP已自動被系統鎖定") ) == "null" ){
-				..log("您的 IP 已被暂时封禁，请稍候再试",false);
-				return false;
-			}
-			..log("访问登录页面时出错，请更换网络",false);
+			..log("没能获取网页 OTP ，请检测网络",false);
 			return false;
 		}
 		return true;
 	}
 }
 
-login = function(str,id,key){
+loginStepTwoLoginPage = function(){
 	import tikas;
-	var urlstr  = "";
-	//var payload = {};
+	var urlstr = ..httpUrlStr;
 	var tAccountID;
 	var tPassword;
-	if( str == "HK" ){//HK登录
-		..http.go( "https://login.hk.beanfun.com/login/id-pass_form_newBF.aspx?otp1=" ++ ..account.otp );
-		..http.wait();
-		urlstr = ..http.read();
-
+	if( ..account.ascription == "HK" ){
 		if( ..string.match(urlstr,tikas.match.googleRc) == "recaptcha" ){
 			..log("您的 IP 出现 Google Recaptcha 人机验证",false);
 			return false;
@@ -398,24 +355,13 @@ login = function(str,id,key){
 			tAccountID.value = id;
 			tPassword        = ..http.getEle( "t_Password" );
 			tPassword.value  = key;
+			..getHttpUrlStr  = false;
 			..http.click( "btn_login" );
-			..win.delay(1000);
-			..http.wait();
-			urlstr = ..http.read();
-			if( ..string.match(urlstr,tikas.match.pnlMsg) == "pnlMsg" ){
-				..log("登录失败：账号或密码错误",false);
-				return false;
-			}
-			..log("登录成功",false);
 			return true;
 		}
-		..log("登录失败：请检查您的网络",false);
+		..log("未能正常打开登录页面，请检查网络",false);
 		return false;
-	}else{//TW登录
-		..http.go( "https://tw.newlogin.beanfun.com/login/id-pass_form.aspx?skey=" ++ ..account.otp );
-		..http.wait();
-		urlstr = ..http.read();
-
+	}else{//台号
 		if( ..string.match(urlstr,tikas.match.googleRc) == "recaptcha" ){
 			..log("您的 IP 出现 Google Recaptcha 人机验证",false);
 			return false;
@@ -423,7 +369,8 @@ login = function(str,id,key){
 		}
 		if( ..string.match(urlstr,tikas.match.advanceCheck) == "AdvanceCheck" ){
 			//TODO：出现此关键字，需要验证信息之后，再登录一次！
-			//此验证未进阶前，会验证邮箱，进阶后，会验证电话
+			//此验证：未进阶前，会验证邮箱，进阶后，会验证电话
+			//出现此值，需要强制执行验证后，再次返回登录操作，后续再来写此逻辑
 		}
 		if( ..string.find(urlstr,"__EVENTVALIDATION") ){
 			/*
@@ -443,20 +390,26 @@ login = function(str,id,key){
 			tAccountID.value = id;
 			tPassword        = ..http.getEle( "t_Password" );
 			tPassword.value  = key;
+			..getHttpUrlStr  = false;
 			..http.click( "btn_login" );
-			..http.wait();
-			urlstr = ..http.read();
-			if( ..string.match(urlstr,tikas.match.pnlMsg) == "pnlMsg" ){
-				..log("登录失败：账号或密码错误",false);
-				return false;
-			}
-			..log("登录成功",false);
 			return true;
 		}
-		..log("登录失败：请检查您的网络",false);
+		..log("未能正常打开登录页面，请检查网络",false);
 		return false;
 	}
 }
+
+loginStepThreeLogging = function(){
+	import tikas;
+	var urlstr = ..httpUrlStr;
+	if( ..string.match(urlstr,tikas.match.pnlMsg) == "pnlMsg" ){
+		..log("登录失败：账号或密码错误",false);
+		return false;
+	}
+	..log("登录成功",false);
+	return true;
+}
+
 
 getWebToken = function(str){
 	import tikas;

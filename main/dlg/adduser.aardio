@@ -198,6 +198,8 @@ var login = function(){ if( check() ){
 			perform.detection();
 			mainForm.show(false);
 			if( adduserForm.radiobuttonHK.checked ){//港号
+			/*
+			TODO：整个登录过程需要重做
 				if( not perform.getOtpKey("HK") ){
 					mainForm.show(true);
 					adduserForm.static.text = "登  录";
@@ -252,6 +254,7 @@ var login = function(){ if( check() ){
 				..formChildShow(4);
 				mainForm.show(true);
 			}
+			*/
 		}
 		case 20 {
 		}
