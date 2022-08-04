@@ -58,6 +58,7 @@ account.secretCode = 获取游戏密码时，所需要的 secretCode 值，就�
 account.ppppp = 获取游戏密码时，所需要的 ppppp 值
 account.otpPwd = 获取一次性 OTP 登录密码，共用，不分账号
 
+account.ascription = 当前账号的归属地，此值决定了登录时，调用的登录接口
 account.checked = 当前选中的账号序列，如果只有一个账号，默认选中为 1, 台号选中第二个账号为 2，没有选择账号值为 0 ，锁号状态不可用时值为 4
 account.one = 暂时使用此值记录第一个账号相关值，等后续 cookie 解决，将换回 rows 值
 account.one.serviceAccountSN = 账号所在数据库序列号，申请登录游戏用的 sotp 值，其实就是这个值
@@ -318,22 +319,21 @@ if( globalCord == 2 ){
 	win.ui.simpleWindow(loginForm);
 	if( loginForm.doModal() != dirPath ){ return ; }
 }//第二次阻塞判断结束
-
-import dotNet;
 //初始化 DES dll 调用
+import dotNet;
 dll = dotNet.load("DES",$"\res\dll\DES.dll");
 dll.import("DES");
 aesObject = DES.ECB();  //调用方法：aesObject.DecryStrHex(str,key) 返回解密文本
-
+//初始化 blink
 import web.blink;
 import web.blink.view;
-//初始化 blink
 http = web.blink.view();
 http.cookieClear();
 http.enableHeadless(true);
 http.userAgent       = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36";
 httpUrlStr           = "";
-http.onDocumentReady = function(isMainFrame,hFrame){ httpUrlStr = http.read() }
+getHttpUrlStr        = false;
+http.onDocumentReady = function(isMainFrame,hFrame){ httpUrlStr = http.read(); getHttpUrlStr = true; }
 http.onAlertBox      = function(str){ return true; }
 
 /*DSG{{*/
@@ -345,10 +345,10 @@ custom={cls="custom";text="child window";left=0;top=0;right=466;bottom=755;db=1;
 
 import win.timer;
 timer = win.timer( mainForm );
-timer.setInterval(1000);
-timer.onTimer = function(hwnd,msg,id,tick){
-	//定时器执行的代码
-}
+timer.setInterval( 1000 );
+timer.onTimer = function(hwnd,msg,id,tick){if(getHttpUrlStr){
+	
+}}
 
 
 
@@ -389,7 +389,6 @@ formChild = function(num){
 		}
 		case 4 {
 			coreFormChild = mainForm.custom.loadForm("\dlg\core.aardio");
-			//detectionFormChild = mainForm.loadForm("\dlg\detection.aardio");
 		}case 5{
 
 
@@ -412,7 +411,6 @@ formChildShow = function(num){
 		}
 		case 4 {
 			coreFormChild.show();
-			//detectionFormChild.show();
 		}
 		case 5 {
 
