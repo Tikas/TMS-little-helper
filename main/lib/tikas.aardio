@@ -93,11 +93,10 @@ namespace tikas{
 	}
 
 	namespace match{
-	    twSkey             = /*strSessionKey\s\=\s\"(.*?)"*/;                         //TW网页一次性OTP
-	    hkOtp              = /*otp1\=(.*?)\&*/;                                       //HK网页一次性OTP
-	    hkSkey             = /*skey\=(.*?)\&*/;                                       //HK网页一次性OTP，请求头专用，还没想好 cookie 怎么写，暂时弃用
-	    webToken           = /*webToken\"\:\"(.*?)\"*/;
-	    bfm                = /*BFM(.*?)\"*/;
+	    twSkey             = /*strSessionKey\s\=\s\"(.*?)"*/;                               //TW网页一次性OTP
+	    hkOtp              = /*otp1\=(.*?)\&*/;                                             //HK网页一次性OTP
+		webToken           = /*webToken\"\:\"(.*?)\"*/;
+		bfm                = /*BFM(.*?)\"*/;
 		googleRc           = /*src\=\'https\:\/\/www\.google\.com\/(.*?)\/api\.js*/;
 		viewState          = /*id\=\"\_\_VIEWSTATE\"\svalue\=\"(.*?)\"*/;
 		viewStategenerator = /*id\=\"\_\_VIEWSTATEGENERATOR\"\svalue\=\"(.*?)\"*/;
@@ -108,14 +107,15 @@ namespace tikas{
 		addAccount         = /*<@btnAddServiceAccount@>*/;
 		lock               = /*<@class="Stop"@>*/;
 		account            = /*\"\>\<div\sid\=\"(.*?)\"\ssn\=\"(\d+)\"\sname\=\"(.*?)\"*/;
-	    sn                 = /*GetResultByLongPolling\&key\=(.*?)\"*/;                //获取游戏密码时，所需要的 sn 值
-	    dynamicStr         = /*MyAccountData\.ServiceAccountCreateTime(.*?)\;*/;      //这里折分出来，是因为当时排错时拆分出来的，
-	    dynamic            = /*\"\&(.*?)\=*/;                                         //当时这样找常出错：/*CreateTime\s\+\s\"\&(.*?)\=(.*?)\"*/，后来排错时拆分出来了
-		dyValue            = /*\=(.*?)\"*/;
-	    secretCode         = /*\'(.*?)\'*/;                                           //获取游戏密码时，所需要的 secretCode 值
-	    data               = /*Data\=(.*?)\"*/;                                       //获取游戏密码时，所需要的 data 值
-		serviceAccount     = /*ServiceAccount\=(.*?)\&*/;
-		createTime         = /*ServiceAccountCreateTime\:\s\"(.*?)\"*/;
+	    dynamicStr         = /*MyAccountData\.ServiceAccountCreateTime(.*?)\;*/;            //这里折分出来，是因为当时排错时拆分出来的，此值和dynamic、dyValue弃用，暂时保留
+	    dynamic            = /*\"\&(.*?)\=*/;                                               //当时这样找常出错：/*CreateTime\s\+\s\"\&(.*?)\=(.*?)\"*/，后来排错时拆分出来了
+	    dyValue            = /*\=(.*?)\"*/;                                                 //折分出来的，dynamicStr、dynamic、dyValue 三值弃用，暂时保留
+	    beanfunhkStr       = /*BF\&amp(.*?)\/html*/;                                        //获取游戏密码的内容
+	    sn                 = /*SN\=(.*?)\&*/;                                               //获取游戏密码时，所需要的 sn 值
+	    secretCode         = /*SecretCode\=(.*?)\&*/;                                       //获取游戏密码时，所需要的 secretCode 值
+	    data               = /*Data\=(.*?)\"*/;                                             //获取游戏密码时，所需要的 data 值
+	    serviceAccount     = /*ServiceAccount\=(.*?)\&*/;                                   //此值港号不使用，前面 account 已经包含此值，台号暂时还没完成，此值保留
+		createTime         = /*CreateTime\=(.*?)\&*/;
 		ppppp              = /*ppppp\=(.*?)\&*/;
 		strOutstring       = "Success";
 		advanceCheck       = /*<@AdvanceCheck@>*/;
