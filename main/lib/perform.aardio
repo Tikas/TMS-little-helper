@@ -498,30 +498,29 @@ loginStepFiveGameStart = function(){
 			return false;
 		}
 	}else{
-
+		//TODO：台号延后，先处理好港号
 	}
 	return true;
 }
 
-
-
-
-getBFM = function(str){
+loginStepSixGetOtpPwd = function(){
 	import tikas;
+	var urlstr       = ..httpUrlStr;
+	var otpstr       = "";
+	var data         = "";
+	var key          = "";
+	otpstr           = ..string.match(urlstr,tikas.match.otpStr);
+	data             = ..string.right( otpstr,#otpstr - 8 );
+	key              = ..string.left( otpstr,8 );
+	otpstr           = ..aesObject.DecryStrHex(data,key);
+	..account.otpPwd = otpstr;
+}
+
+getBFM = function(){
+	import tikas;
+	var urlstr = ..httpUrlStr;
 	var num    = ..configId.current;
-	var urlstr = "";
-	var bfmID  = "";
-	if( str == "HK" ){
-		..http.go( "https://bfweb.hk.beanfun.com/beanfun_block/generic_handlers/echo_token.ashx?webtoken=1" );
-		..http.wait();
-		urlstr = ..http.read();
-		bfmID  = ..string.match( urlstr,tikas.match.bfm );
-	}else{
-		..http.go( "https://tw.beanfun.com/beanfun_block/generic_handlers/echo_token.ashx?webtoken=1" );
-		..http.wait();
-		urlstr = ..http.read();
-		bfmID  = ..string.match( urlstr,tikas.match.bfm );
-	}
+	var bfmID  = ..string.match( urlstr,tikas.match.bfm );
 	if( tostring(bfmID) == "null" ){
 		..log("获取 BFM 失败！",false);
 		return false;

@@ -119,6 +119,7 @@ namespace tikas{
 		ppppp              = /*ppppp\=(.*?)\&*/;
 		strOutstring       = "Success";
 		advanceCheck       = /*<@AdvanceCheck@>*/;
+		otpStr             = /*1\;(.*?)\<*/;
 	}
 
 	loyisa = {
