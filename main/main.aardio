@@ -5,6 +5,11 @@ import key;
 import web.json;
 import win.reg;
 import fsys;
+import win.timer;
+import dotNet;
+import web.blink;
+import web.blink.view;
+import perform;
 
 globalCord = 1;
 /*
@@ -21,14 +26,16 @@ globalCord 为全局通用控制识别码，为减少变量，很多判断写到
 9 = 台号锁了两个号
 --------
 10 = 当前还没有账号记录信息，强制要求显示增加账号，并隐藏返回按钮
-11 = 「港号」获取到游戏账号列表 --- 不记录信息登录 - 此值由于 cookie 没解决，暂时无效
-12 = 「港号」没有进行进阶认证 --- 不记录信息登录
-13 = 「台号」获取到游戏账号列表 --- 不记录信息登录 - 此值由于 cookie 没解决，暂时无效
-14 = 「台号」没有进行进阶认证 --- 不记录信息登录
-15 = 首次使用，不记录信息执行登录操作，同时，也是新增账号时，不记录信息执行的登录操作
-16 = 首次使用，记住账号信息执行登录操作
-17 = 「港号」账号已完成进阶认证，但是还没创建游戏账号 --- 不记录信息登录
-18 = 「台号」账号已完成进阶认证，但是还没创建游戏账号 --- 不记录信息登录
+11 = 首次使用
+12 = 首次使用，访问登录页面
+13 = 首次使用，获取 webToken
+14 = 首次使用，进入账号列表
+15 = 首次使用，有账号信息
+16 = 首次使用，没有账号
+17 = 首次使用，没有进阶
+181 = 首次使用，锁号第一个
+182 = 首次使用，锁号第二个
+183 = 首次使用，两个号都锁了
 --------
 20 = 当前有账号记录信息，首次先进入账号列表界面
 
@@ -36,6 +43,19 @@ globalCord 为全局通用控制识别码，为减少变量，很多判断写到
  = 是用户通过点击账号列表里的修改进入的增加账号界面
 --------
 */
+//初始化 DES dll 调用
+dll = dotNet.load("DES",$"\res\dll\DES.dll");
+dll.import("DES");
+aesObject = DES.ECB();  //调用方法：aesObject.DecryStrHex(str,key) 返回解密文本
+//初始化 blink
+http = web.blink.view();
+http.cookieClear();
+http.enableHeadless(true);
+http.userAgent       = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36";
+httpUrlStr           = "";
+getHttpUrlStr        = false;
+http.onDocumentReady = function(isMainFrame,hFrame){ httpUrlStr = http.read(); getHttpUrlStr = true; }
+http.onAlertBox      = function(str){ return true; }
 dirPath        = tikas.deTypeHex( tikas.hex.dirPath );
 userClosed     = true;
 sysinfo        = tikas.sysinfo();
@@ -45,10 +65,14 @@ configFilePath = io.appData( dirPath ++ tikas.deTypeHex(tikas.hex.configFile) );
 configTks      = {};
 configId       = {};
 account        = {};
+account.save   = false;
 /*
 一开始是想每个关键的数据都弄一个变量来存放的，然而，我最讨厌就是变量太多，所有账号相关的，全丢进这个数组吧！
 account.pwd = 加密存放的六位数主密码，没错，就是开始界面的那六个数字密码
 account.otp = 港号最开始的网页 otp 或者 台号最开始的网页 skey，共用此值
+account.save = 此值为新增账号时，保存账号信息时用到，false 为不保存，true 为保存
+account.bfId = beanfun 账号
+account.bfPwd = 账号的密码
 
 account.webtoken = 获取游戏密码时，所需要的 webtoken 值
 account.sn = 获取游戏密码时，所需要的 sn 值
@@ -319,22 +343,6 @@ if( globalCord == 2 ){
 	win.ui.simpleWindow(loginForm);
 	if( loginForm.doModal() != dirPath ){ return ; }
 }//第二次阻塞判断结束
-//初始化 DES dll 调用
-import dotNet;
-dll = dotNet.load("DES",$"\res\dll\DES.dll");
-dll.import("DES");
-aesObject = DES.ECB();  //调用方法：aesObject.DecryStrHex(str,key) 返回解密文本
-//初始化 blink
-import web.blink;
-import web.blink.view;
-http = web.blink.view();
-http.cookieClear();
-http.enableHeadless(true);
-http.userAgent       = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36";
-httpUrlStr           = "";
-getHttpUrlStr        = false;
-http.onDocumentReady = function(isMainFrame,hFrame){ httpUrlStr = http.read(); getHttpUrlStr = true; }
-http.onAlertBox      = function(str){ return true; }
 
 /*DSG{{*/
 mainForm = win.form(cls="XTIKAS_FORM";text="TMS little helper";right=465;bottom=754;border="none";composited=1;max=false;mode="popup";sysmenu=false;title=false)
@@ -342,17 +350,10 @@ mainForm.add(
 custom={cls="custom";text="child window";left=0;top=0;right=466;bottom=755;db=1;dl=1;dr=1;dt=1;repeat="tile";z=1}
 )
 /*}}*/
-
-import win.timer;
+//初始化定时器
 timer = win.timer( mainForm );
 timer.setInterval( 1000 );
-timer.onTimer = function(hwnd,msg,id,tick){if(getHttpUrlStr){
-	
-}}
-
-
-
-
+var timeNum = 0;
 statusInformation = /******
 Welcome to TMS little helper!
 
@@ -364,6 +365,50 @@ log = function(str,login = true){
 		coreForm.richedit.print( tostring(tm) ++ " " ++ str );
 	}else{
 		statusInformation = statusInformation ++ tostring(tm) ++ " " ++ str ++ '\r\n';
+	}
+}
+errorWhileLogging = function(){
+	mainForm.show(true);
+	win.msgbox(statusInformation,"错误:");
+	timer.disable();
+}
+timerStep = function(num){
+	globalCord = num;
+	getHttpUrlStr = false;
+	timeNum = 0;
+	timer.disable();
+	perform.loginStep(num);
+}
+timer.onTimer = function(hwnd,msg,id,tick){
+	timeNum ++;
+	if( timeNum >= 30 ){
+		log("网络超时，请重试",false);
+		timeNum       = 0;
+		getHttpUrlStr = false;
+		timer.disable();
+	}
+	if( getHttpUrlStr ){
+		select(globalCord) {
+			case 11 { if( perform.loginStepOneGetOtp() ){ timerStep(12); } }//获取到 OTP，访问登录页面
+			case 12 {//访问登录页面并执行登录操作
+				perform.loginStepTwoLoginPage();
+				if( perform.loginStepTwoLogging() ){ timerStep(13); }
+			}
+			case 13 { if( perform.loginStepThreeGetWebToken() ){ timerStep(14); } }//访问登录页面并执行登录操作
+			case 14 {//获取账号列表信息，这里返回值不同，代表不同状态
+				//只能返回数值，5 为台号两个号都锁了，4 为锁号第二个，3 为锁号第一个，2 为没有进阶，1 为没有账号，0 为有账号
+				var getAccountListNum = perform.loginStepFourGetAccountList();
+				select(getAccountListNum) {
+					case 0 { timerStep(15); }//有账号
+					case 1 { timerStep(16); }//没有账号
+					case 2 { timerStep(17); }//没有进阶
+					case 3 { timerStep(181); }//锁号第一个
+					case 4 { timerStep(182); }//锁号锁号第二个
+					case 5 { timerStep(183); }//两个号都锁了
+				}
+			}
+			//
+		}
 	}
 }
 

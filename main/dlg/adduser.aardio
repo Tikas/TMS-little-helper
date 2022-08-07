@@ -28,8 +28,6 @@ configId = {
 		{ "TW";"BFM***89b";"小T同学的主号";"5";"1";"BFMtikas123456789b";"1";"13812345678";"0";"0" };
 	}
 	"current" = 0//当前账号序列，此值关系到账号密码配置的读写准确性，为 0 时，作为临时登录，账号归属等将从 temp 值读取
-	"tempPwd" = "密码"//此值临时存放使用，主要是为新号还没获取 BFM 时，使用用后删除 temp 值
-	"tempArea" = "归属地"//临时性登录其他账号，存放归属地
 }//此定义为演示用，实际使用时，BFM、电话、原账号都会进行加密记录，为减少记忆，所有值为字符串
 
 由于密码记录使用的是 BFM 账号进行 sha512 之后取的希哈值记录，使用数组会导致不方便查找，使用 ini 又不方便加密，在这些使用了 sqlite 并使用 aes128 加密
@@ -65,7 +63,7 @@ plus2={cls="plus";left=58;top=236;right=93;bottom=271;color=14272689;iconStyle={
 plus3={cls="plus";left=58;top=277;right=93;bottom=312;color=14272689;iconStyle={font=LOGFONT(h=-29;name='FontAwesome')};iconText='\uF023';z=6};
 plus4={cls="plus";left=59;top=316;right=94;bottom=351;color=14272689;iconStyle={font=LOGFONT(h=-29;name='FontAwesome')};iconText='\uF095';z=9};
 radiobuttonHK={cls="radiobutton";text="HK「港号」";left=90;top=140;right=240;bottom=170;bgcolor=12091705;font=LOGFONT(h=-16);z=28};
-radiobuttonTW={cls="radiobutton";text="TW「台号」";left=260;top=140;right=410;bottom=170;bgcolor=12091705;font=LOGFONT(h=-16);z=29};
+radiobuttonTW={cls="radiobutton";text="TW「台号」";left=260;top=140;right=410;bottom=170;bgcolor=12091705;disabled=1;font=LOGFONT(h=-16);z=29};
 registerHK={cls="plus";text="> 注册港号";left=70;top=730;right=170;bottom=755;color=15790320;z=32};
 registerTW={cls="plus";text="> 注册台号";left=180;top=730;right=280;bottom=755;color=15790320;z=31};
 retrievePwd={cls="plus";text="> 找回密码";left=290;top=730;right=390;bottom=755;color=15790320;z=30};
@@ -189,78 +187,36 @@ var check = function(){
 
 //登录被点击
 var login = function(){ if( check() ){
-		adduserForm.static.disabled = true;
-		adduserForm.static.text     = "正在执行";
-	var saveBoolean                 = adduserForm.checkboxSave.checked;
+	adduserForm.static.disabled = true;
+	var saveBoolean             = adduserForm.checkboxSave.checked;
 	if( saveBoolean ){ saveConifgId(); }
 	select(..globalCord) {
 		case 10 {//还没有账号记录，此时需要执行登录操作
+			..account.bfId  = tikas.xxteaEncrypt( adduserForm.editID.text,..sysinfo ++ ..randomCode );
+			..account.bfPwd = tikas.xxteaEncrypt( adduserForm.editPwd.text,..sysinfo ++ ..randomCode );
 			perform.detection();
 			mainForm.show(false);
 			if( adduserForm.radiobuttonHK.checked ){//港号
-			/*
-			TODO：整个登录过程需要重做
-				if( not perform.getOtpKey("HK") ){
-					mainForm.show(true);
-					adduserForm.static.text = "登  录";
-					win.msgbox(..statusInformation,"错误:");
-					adduserForm.static.disabled = false;
-					return ;
-				}
-				if( not perform.login("HK",adduserForm.editID.text,adduserForm.editPwd.text) ){
-					mainForm.show(true);
-					adduserForm.static.text = "登  录";
-					win.msgbox(..statusInformation,"错误:");
-					adduserForm.static.disabled = false;
-					return ;
-				}
-				if( saveBoolean ){
-					..globalCord = 16;  //首次使用，记住账号信息执行登录操作
-				}
-				else{
-					..globalCord        = 15;    //首次使用，不记录信息执行登录操作
-					..configId.current  = 0;
-					..configId.tempArea = "HK";  //使用临时值记录归属地
-				}
-				..userClosed = false;
+				..account.ascription = "HK";
+				..getHttpUrlStr      = false;
+				if( saveBoolean ){ ..account.save = true; }
+				..globalCord       = 11;     //首次使用
+				..configId.current = 0;
+				..userClosed       = false;
+				perform.loginStep(11);
 				..formChild(4);
 				..formChildShow(4);
-				mainForm.show(true);
 			}else{//台号
-				if( not perform.getOtpKey("HK") ){
-					mainForm.show(true);
-					adduserForm.static.text = "登  录";
-					win.msgbox(..statusInformation,"错误:");
-					adduserForm.static.disabled = false;
-					return ;
-				}
-				if( not perform.login("HK",adduserForm.editID.text,adduserForm.editPwd.text) ){
-					mainForm.show(true);
-					adduserForm.static.text = "登  录";
-					win.msgbox(..statusInformation,"错误:");
-					adduserForm.static.disabled = false;
-					return ;
-				}
-				if( saveBoolean ){
-					..globalCord = 16;  //首次使用，记住账号信息执行登录操作
-				}
-				else{
-					..globalCord        = 15;    //首次使用，不记录信息执行登录操作
-					..configId.current  = 0;
-					..configId.tempArea = "HK";  //使用临时值记录归属地
-				}
-				..userClosed = false;
-				..formChild(4);
-				..formChildShow(4);
-				mainForm.show(true);
+				..account.ascription = "TW";
+				//TODO：台号登录
 			}
-			*/
 		}
 		case 20 {
 		}
 		case 30 {
 		}
 	}
+	adduserForm.static.disabled = false;
 }}//为减少缩进，login 事件是有两个大括号
 
 

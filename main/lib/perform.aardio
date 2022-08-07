@@ -164,7 +164,7 @@ msgInput =function(msg,img=0){
 	var codeFormTmp = ..mainForm.loadForm(code,msg,img);
 }
 
-message = function(num){
+message = function(num){//TODO：需要重写
 	import process;
 	var strTmp1 = "非常抱歉！"+'\n\n'+"接下来需要您，亲自前往官网登录后，执行进阶认证"+'\n\n'+"点击确定前往官网登录页面";
 	var strTmp2 = "是否需要提供提示帮助"+'\n\n'+"如果您是首次执行进阶认证，选择需要提示，或许能给您带来一些帮助。";
@@ -208,7 +208,7 @@ message = function(num){
 	}
 }
 
-verify = function(str){//此功能没有完善 cookie，暂时不可用！
+verify = function(str){//TODO：需要重写
 	import win.ui;
 	import inet.tls;
 	import web.form;
@@ -296,6 +296,7 @@ loginStep = function(num){
 		case 68 {
 		}
 	}
+	..timer.enable();
 }
 
 loginStepOneGetOtp = function(){//获取OTP
@@ -305,20 +306,24 @@ loginStepOneGetOtp = function(){//获取OTP
 		..account.otp = tostring( ..string.match(urlstr,tikas.match.hkOtp) );
 		if( ..string.match(urlstr,"IP已自動被系統鎖定") ){
 			..log("您的 IP 已被暂时封禁，请稍候再试",false);
+			..errorWhileLogging();
 			return false;
 		}
 		if( ..account.otp == "null" ){
 			..log("没能获取网页 OTP ，请检测网络",false);
+			..errorWhileLogging();
 			return false;
 		}
 	}else{//台号
 		..account.otp = tostring( ..string.match(urlstr,tikas.match.twSkey) );
 		if( ..string.match(urlstr,"IP已自動被系統鎖定") ){
 			..log("您的 IP 已被暂时封禁，请稍候再试",false);
+			..errorWhileLogging();
 			return false;
 		}
 		if( ..account.otp == "null" ){
 			..log("没能获取网页 OTP ，请检测网络",false);
+			..errorWhileLogging();
 			return false;
 		}
 	}
@@ -333,6 +338,7 @@ loginStepTwoLoginPage = function(){//在登录页面执行登录操作
 	if( ..account.ascription == "HK" ){
 		if( ..string.match(urlstr,tikas.match.googleRc) == "recaptcha" ){
 			..log("您的 IP 出现 Google Recaptcha 人机验证",false);
+			..errorWhileLogging();
 			return false;
 		}
 		if( ..string.match(urlstr,"__EVENTVALIDATION") ){
@@ -351,18 +357,20 @@ loginStepTwoLoginPage = function(){//在登录页面执行登录操作
 			urlstr = ..http.post("https://login.hk.beanfun.com/login/id-pass_form_newBF.aspx?otp1=" ++ ..account.otp,payload);
 			*/
 			tAccountID       = ..http.getEle( "t_AccountID" );
-			tAccountID.value = id;
+			tAccountID.value = tikas.xxteaDecrypt( ..account.bfId,..sysinfo ++ ..randomCode );
 			tPassword        = ..http.getEle( "t_Password" );
-			tPassword.value  = key;
+			tPassword.value  = tikas.xxteaDecrypt( ..account.bfPwd,..sysinfo ++ ..randomCode );
 			..getHttpUrlStr  = false;
 			..http.click( "btn_login" );
 			return true;
 		}
 		..log("未能正常打开登录页面，请检查网络",false);
+		..errorWhileLogging();
 		return false;
 	}else{//台号
 		if( ..string.match(urlstr,tikas.match.googleRc) == "recaptcha" ){
 			..log("您的 IP 出现 Google Recaptcha 人机验证",false);
+			..errorWhileLogging();
 			return false;
 			//有 RC 会 post 此值：g-recaptcha-response
 		}
@@ -386,14 +394,15 @@ loginStepTwoLoginPage = function(){//在登录页面执行登录操作
 			urlstr                            = ..http.post("https://tw.newlogin.beanfun.com/login/id-pass_form.aspx?skey=" ++ ..account.otp,payload);
 			*/
 			tAccountID       = ..http.getEle( "t_AccountID" );
-			tAccountID.value = id;
+			tAccountID.value = tikas.xxteaDecrypt( ..account.bfId,..sysinfo ++ ..randomCode );
 			tPassword        = ..http.getEle( "t_Password" );
-			tPassword.value  = key;
+			tPassword.value  = tikas.xxteaDecrypt( ..account.bfPwd,..sysinfo ++ ..randomCode );
 			..getHttpUrlStr  = false;
 			..http.click( "btn_login" );
 			return true;
 		}
 		..log("未能正常打开登录页面，请检查网络",false);
+		..errorWhileLogging();
 		return false;
 	}
 }
@@ -403,6 +412,7 @@ loginStepTwoLogging = function(){//检查登录是否成功，这一步归类为
 	var urlstr = ..httpUrlStr;
 	if( ..string.match(urlstr,tikas.match.pnlMsg) == "pnlMsg" ){
 		..log("登录失败：账号或密码错误",false);
+		..errorWhileLogging();
 		return false;
 	}
 	..log("登录成功",false);
@@ -416,12 +426,13 @@ loginStepThreeGetWebToken = function(){
 	webToken = ..string.match( urlstr,tikas.match.webToken );
 	if( tostring(webToken) == "null" ){
 		..log("获取 webToken 失败！如非网络原因，请联系 Tikas 修复！",false);
+		..errorWhileLogging();
 		return false;
 	}
 	..account.webtoken = webToken;
 	return true;
 }
-//只能返回数值，5 为台号两个号都锁了， 4 为出错，3 为锁号，2 为没有进阶，1 为没有账号，0 为有账号
+//只能返回数值，5 为台号两个号都锁了，4 为锁号第二个，3 为锁号第一个，2 为没有进阶，1 为没有账号，0 为有账号
 loginStepFourGetAccountList = function(){
 	import tikas;
 	var urlstr = ..httpUrlStr;
@@ -530,7 +541,7 @@ getBFM = function(){
 	return true;
 }
 
-addAccount = function(str,name){
+addAccount = function(str,name){//TODO：需要重写
 	import .web.json;
 	import time.ole;
 	var payload = {};
