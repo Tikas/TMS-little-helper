@@ -204,8 +204,9 @@ var login = function(){ if( check() ){
 				..configId.current = 0;
 				..userClosed       = false;
 				perform.loginStep(11);
-				..formChild(4);
-				..formChildShow(4);
+				//TODO：不应该执行定时器任务后执行加载 core 界面
+				//..formChild(4);
+				//..formChildShow(4);
 			}else{//台号
 				..account.ascription = "TW";
 				//TODO：台号登录

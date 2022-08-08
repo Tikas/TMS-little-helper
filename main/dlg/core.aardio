@@ -102,53 +102,51 @@ var setSkin = function(num){//传值 1 为正常，2 为警告，3 为危险
 			)
 			setSkin(2);
 		}
-		case 7 {//港号锁号了
-			coreForm.add(
-				plusWebtoken={cls="plus";text='游戏账号：' ++ ..account.one.displayName ++ ' 已被锁定！\n\r锁定原因查询中...';left=20;top=170;right=446;bottom=270;align="left";bgcolor=6324655;color=15793151;font=LOGFONT(h=-16);iconStyle={align="left";font=LOGFONT(h=-30;name='FontAwesome');padding={left=30}};iconText='\uF023';textPadding={left=90};z=33};
-			)
-			setSkin(2);
-		}
-		case 11 {//港号获取到游戏账号列表
+		case 15 {//获取到游戏账号列表
 			coreForm.accountOne.text = ..account.one.displayName ++ '\n' ++ "来枫谷已有：" ++ ..account.one.day ++ "天";
 			coreForm.accountOne.hide = 0;
 			coreForm.accountOne.checked = true;
 			setSkin(1);
 		}
-		case 12 {//港号没有进行进阶认证
+		
+		case 16 {//账号已完成进阶认证，但是还没创建游戏账号
+			coreForm.addAccount.hide = 0;
+			setSkin(1);
+		}
+		case 17 {//没有进行进阶认证
 			coreForm.addAccount.text     = "请先完成进阶认证";
 			coreForm.addAccount.iconText = '\uF044';
 			coreForm.addAccount.hide     = 0;
 			setSkin(2);
 		}
-		case 17 {//港号账号已完成进阶认证，但是还没创建游戏账号
-			coreForm.addAccount.hide = 0;
-			setSkin(1);
+		case 181 {//锁号了
+			coreForm.add(
+				plusWebtoken={cls="plus";text='游戏账号：' ++ ..account.one.displayName ++ ' 已被锁定！\n\r锁定原因查询中...';left=20;top=170;right=446;bottom=270;align="left";bgcolor=6324655;color=15793151;font=LOGFONT(h=-16);iconStyle={align="left";font=LOGFONT(h=-30;name='FontAwesome');padding={left=30}};iconText='\uF023';textPadding={left=90};z=33};
+			)
+			setSkin(2);
 		}
-
 	}
 })();
 
 coreForm.addAccount.oncommand = function( id,event ){
 	select(..globalCord) {
-		case 12 {//港号没有进行进阶认证
-			//perform.verify("HK");
-			perform.message(12);
-		}
-		case 14 {//台号没有进行进阶认证
-			//perform.verify("TW");
-			perform.message(14);
-		}
-		case 17 {//港号账号已完成进阶认证，但是还没创建游戏账号
+		case 16 {//账号已完成进阶认证，但是还没创建游戏账号
 			perform.msgInput("请输入新增账号的别名：");
 		}
-
+		case 17 {//没有进行进阶认证
+			//TODO：需要写重此逻辑
+			//perform.verify("HK");//新写法，需要自动区分港号和台号
+			//perform.message(12);
+		}
 	}
 }
 
 //订阅 msgForm 返回的消息
+/*
+//TODO：此处需要重写逻辑
 subscribe("messageFromMsgform",function(str,code){
     select(..globalCord) {
-		case 17 {//港号账号已完成进阶认证，但是还没创建游戏账号
+		case 16 {//账号已完成进阶认证，但是还没创建游戏账号
 			if( perform.addAccount("HK",str) ){//新增游戏账号成功
 				coreForm.accountOne.text = ..account.one.displayName ++ '\n' ++ "来枫谷已有：" ++ ..account.one.createTime ++ "天";
 				coreForm.accountOne.hide = 0;
@@ -163,6 +161,7 @@ subscribe("messageFromMsgform",function(str,code){
 		}
     }
 });
+*/
 
 coreForm.copyAccount.oncommand = function( id,event ){
 	coreForm.copyAccount.disabledText = "登录账号已复制";
@@ -186,24 +185,20 @@ coreForm.startGame.oncommand = function( id,event ){
 
 }*/
 
-
 coreForm.buttonMinimize.skin( tikas.skin.buttonMiniSkin );
 coreForm.buttonClose.skin( tikas.skin.buttonCloseSkin );
-coreForm.buttonClose.oncommand = function(id,event){
-	..userClosed = true;//默认为真
-	coreForm.close();
-}
 coreForm.buttonMinimize.oncommand = function(id,event){
 	::User32.PostMessage(mainForm.hwnd,0x112/*_WM_SYSCOMMAND*/,0xF020/*_SC_MINIMIZE*/, 0);
 }
 coreForm.richedit.text = statusInformation;
 
-
-
-
+//TODO：此两处的关闭逻辑，需要优化，等后续增加最小化时处理
+coreForm.buttonClose.oncommand = function(id,event){
+	..userClosed = true;//默认为真
+	coreForm.close();
+}
 coreForm.onClose = function(hwnd,message,wParam,lParam){
     if( ..userClosed ){
-        ..http.close();
 		mainForm.close();
 	}
 }
