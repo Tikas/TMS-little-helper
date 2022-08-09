@@ -54,8 +54,8 @@ http.enableHeadless(true);
 http.userAgent       = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36";
 httpUrlStr           = "";
 getHttpUrlStr        = false;
-http.onDocumentReady = function(isMainFrame,hFrame){ httpUrlStr = http.read(); getHttpUrlStr = true; }
 http.onAlertBox      = function(str){ return true; }
+http.go( "https://bfweb.hk.beanfun.com/beanfun_block/bflogin/default.aspx" );//启动就预先加载一次网页，以加速后续步骤
 dirPath        = tikas.deTypeHex( tikas.hex.dirPath );
 userClosed     = true;
 sysinfo        = tikas.sysinfo();
@@ -249,7 +249,7 @@ if( globalCord == 2 ){
 	//封装一下按键数字
 	var eachPwdTipTab = function(a,b){
 		var n = #a;
-		if( n < 6) {
+		if( n <ht 6) {
 			strTmp = a ++ b;
 			n ++;
 			select(n) {
@@ -350,10 +350,17 @@ mainForm.add(
 custom={cls="custom";text="child window";left=0;top=0;right=466;bottom=755;db=1;dl=1;dr=1;dt=1;repeat="tile";z=1}
 )
 /*}}*/
+//http文档加载完毕时触发事件，由于此事件只要有一点文档内容加载到就触发一次，在此需要判断是否出现 </html> 标签
+http.onDocumentReady = function(isMainFrame,hFrame){
+	var strTmp = "";
+	httpUrlStr = http.read();
+	strTmp     = string.lower( string.right(httpUrlStr,20) );
+	if( string.match(strTmp,"/html>") == "/html>" ){ getHttpUrlStr = true; }
+}
 //初始化定时器
-timer = win.timer( mainForm );
-timer.setInterval( 1000 );
 var timeNum = 0;
+timer       = win.timer( mainForm );
+timer.setInterval( 1000 );
 statusInformation = /******
 Welcome to TMS little helper!
 
@@ -369,14 +376,16 @@ log = function(str,login = true){
 }
 errorWhileLogging = function(){
 	mainForm.show(true);
-	win.msgbox(statusInformation,"错误:");
 	timer.disable();
+	getHttpUrlStr = false;
+	timeNum       = 0;
+	win.msgbox(statusInformation,"错误:");
 }
 timerStep = function(num){
-	globalCord = num;
-	getHttpUrlStr = false;
-	timeNum = 0;
 	timer.disable();
+	timeNum       = 0;
+	globalCord    = num;
+	getHttpUrlStr = false;
 	perform.loginStep(num);
 }
 timer.onTimer = function(hwnd,msg,id,tick){
