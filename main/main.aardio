@@ -50,7 +50,6 @@ aesObject = DES.ECB();  //调用方法：aesObject.DecryStrHex(str,key) 返回�
 //初始化 blink
 http = web.blink.view();
 http.cookieClear();
-http.enableHeadless(true);
 http.userAgent       = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36";
 httpUrlStr           = "";
 getHttpUrlStr        = false;
@@ -249,7 +248,7 @@ if( globalCord == 2 ){
 	//封装一下按键数字
 	var eachPwdTipTab = function(a,b){
 		var n = #a;
-		if( n <ht 6) {
+		if( n < 6 ) {
 			strTmp = a ++ b;
 			n ++;
 			select(n) {
@@ -359,7 +358,7 @@ http.onDocumentReady = function(isMainFrame,hFrame){
 }
 //初始化定时器
 var timeNum = 0;
-timer       = win.timer( mainForm );
+timer       = win.timer();
 timer.setInterval( 1000 );
 statusInformation = /******
 Welcome to TMS little helper!
