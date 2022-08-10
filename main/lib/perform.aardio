@@ -323,79 +323,36 @@ loginStepOneGetOtp = function(){//获取OTP
 
 loginStepTwoLoginPage = function(){//在登录页面执行登录操作
 	import tikas;
+	..win.delay(2000);
 	var urlstr = ..httpUrlStr;
 	var tAccountID;
 	var tPassword;
-	if( ..account.ascription == "HK" ){
-		if( ..string.match(urlstr,tikas.match.googleRc) == "recaptcha" ){
-			..log("您的 IP 出现 Google Recaptcha 人机验证",false);
-			..errorWhileLogging();
-			return false;
-		}
-		if( ..string.match(urlstr,"__EVENTVALIDATION") ){
-			/*
-			payload.__EVENTTARGET             = "";
-			payload.__EVENTARGUMENT           = "";
-			payload.__VIEWSTATE               = tostring( ..string.match(urlstr,tikas.match.viewState) );
-			payload.__VIEWSTATEGENERATOR      = tostring( ..string.match(urlstr,tikas.match.viewStategenerator) );
-			payload.__VIEWSTATEENCRYPTED      = "";
-			payload.__EVENTVALIDATION         = tostring( ..string.match(urlstr,tikas.match.eventValidation) );
-			payload.t_AccountID               = id;
-			payload.t_Password                = key;
-			payload.token1                    = tostring( ..string.match(urlstr,tikas.match.token) );
-			payload.btn_login                 = "登入";
-			payload.checkbox_remember_account = "on";
-			urlstr = ..http.post("https://login.hk.beanfun.com/login/id-pass_form_newBF.aspx?otp1=" ++ ..account.otp,payload);
-			*/
-			tAccountID       = ..http.getEle( "t_AccountID" );
-			tAccountID.value = tikas.xxteaDecrypt( ..account.bfId,..sysinfo ++ ..randomCode );
-			tPassword        = ..http.getEle( "t_Password" );
-			tPassword.value  = tikas.xxteaDecrypt( ..account.bfPwd,..sysinfo ++ ..randomCode );
-			..getHttpUrlStr  = false;
-			..http.click( "btn_login" );
-			return true;
-		}
-		..log("未能正常打开登录页面，请检查网络",false);
+	if( ..string.match(urlstr,tikas.match.googleRc) == "recaptcha" ){
+		..log("您的 IP 出现 Google Recaptcha 人机验证",false);
 		..errorWhileLogging();
 		return false;
-	}else{//台号
-		if( ..string.match(urlstr,tikas.match.googleRc) == "recaptcha" ){
-			..log("您的 IP 出现 Google Recaptcha 人机验证",false);
-			..errorWhileLogging();
-			return false;
-			//有 RC 会 post 此值：g-recaptcha-response
-		}
+	}
+	if( ..account.ascription == "TW" ){
 		if( ..string.match(urlstr,tikas.match.advanceCheck) == "AdvanceCheck" ){
 			//TODO：出现此关键字，需要验证信息之后，再登录一次！
 			//此验证：未进阶前，会验证邮箱，进阶后，会验证电话
 			//出现此值，需要强制执行验证后，再次返回登录操作，也就是说，验证前和验证后都需要登录一次（总登录两次），后续再来写此逻辑
+			..errorWhileLogging();
+			return false;
 		}
-		if( ..string.match(urlstr,"__EVENTVALIDATION") ){
-			/*
-			payload.__EVENTTARGET             = "";
-			payload.__EVENTARGUMENT           = "";
-			payload.__VIEWSTATE               = tostring( ..string.match(urlstr,tikas.match.viewState) );
-			payload.__VIEWSTATEGENERATOR      = tostring( ..string.match(urlstr,tikas.match.viewStategenerator) );
-			payload.__EVENTVALIDATION         = tostring( ..string.match(urlstr,tikas.match.eventValidation) );
-			payload.t_AccountID               = id;
-			payload.t_Password                = key;
-			payload.token1                    = "";
-			payload.btn_login                 = "登入";
-			payload.checkbox_remember_account = "on";
-			urlstr                            = ..http.post("https://tw.newlogin.beanfun.com/login/id-pass_form.aspx?skey=" ++ ..account.otp,payload);
-			*/
-			tAccountID       = ..http.getEle( "t_AccountID" );
-			tAccountID.value = tikas.xxteaDecrypt( ..account.bfId,..sysinfo ++ ..randomCode );
-			tPassword        = ..http.getEle( "t_Password" );
-			tPassword.value  = tikas.xxteaDecrypt( ..account.bfPwd,..sysinfo ++ ..randomCode );
-			..getHttpUrlStr  = false;
-			..http.click( "btn_login" );
-			return true;
-		}
-		..log("未能正常打开登录页面，请检查网络",false);
-		..errorWhileLogging();
-		return false;
 	}
+	if( ..string.match(urlstr,"__EVENTVALIDATION") ){
+		tAccountID       = ..http.getEle( "t_AccountID" );
+		tAccountID.value = tikas.xxteaDecrypt( ..account.bfId,..sysinfo ++ ..randomCode );
+		tPassword        = ..http.getEle( "t_Password" );
+		tPassword.value  = tikas.xxteaDecrypt( ..account.bfPwd,..sysinfo ++ ..randomCode );
+		..getHttpUrlStr  = false;
+		..http.click( "btn_login" );
+		return true;
+	}
+	..log("未能正常打开登录页面，请检查网络",false);
+	..errorWhileLogging();
+	return false;
 }
 
 loginStepTwoLogging = function(){//检查登录是否成功，这一步归类为第二步登录页面里，合为一个整体
