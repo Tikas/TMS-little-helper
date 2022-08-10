@@ -301,31 +301,22 @@ loginStep = function(num){
 
 loginStepOneGetOtp = function(){//获取OTP
 	import tikas;
+	..win.delay(2000);
 	var urlstr = ..httpUrlStr;
 	if( ..account.ascription == "HK" ){
 		..account.otp = tostring( ..string.match(urlstr,tikas.match.hkOtp) );
-		if( ..string.match(urlstr,"IP已自動被系統鎖定") ){
-			..log("您的 IP 已被暂时封禁，请稍候再试",false);
-			..errorWhileLogging();
-			return false;
-		}
-		if( ..account.otp == "null" ){
-			..log("没能获取网页 OTP ，请检测网络",false);
-			..errorWhileLogging();
-			return false;
-		}
 	}else{//台号
 		..account.otp = tostring( ..string.match(urlstr,tikas.match.twSkey) );
-		if( ..string.match(urlstr,"IP已自動被系統鎖定") ){
-			..log("您的 IP 已被暂时封禁，请稍候再试",false);
-			..errorWhileLogging();
-			return false;
-		}
-		if( ..account.otp == "null" ){
-			..log("没能获取网页 OTP ，请检测网络",false);
-			..errorWhileLogging();
-			return false;
-		}
+	}
+	if( ..string.match(urlstr,"IP已自動被系統鎖定") ){
+		..log("您的 IP 已被暂时封禁，请稍候再试",false);
+		..errorWhileLogging();
+		return false;
+	}
+	if( ..account.otp == "null" ){
+		..log("没能获取网页 OTP ，请检测网络",false);
+		..errorWhileLogging();
+		return false;
 	}
 	return true;
 }
