@@ -196,15 +196,14 @@ var check = function(){
 }
 //登录被点击
 login = function(){ if( check() ){
-	adduserForm.start.disabled = true;
-	var saveBoolean             = adduserForm.checkboxSave.checked;
+	mainForm.show(false);
+	var saveBoolean = adduserForm.checkboxSave.checked;
 	if( saveBoolean ){ saveConifgId(); }
 	select(..globalCord) {
 		case 10 {//还没有账号记录，此时需要执行登录操作
 			..account.bfId  = tikas.xxteaEncrypt( adduserForm.editID.text,..sysinfo ++ ..randomCode );
 			..account.bfPwd = tikas.xxteaEncrypt( adduserForm.editPwd.text,..sysinfo ++ ..randomCode );
 			perform.detection();
-			mainForm.show(false);
 			if( adduserForm.radiobuttonHK.checked ){//港号
 				..account.ascription = "HK";
 				..getHttpUrlStr      = false;
@@ -226,7 +225,6 @@ login = function(){ if( check() ){
 		case 30 {
 		}
 	}
-	adduserForm.start.disabled = false;
 }}//为减少缩进，login 事件是有两个大括号
 //判断用户是从什么界面进来
 select(..globalCord) {
@@ -243,7 +241,7 @@ select(..globalCord) {
 
 
 
-
+//TODO:当出错时，再次点击登录不会触发此事件，先进行 BUG 标识，后续有时间来处理此 BUG
 adduserForm.start.oncommand = function( id,event ){ login(); }
 adduserForm.onClose = function(hwnd,message,wParam,lParam){ if( ..userClosed ){ mainForm.close(); } }
 adduserForm.buttonClose.oncommand = function( id,event ){ ..userClosed = true;adduserForm.close(); }

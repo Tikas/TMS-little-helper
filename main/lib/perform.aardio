@@ -301,7 +301,7 @@ loginStep = function(num){
 
 loginStepOneGetOtp = function(){//获取OTP
 	import tikas;
-	..win.delay(2000);
+	..win.delay(1000);
 	var urlstr = ..httpUrlStr;
 	if( ..account.ascription == "HK" ){
 		..account.otp = tostring( ..string.match(urlstr,tikas.match.hkOtp) );
@@ -323,7 +323,7 @@ loginStepOneGetOtp = function(){//获取OTP
 
 loginStepTwoLoginPage = function(){//在登录页面执行登录操作
 	import tikas;
-	..win.delay(2000);
+	..win.delay(1000);
 	var urlstr = ..httpUrlStr;
 	var tAccountID;
 	var tPassword;
@@ -357,6 +357,7 @@ loginStepTwoLoginPage = function(){//在登录页面执行登录操作
 
 loginStepTwoLogging = function(){//检查登录是否成功，这一步归类为第二步登录页面里，合为一个整体
 	import tikas;
+	..win.delay(1000);
 	var urlstr = ..httpUrlStr;
 	if( ..string.match(urlstr,tikas.match.pnlMsg) == "pnlMsg" ){
 		..log("登录失败：账号或密码错误",false);
@@ -369,6 +370,7 @@ loginStepTwoLogging = function(){//检查登录是否成功，这一步归类为
 
 loginStepThreeGetWebToken = function(){
 	import tikas;
+	..win.delay(1000);
 	var urlstr = ..httpUrlStr;
 	var webToken = "";
 	webToken = ..string.match( urlstr,tikas.match.webToken );
@@ -383,6 +385,7 @@ loginStepThreeGetWebToken = function(){
 //只能返回数值，5 为台号两个号都锁了，4 为锁号第二个，3 为锁号第一个，2 为没有进阶，1 为没有账号，0 为有账号
 loginStepFourGetAccountList = function(){
 	import tikas;
+	..win.delay(1000);
 	var urlstr = ..httpUrlStr;
 	if( ..account.ascription == "HK" ){
 		if( ..string.match(urlstr,tikas.match.verify) == "Verify" ){
