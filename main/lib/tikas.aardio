@@ -90,6 +90,9 @@ namespace tikas{
 			color      = { active=0xFFFFFFFF;default=0xFFCCCCCC;hover=0xFF000000 };
 			iconColor  = { hover=0xFF000000 }
 		}
+		startSkin = {
+			foreground = { hover = "/res/start/start1.png";focus = "/res/start/start.png";active = "/res/start/start2.png" }
+		}
 	}
 
 	namespace match{

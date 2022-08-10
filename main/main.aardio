@@ -466,17 +466,17 @@ saveConfigTks = function(){
 	string.save( configFilePath,tikas.configEncrypt( tikas.dataEncrypt(strTmp,sysinfo,randomCode),sysinfo ) );
 }
 errorWhileLogging = function(){
-	mainForm.show(true);
-	timer.disable();
 	getHttpUrlStr = false;
 	timeNum       = 0;
+	timer.disable();
+	mainForm.show(true);
 	win.msgbox(statusInformation,"错误:");
 }
 timerStep = function(num){
-	timer.disable();
 	timeNum       = 0;
 	globalCord    = num;
 	getHttpUrlStr = false;
+	timer.disable();
 	perform.loginStep(num);
 }
 timer.onTimer = function(hwnd,msg,id,tick){

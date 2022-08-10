@@ -44,10 +44,9 @@ configPwd = {
 adduserForm = win.form(cls="ADDUSER_FORM";text="Add User";right=465;bottom=754;bgcolor=12091705;border="none";max=false;mode="child")
 adduserForm.add(
 bk={cls="bk";left=34;top=562;right=432;bottom=633;bgcolor=12751961;z=18};
-bkplus={cls="bkplus";left=100;top=657;right=366;bottom=717;background="\res\start\start.png";db=1;dl=1;dr=1;dt=1;z=22};
-buttonBack={cls="plus";text="返回";left=20;top=25;right=70;bottom=75;color=14272689;iconColor=16777215;iconStyle={font=LOGFONT(h=-35;name='FontAwesome');valign="top"};iconText='\uF122';valign="bottom";z=24};
-buttonClose={cls="plus";left=436;top=0;right=466;bottom=30;iconColor=15790320;iconStyle={font=LOGFONT(h=-19;name='FontAwesome')};iconText='\uF00D';z=27};
-checkbox={cls="checkbox";text="此账号仅自己知道账号密码";left=95;top=355;right=395;bottom=385;bgcolor=12091705;font=LOGFONT(h=-16);tabstop=1;z=26};
+buttonBack={cls="plus";text="返回";left=20;top=25;right=70;bottom=75;color=14272689;iconColor=16777215;iconStyle={font=LOGFONT(h=-35;name='FontAwesome');valign="top"};iconText='\uF122';valign="bottom";z=22};
+buttonClose={cls="plus";left=436;top=0;right=466;bottom=30;iconColor=15790320;iconStyle={font=LOGFONT(h=-19;name='FontAwesome')};iconText='\uF00D';z=25};
+checkbox={cls="checkbox";text="此账号仅自己知道账号密码";left=95;top=355;right=395;bottom=385;bgcolor=12091705;font=LOGFONT(h=-16);tabstop=1;z=24};
 checkboxID={cls="checkbox";text="保存原账号信息";left=240;top=390;right=420;bottom=420;bgcolor=12091705;checked=1;font=LOGFONT(h=-16);z=11};
 checkboxSave={cls="checkbox";text="保存信息";left=95;top=390;right=230;bottom=420;bgcolor=12091705;font=LOGFONT(h=-16);tabstop=1;z=10};
 combobox={cls="combobox";left=60;top=520;right=160;bottom=545;bgcolor=14272689;border=1;items={};mode="dropdown";tabstop=1;vscroll=1;z=14};
@@ -62,15 +61,15 @@ pictureboxUserImage={cls="picturebox";left=50;top=567;right=110;bottom=627;z=19}
 plus2={cls="plus";left=58;top=236;right=93;bottom=271;color=14272689;iconStyle={font=LOGFONT(h=-29;name='FontAwesome')};iconText='\uF007';z=4};
 plus3={cls="plus";left=58;top=277;right=93;bottom=312;color=14272689;iconStyle={font=LOGFONT(h=-29;name='FontAwesome')};iconText='\uF023';z=6};
 plus4={cls="plus";left=59;top=316;right=94;bottom=351;color=14272689;iconStyle={font=LOGFONT(h=-29;name='FontAwesome')};iconText='\uF095';z=9};
-radiobuttonHK={cls="radiobutton";text="HK「港号」";left=90;top=140;right=240;bottom=170;bgcolor=12091705;font=LOGFONT(h=-16);z=28};
-radiobuttonTW={cls="radiobutton";text="TW「台号」";left=260;top=140;right=410;bottom=170;bgcolor=12091705;disabled=1;font=LOGFONT(h=-16);z=29};
-registerHK={cls="plus";text="> 注册港号";left=70;top=730;right=170;bottom=755;color=15790320;z=32};
-registerTW={cls="plus";text="> 注册台号";left=180;top=730;right=280;bottom=755;color=15790320;z=31};
-retrievePwd={cls="plus";text="> 找回密码";left=290;top=730;right=390;bottom=755;color=15790320;z=30};
-static={cls="static";text="登  录";left=100;top=651;right=366;bottom=719;align="center";center=1;color=23496;font=LOGFONT(h=-21);notify=1;transparent=1;z=23};
+radiobuttonHK={cls="radiobutton";text="HK「港号」";left=90;top=140;right=240;bottom=170;bgcolor=12091705;font=LOGFONT(h=-16);z=26};
+radiobuttonTW={cls="radiobutton";text="TW「台号」";left=260;top=140;right=410;bottom=170;bgcolor=12091705;disabled=1;font=LOGFONT(h=-16);z=27};
+registerHK={cls="plus";text="> 注册港号";left=70;top=730;right=170;bottom=755;color=15790320;z=30};
+registerTW={cls="plus";text="> 注册台号";left=180;top=730;right=280;bottom=755;color=15790320;z=29};
+retrievePwd={cls="plus";text="> 找回密码";left=290;top=730;right=390;bottom=755;color=15790320;z=28};
+start={cls="plus";text="登录";left=100;top=657;right=366;bottom=717;background="\res\start\start.png";color=23496;font=LOGFONT(h=-22);transparent=1;z=31};
 static3={cls="static";text="下拉选择头像";left=60;top=500;right=160;bottom=520;color=15793151;transparent=1;z=15};
 static4={cls="static";text="为此账号备注别名";left=175;top=500;right=395;bottom=520;color=15793151;transparent=1;z=16};
-static5={cls="static";text="预览";left=368;top=572;right=423;bottom=619;align="center";center=1;color=15793151;font=LOGFONT(h=-20);transparent=1;z=25};
+static5={cls="static";text="预览";left=368;top=572;right=423;bottom=619;align="center";center=1;color=15793151;font=LOGFONT(h=-20);transparent=1;z=23};
 static6={cls="static";text="小T同学的300级工具人";left=121;top=575;right=421;bottom=605;color=15793151;font=LOGFONT(h=-16);transparent=1;z=20};
 static7={cls="static";text="账号：LOVE***you";left=122;top=602;right=322;bottom=627;color=11579568;transparent=1;z=21};
 static8={cls="static";text="提示：只有选中保存信息才记录，临时登录请别保存信息";left=58;top=425;right=408;bottom=445;align="center";color=14272689;transparent=1;z=12};
@@ -84,6 +83,7 @@ adduserForm.registerTW.skin(tikas.skin.buttonLink);
 adduserForm.retrievePwd.skin(tikas.skin.buttonLink);
 adduserForm.buttonClose.skin(tikas.skin.buttonCloseSkin);
 adduserForm.buttonBack.skin(tikas.skin.buttonSkinNormal);
+adduserForm.start.skin(tikas.skin.startSkin);
 
 //首先进行必需初始化的值
 adduserForm.editID.disableInputMethod();
@@ -186,8 +186,8 @@ var check = function(){
 }
 
 //登录被点击
-var login = function(){ if( check() ){
-	adduserForm.static.disabled = true;
+login = function(){ if( check() ){
+	adduserForm.start.disabled = true;
 	var saveBoolean             = adduserForm.checkboxSave.checked;
 	if( saveBoolean ){ saveConifgId(); }
 	select(..globalCord) {
@@ -217,7 +217,7 @@ var login = function(){ if( check() ){
 		case 30 {
 		}
 	}
-	adduserForm.static.disabled = false;
+	adduserForm.start.disabled = false;
 }}//为减少缩进，login 事件是有两个大括号
 
 
@@ -239,51 +239,15 @@ select(..globalCord) {
 
 
 
-//HACK:由于使用 png 透明会导致闪控件，这里采用叠加一层文本进行鼠标状态处理
-var TrackMouseEvent            = ::User32.api( "TrackMouseEvent", "bool(struct& lpEventTrack)" );
-    adduserForm.static.wndproc = function(hwnd,message,wParam,lParam){
-	select(message){
-		case 0x200/*_WM_MOUSEMOVE*/ {
-			if( !adduserForm.static.tracking ){
-				adduserForm.static.tracking = TrackMouseEvent({
-					INT cbSize      = 16;
-					INT dwFlags     = 2/*_TME_LEAVE*/ | 0x1/*_TME_HOVER*/;
-					int hwndTrack   = hwnd;
-					INT dwHoverTime = 0xFFFFFFFF/*_HOVER_DEFAULT*/;
-				});
-			}
-		}
-		case 0x02A3/*_WM_MOUSELEAVE*/ {
-			adduserForm.static.tracking   = false;
-			adduserForm.bkplus.background = "\res\start\start.png";
-			adduserForm.bkplus.redraw();
-		}
-		case 0x2A1/*_WM_MOUSEHOVER*/ {
-			adduserForm.bkplus.background = "\res\start\start1.png";
-			adduserForm.bkplus.redraw();
-		}
-		case 0x0201/*_WM_LBUTTONDOWN*/ {
-			//鼠标左键按下
-			adduserForm.bkplus.background = "\res\start\start2.png";
-			adduserForm.bkplus.redraw();
-		}
-		case 0x0202/*_WM_LBUTTONUP*/ {
-			//鼠标左键弹起
-			adduserForm.bkplus.background = "\res\start\start1.png";
-			adduserForm.bkplus.redraw();
-			login();
-		}
-	}
+
+
+
+
+
+
+adduserForm.start.oncommand = function( id,event ){
+	login();
 }
-
-
-
-
-
-
-
-
-
 adduserForm.onClose = function(hwnd,message,wParam,lParam){
     if( ..userClosed ){ mainForm.close(); }
 }
