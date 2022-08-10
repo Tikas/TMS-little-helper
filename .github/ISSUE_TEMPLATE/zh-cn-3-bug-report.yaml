@@ -37,12 +37,21 @@ body:
 
         ```md
         在这里面粘贴您的 `环境信息相关信息`。
-        具体列出 BUG 出现时的操作系统相关环境信息。
-        如：
-          + 系统版本
-          + 运行库版本
-          + 相关安全软件
-          + 等等
+        ```
+
+        </p></details>
+    validations:
+      required: true
+  - type: textarea
+    id: runtime
+    attributes:
+      label: 运行库版本信息
+      description: 请提供您的运行库信息，建议安装最新版本的 [VC++ 运行库](https://docs.microsoft.com/zh-CN/cpp/windows/latest-supported-vc-redist?view=msvc-170) ，和安装 [.Net 4.8 运行库](https://dotnet.microsoft.com/en-us/download/dotnet-framework/thank-you/net48-web-installer)，注意：点击 `.Net 4.8 运行库` 会直接下载 .Net 4.8 运行库 在线安装程序！
+      value: |
+        <details><summary>运行库版本信息相关</summary><p>
+
+        ```md
+        在这里面粘贴您的 `运行库版本信息相关`。
         ```
 
         </p></details>
