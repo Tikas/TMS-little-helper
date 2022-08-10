@@ -55,21 +55,20 @@ aesObject = DES.ECB();  //调用方法：aesObject.DecryStrHex(str,key) 返回�
 //初始化 blink
 http = web.blink.view();
 http.cookieClear();
-http.userAgent       = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36";
-httpUrlStr           = "";
-getHttpUrlStr        = false;
-http.onAlertBox      = function(str){ return true; }
-http.go( "https://bfweb.hk.beanfun.com/beanfun_block/bflogin/default.aspx" );//启动就预先加载一次网页，以加速后续步骤
-dirPath        = tikas.deTypeHex( tikas.hex.dirPath );
-userClosed     = true;
-sysinfo        = tikas.sysinfo();
-reg            = win.reg( tikas.deTypeHex(tikas.hex.regPath) );
-randomCode     = tostring( reg.queryValue( tikas.deTypeHex(tikas.hex.randomCodePath) ) );
-configFilePath = io.appData( dirPath ++ tikas.deTypeHex(tikas.hex.configFile) );
-configTks      = {};
-configId       = {};
-account        = {};
-account.save   = false;
+http.userAgent  = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36";
+httpUrlStr      = "";
+getHttpUrlStr   = false;
+http.onAlertBox = function(str){ return true; }
+dirPath         = tikas.deTypeHex( tikas.hex.dirPath );
+userClosed      = true;
+sysinfo         = tikas.sysinfo();
+reg             = win.reg( tikas.deTypeHex(tikas.hex.regPath) );
+randomCode      = tostring( reg.queryValue( tikas.deTypeHex(tikas.hex.randomCodePath) ) );
+configFilePath  = io.appData( dirPath ++ tikas.deTypeHex(tikas.hex.configFile) );
+configTks       = {};
+configId        = {};
+account         = {};
+account.save    = false;
 /*
 一开始是想每个关键的数据都弄一个变量来存放的，然而，我最讨厌就是变量太多，所有账号相关的，全丢进这个数组吧！
 account.pwd = 加密存放的六位数主密码，没错，就是开始界面的那六个数字密码

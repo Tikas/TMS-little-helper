@@ -20,14 +20,14 @@ roundTikasProtect={cls="plus";left=10;top=10;right=140;bottom=140;ah=1;aw=1;colo
 	win.ui.fade(detectionForm);
 	var rWidth, rHeight = win.getScreen();
 	win.setPos( detectionForm.hwnd,rWidth - detectionForm.width,rHeight - detectionForm.height - 58 );
-	detectionForm.bgTikasProtect.setTrackbarRange(1,500);
+	detectionForm.bgTikasProtect.setTrackbarRange(1,300);
 	function initialization(){
-		detectionForm.bgTikasProtect.progressPos = 100;
+		detectionForm.bgTikasProtect.progressPos = 10;
 		var tmId = detectionForm.addtimer( 1,
 			function(hwnd,msg,id,tick){
 				var finished = detectionForm.bgTikasProtect.stepProgress(1);
 				if( !finished ){
-					sleep(5000);
+					sleep(3000);
 					detectionForm.close();
 					return 0;
 				}

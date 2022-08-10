@@ -19,6 +19,7 @@ namespace tikas{
 		tip8           = "e8afb7e8be93e585a5e682a8e79a84e8b4a6e58fb7";                                                  //=请输入您的账号
 		tip9           = "e8afb7e8be93e585a5e5af86e7a081";                                                              //=请输入密码
 		tip10          = "e8bf9be998b6e8aea4e8af81e79a84e6898be69cbae58fb7e7a081e4b88de883bde4b8bae7a9ba";              //=进阶认证的手机号码不能为空
+		tip11          = "e995bfe5baa6e4b88de8b6b3203820e4bd8de695b0";                                                  //=长度不足 8 位数
 	}
 
 	namespace skin{

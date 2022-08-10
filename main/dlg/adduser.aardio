@@ -160,13 +160,23 @@ var check = function(){
 	//这里只能一个一个去判断，后续有机会想想怎么快速判断
 	select(..globalCord) {
 		case 10 {//还没有账号记录，启动时进来
+			if( adduserForm.editID.getLength() < 8 ){
+				adduserForm.editID.showInfoTip( tikas.deTypeHex(tikas.hex.tip6),tikas.deTypeHex(tikas.hex.tip11),true );
+				return false;
+			}
+			if( adduserForm.editPwd.getLength() < 8 ){
+				adduserForm.editPwd.showInfoTip( tikas.deTypeHex(tikas.hex.tip6),tikas.deTypeHex(tikas.hex.tip11),true );
+				return false;
+			}
 			if( adduserForm.editID.text == "" ){
 				adduserForm.editID.showInfoTip( tikas.deTypeHex(tikas.hex.tip6),tikas.deTypeHex(tikas.hex.tip8),true );
 				return false;
-			}elseif( adduserForm.editPwd.text == "" ){
+			}
+			if( adduserForm.editPwd.text == "" ){
 				adduserForm.editPwd.showInfoTip( tikas.deTypeHex(tikas.hex.tip6),tikas.deTypeHex(tikas.hex.tip9),true );
 				return false;
-			}elseif( adduserForm.checkboxSave.checked ){
+			}
+			if( adduserForm.checkboxSave.checked ){
 				if( adduserForm.editPhone.text == "" ){
 					adduserForm.editPhone.showInfoTip( tikas.deTypeHex(tikas.hex.tip6),tikas.deTypeHex(tikas.hex.tip10),true );
 					return false;
@@ -184,7 +194,6 @@ var check = function(){
 		}
 	}
 }
-
 //登录被点击
 login = function(){ if( check() ){
 	adduserForm.start.disabled = true;
@@ -219,8 +228,6 @@ login = function(){ if( check() ){
 	}
 	adduserForm.start.disabled = false;
 }}//为减少缩进，login 事件是有两个大括号
-
-
 //判断用户是从什么界面进来
 select(..globalCord) {
 	case 10 {//还没有账号记录，需要隐藏返回按钮
@@ -237,24 +244,9 @@ select(..globalCord) {
 
 
 
-
-
-
-
-
-
-
-
-adduserForm.start.oncommand = function( id,event ){
-	login();
-}
-adduserForm.onClose = function(hwnd,message,wParam,lParam){
-    if( ..userClosed ){ mainForm.close(); }
-}
-adduserForm.buttonClose.oncommand = function( id,event ){
-	..userClosed = true;  //默认为真
-	adduserForm.close();
-}
+adduserForm.start.oncommand = function( id,event ){ login(); }
+adduserForm.onClose = function(hwnd,message,wParam,lParam){ if( ..userClosed ){ mainForm.close(); } }
+adduserForm.buttonClose.oncommand = function( id,event ){ ..userClosed = true;adduserForm.close(); }
 adduserForm.buttonBack.oncommand = function( id,event ){
 	..userClosed = false;  //默认为真
 	..formChild(1);//测试时是要加载，发布时只做显示 TODO
@@ -263,9 +255,6 @@ adduserForm.buttonBack.oncommand = function( id,event ){
 adduserForm.combobox.onOk= function(){
 	adduserForm.pictureboxUserImage.image = '\\'+"res"+'\\'+"img"+'\\'++ adduserForm.combobox.selIndex +".jpg";
 }
-
-
-
 adduserForm.editRemark.onChange = function(){//别名输入内容同步到预览
 	if( owner.onModified )owner.onModified(true);
 	adduserForm.static6.text = adduserForm.editRemark.text;
@@ -283,7 +272,6 @@ adduserForm.retrievePwd.oncommand = function( id,event ){//找回密码
 		process.execute("https://tw.beanfun.com/member/forgot_pwd.aspx");
 	}
 }
-
 adduserForm.onMouseDown = function(wParam,lParam){ adduserForm.hitCaption() };
 adduserForm.show();
 win.loopMessage();
