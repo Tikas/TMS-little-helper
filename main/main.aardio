@@ -10,6 +10,7 @@ import dotNet;
 import web.blink;
 import web.blink.view;
 import perform;
+import win.ui.atom;
 
 globalCord = 1;
 /*
@@ -353,6 +354,8 @@ mainForm.add(
 custom={cls="custom";text="child window";left=0;top=0;right=466;bottom=755;db=1;dl=1;dr=1;dt=1;repeat="tile";z=1}
 )
 /*}}*/
+var atom,hwnd = mainForm.atom("33516eb3-ce28-4cfe-b412-53c2a4318f42");
+if(!atom){ win.quitMessage();return; }
 //http文档加载完毕时触发事件，由于此事件只要有一点文档内容加载到就触发一次，在此需要判断是否出现 </html> 标签
 http.onDocumentReady = function(isMainFrame,hFrame){
 	var strTmp = "";
