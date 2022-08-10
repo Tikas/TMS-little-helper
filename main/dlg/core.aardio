@@ -1,6 +1,20 @@
 import tikas;
 import perform;
 
+(function(){
+	..timer.disable();
+	//只能返回数值，5 为台号两个号都锁了，4 为锁号第二个，3 为锁号第一个，2 为没有进阶，1 为没有账号，0 为有账号
+	var getAccountListNum = perform.loginStepFourGetAccountList();
+	select(getAccountListNum) {
+		case 0 { globalCord = 60; }//有账号
+		case 1 { globalCord = 61; }//没有账号
+		case 2 { globalCord = 62; }//没有进阶
+		case 3 { globalCord = 63; }//锁号第一个
+		case 4 { globalCord = 64; }//锁号锁号第二个
+		case 5 { globalCord = 65; }//两个号都锁了
+	}
+})();
+
 mainForm.show(true);
 
 import win.ui;

@@ -26,21 +26,25 @@ globalCord 为全局通用控制识别码，为减少变量，很多判断写到
 9 = 台号锁了两个号
 --------
 10 = 当前还没有账号记录信息，强制要求显示增加账号，并隐藏返回按钮
-11 = 首次使用
-12 = 首次使用，访问登录页面
-13 = 首次使用，获取 webToken
-14 = 首次使用，进入账号列表
-15 = 首次使用，有账号信息
-16 = 首次使用，没有账号
-17 = 首次使用，没有进阶
-181 = 首次使用，锁号第一个
-182 = 首次使用，锁号第二个
-183 = 首次使用，两个号都锁了
+11 = 港号：获取 otp1
+12 = 港号：访问登录页面
+13 = 港号：获取 webToken
+14 = 港号：进入账号列表
+15 = 港号：启动游戏
+16 = 港号：获取OTP一次性登录密码
+17 = 港号：心跳
 --------
 20 = 当前有账号记录信息，首次先进入账号列表界面
 
  = 是用户通过点击增加用户进入的增加账号界面
  = 是用户通过点击账号列表里的修改进入的增加账号界面
+--------
+60 = 有账号
+61 = 没有账号
+62 = 没有进阶
+63 = 锁号第一个
+64 = 锁号第二个（港号只能创建一个账号，此值不可用）
+65 = 两个号都锁了（港号只能创建一个账号，此值不可用）
 --------
 */
 //初始化 DES dll 调用
@@ -373,61 +377,13 @@ log = function(str,login = true){
 		statusInformation = statusInformation ++ tostring(tm) ++ " " ++ str ++ '\r\n';
 	}
 }
-errorWhileLogging = function(){
-	mainForm.show(true);
-	timer.disable();
-	getHttpUrlStr = false;
-	timeNum       = 0;
-	win.msgbox(statusInformation,"错误:");
-}
-timerStep = function(num){
-	timer.disable();
-	timeNum       = 0;
-	globalCord    = num;
-	getHttpUrlStr = false;
-	perform.loginStep(num);
-}
-timer.onTimer = function(hwnd,msg,id,tick){
-	timeNum ++;
-	if( timeNum >= 30 ){
-		log("网络超时，请重试",false);
-		timeNum       = 0;
-		getHttpUrlStr = false;
-		timer.disable();
-	}
-	if( getHttpUrlStr ){
-		select(globalCord) {
-			case 11 { if( perform.loginStepOneGetOtp() ){ timerStep(12); } }//获取到 OTP，访问登录页面
-			case 12 {//访问登录页面并执行登录操作
-				perform.loginStepTwoLoginPage();
-				if( perform.loginStepTwoLogging() ){ timerStep(13); }
-			}
-			case 13 { if( perform.loginStepThreeGetWebToken() ){ timerStep(14); } }//访问登录页面并执行登录操作
-			case 14 {//获取账号列表信息，这里返回值不同，代表不同状态
-				//只能返回数值，5 为台号两个号都锁了，4 为锁号第二个，3 为锁号第一个，2 为没有进阶，1 为没有账号，0 为有账号
-				var getAccountListNum = perform.loginStepFourGetAccountList();
-				select(getAccountListNum) {
-					case 0 { timerStep(15); }//有账号
-					case 1 { timerStep(16); }//没有账号
-					case 2 { timerStep(17); }//没有进阶
-					case 3 { timerStep(181); }//锁号第一个
-					case 4 { timerStep(182); }//锁号锁号第二个
-					case 5 { timerStep(183); }//两个号都锁了
-				}
-			}
-			//
-		}
-	}
-}
-
+//每次加载子窗口，都会一直存在，除非关闭子窗口。
+//而关闭子窗口会导致整个程序结束，为减少内存占用，这里拆分为按需加载和按需显示
 var listFormChild;
 var adduserFormChild;
 var qrFormChild;
 var coreFormChild;
 var detectionFormChild;
-
-//每次加载子窗口，都会一直存在，除非关闭子窗口。
-//而关闭子窗口会导致整个程序结束，为减少内存占用，这里拆分为按需加载和按需显示
 //按需加载
 formChild = function(num){
 	select(num) {
@@ -472,7 +428,6 @@ formChildShow = function(num){
 		}
 	}
 }
-
 //先读账号配置文件是否存在
 var checkIdFiles = function(){
 	var tempStr = "";
@@ -509,6 +464,46 @@ if( checkIdFiles() == false ){
 saveConfigTks = function(){
 	var strTmp = web.json.stringify( configTks,true );
 	string.save( configFilePath,tikas.configEncrypt( tikas.dataEncrypt(strTmp,sysinfo,randomCode),sysinfo ) );
+}
+errorWhileLogging = function(){
+	mainForm.show(true);
+	timer.disable();
+	getHttpUrlStr = false;
+	timeNum       = 0;
+	win.msgbox(statusInformation,"错误:");
+}
+timerStep = function(num){
+	timer.disable();
+	timeNum       = 0;
+	globalCord    = num;
+	getHttpUrlStr = false;
+	perform.loginStep(num);
+}
+timer.onTimer = function(hwnd,msg,id,tick){
+	timeNum ++;
+	if( timeNum >= 30 ){
+		log("网络超时，请重试",false);
+		timeNum       = 0;
+		getHttpUrlStr = false;
+		timer.disable();
+	}
+	if( getHttpUrlStr ){
+		select(globalCord) {
+			case 11 { if( perform.loginStepOneGetOtp() ){ timerStep(12); } }//获取到 OTP，访问登录页面
+			case 12 {//访问登录页面并执行登录操作
+				perform.loginStepTwoLoginPage();
+				if( perform.loginStepTwoLogging() ){ timerStep(13); }
+			}
+			case 13 { if( perform.loginStepThreeGetWebToken() ){ timerStep(14); } }//访问登录页面并执行登录操作
+			case 14 {//获取账号列表信息，这里返回值不同，代表不同状态
+				timeNum       = 0;
+				getHttpUrlStr = false;
+				formChild(4);
+				formChildShow(4);
+			}
+			//TODO：台号登录过程，或者其他执行相关
+		}
+	}
 }
 
 mainForm.show();
