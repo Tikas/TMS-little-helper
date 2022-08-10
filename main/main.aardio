@@ -466,9 +466,6 @@ saveConfigTks = function(){
 	string.save( configFilePath,tikas.configEncrypt( tikas.dataEncrypt(strTmp,sysinfo,randomCode),sysinfo ) );
 }
 errorWhileLogging = function(){
-	getHttpUrlStr = false;
-	timeNum       = 0;
-	timer.disable();
 	mainForm.show(true);
 	win.msgbox(statusInformation,"错误:");
 }
@@ -479,6 +476,26 @@ timerStep = function(num){
 	timer.disable();
 	perform.loginStep(num);
 }
+timerRunCode = function(){
+	getHttpUrlStr = false;
+	timeNum       = 0;
+	timer.disable();
+	select(globalCord) {
+		case 11 { if( perform.loginStepOneGetOtp() ){ timerStep(12); } }//获取到 OTP，访问登录页面
+		case 12 {//访问登录页面并执行登录操作
+			perform.loginStepTwoLoginPage();
+			if( perform.loginStepTwoLogging() ){ timerStep(13); }
+		}
+		case 13 { if( perform.loginStepThreeGetWebToken() ){ timerStep(14); } }//访问登录页面并执行登录操作
+		case 14 {//获取账号列表信息，这里返回值不同，代表不同状态
+			timeNum       = 0;
+			getHttpUrlStr = false;
+			formChild(4);
+			formChildShow(4);
+		}
+		//TODO：台号登录过程，或者其他执行相关
+	}
+}
 timer.onTimer = function(hwnd,msg,id,tick){
 	timeNum ++;
 	if( timeNum >= 30 ){
@@ -487,23 +504,7 @@ timer.onTimer = function(hwnd,msg,id,tick){
 		getHttpUrlStr = false;
 		timer.disable();
 	}
-	if( getHttpUrlStr ){
-		select(globalCord) {
-			case 11 { if( perform.loginStepOneGetOtp() ){ timerStep(12); } }//获取到 OTP，访问登录页面
-			case 12 {//访问登录页面并执行登录操作
-				perform.loginStepTwoLoginPage();
-				if( perform.loginStepTwoLogging() ){ timerStep(13); }
-			}
-			case 13 { if( perform.loginStepThreeGetWebToken() ){ timerStep(14); } }//访问登录页面并执行登录操作
-			case 14 {//获取账号列表信息，这里返回值不同，代表不同状态
-				timeNum       = 0;
-				getHttpUrlStr = false;
-				formChild(4);
-				formChildShow(4);
-			}
-			//TODO：台号登录过程，或者其他执行相关
-		}
-	}
+	if( getHttpUrlStr ){ timerRunCode(); }
 }
 
 mainForm.show();
