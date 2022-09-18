@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<project ver="10" name="little helper for tikas" libEmbed="true" icon="res\logo.ico" ui="win" output="TMSHelper.exe" CompanyName="tikas" FileDescription="This is a little helper for TMS that makes you experience maplestory more friendly." LegalCopyright="Copyright (C) 𝒙𝑻𝒊𝒌𝒂𝒔 2022" ProductName="TMS little helper" InternalName="TMS little helper" FileVersion="1.0.0.64" ProductVersion="1.0.0.64" publishDir="/dist/" dstrip="false" local="false" ignored="false">
+<project ver="10" name="little helper for tikas" libEmbed="true" icon="res\logo.ico" ui="win" output="TMSHelper.exe" CompanyName="tikas" FileDescription="This is a little helper for TMS that makes you experience maplestory more friendly." LegalCopyright="Copyright (C) 𝒙𝑻𝒊𝒌𝒂𝒔 2022" ProductName="TMS little helper" InternalName="TMS little helper" FileVersion="1.0.0.65" ProductVersion="1.0.0.65" publishDir="/dist/" dstrip="false" local="false" ignored="false">
 	<file name="main.aardio" path="main.aardio" comment="main.aardio"/>
 	<folder name="资源文件" path="res" embed="true" local="false" ignored="false">
 		<folder name="background" path="res\background" embed="true" comment="目录" local="false" ignored="false">
