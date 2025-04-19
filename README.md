@@ -38,7 +38,7 @@
 
 本项目现在起将长期搁置，大家如需要第三方启动程序，可以选择：
 
-[繽放 - 樂豆第三方客戶端](https://github.com/pungin/Beanfun) | [秋水橘子香港登入工具](https://github.com/starmcc/qs-beanfun)
+[繽放 - 樂豆第三方客戶端](https://github.com/pungin/Beanfun)
 
 为减少重复造轮子，除非市面上没有相关第三方启动程序，不然，本项目不会重新开发。
 
